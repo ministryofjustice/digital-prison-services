@@ -77,23 +77,24 @@ context('A user can view list of appointments', () => {
     ])
     cy.task('stubNomisLocationMapping', { nomisLocationId: 789, dpsLocationId: 'abc-123' })
 
-    cy.task('stubAppointmentLocations', {
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 1, dpsLocationId: 'dps-1' })
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 2, dpsLocationId: 'dps-2' })
+    cy.task('stubGetLocationsByNonResidentialUsageType', {
       agency: 'MDI',
       locations: [
         {
-          locationId: 1,
+          id: 'dps-1',
           locationType: 'VLB',
-          description: 'VLB Room 1',
-          userDescription: 'VLB Room 1',
-          agencyId: 'WWI',
-          createdByUsername: 'username1',
+          pathHierarchy: 'VLB Room 1',
+          localName: 'VLB Room 1',
+          prisonId: 'WWI',
         },
         {
-          locationId: 2,
+          id: 'dps-2',
           locationType: 'GYM',
-          description: 'Gym',
-          userDescription: 'Gym',
-          agencyId: 'WWI',
+          pathHierarchy: 'Gym',
+          localName: 'Gym',
+          prisonId: 'WWI',
         },
       ],
     })

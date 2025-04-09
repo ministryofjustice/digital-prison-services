@@ -6,14 +6,16 @@ import { serviceUnavailableMessage } from '../../common-messages'
 import { prepostDurations } from '../../shared/appointmentConstants'
 import { toAppointmentDetailsSummary, isVideoLinkBooking } from '../../services/appointmentsService'
 
-export const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError }) => {
+export const confirmAppointmentFactory = ({ prisonApi, appointmentsService, systemOauthClient, logError }) => {
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const { activeCaseLoadId } = req.session.userDetails
+    const context = await systemOauthClient.getClientCredentialsTokens()
 
     try {
       const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
         res.locals,
+        context,
         activeCaseLoadId
       )
 

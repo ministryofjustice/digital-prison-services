@@ -238,11 +238,6 @@ export const prisonApiFactory = (client) => {
 
   const getBasicInmateDetailsForOffenders = (context, offenders) => post(context, `/api/bookings/offenders`, offenders)
 
-  const getLocationsForAgency = (context, agencyId) => get(context, `/api/agencies/${agencyId}/locations`)
-
-  const getLocationsForAppointments = (context, agencyId) =>
-    get(context, `/api/agencies/${agencyId}/locations?eventType=APP`)
-
   const getAppointmentTypes = (context) => get(context, '/api/reference-domains/scheduleReasons?eventType=APP')
 
   const getAdjudicationFindingTypes = (context) => get(context, '/api/reference-domains/domains/OIC_FINDING', 1000)
@@ -435,8 +430,6 @@ export const prisonApiFactory = (client) => {
     getLocation,
     getOffendersEnRoute,
     getBasicInmateDetailsForOffenders,
-    getLocationsForAgency,
-    getLocationsForAppointments,
     getAppointmentTypes,
     getAdjudicationFindingTypes,
     addAppointments,

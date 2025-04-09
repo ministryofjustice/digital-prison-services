@@ -26,12 +26,15 @@ context('Appointment details page', () => {
     })
 
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
-    cy.task('stubAppointmentLocations', {
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 1, dpsLocationId: 'dps-1' })
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 2, dpsLocationId: 'dps-2' })
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 3, dpsLocationId: 'dps-3' })
+    cy.task('stubGetLocationsByNonResidentialUsageType', {
       agency: 'MDI',
       locations: [
-        { userDescription: 'VCC Room 1', locationId: 1 },
-        { userDescription: 'Gymnasium', locationId: 2 },
-        { userDescription: 'VCC Room 2', locationId: 3 },
+        { localName: 'VCC Room 1', id: 'dps-1' },
+        { localName: 'Gymnasium', id: 'dps-2' },
+        { localName: 'VCC Room 2', id: 'dps-3' },
       ],
     })
     cy.task('stubAppointmentTypes', [
@@ -128,19 +131,18 @@ context('Appointment details page', () => {
             startTime: '2021-05-20T13:00:00',
             endTime: '2021-05-20T14:00:00',
             comment: 'Test appointment comments',
-          }
+          },
         },
       })
-      cy.task('stubNomisLocationMapping', { nomisLocationId: 1, dpsLocationId: 'abc-123' })
-      cy.task('stubGetLocationById', { id: 'abc-123', response: { key: 'location-key' } })
-      cy.task('stubGetLocationByKey', { key: 'location-key', response: { id: 'abc-123' } })
+      cy.task('stubGetLocationById', { id: 'dps-1', response: { key: 'location-key' } })
+      cy.task('stubGetLocationByKey', { key: 'location-key', response: { id: 'dps-1' } })
       cy.task('matchAppointmentToVideoLinkBooking', {
         videoLinkBookingId: 1,
         bookingType: 'COURT',
         prisonAppointments: [
           { appointmentType: 'VLB_COURT_PRE', prisonLocKey: 'location-key', startTime: '12:45', endTime: '13:00' },
-          { appointmentType: 'VLB_COURT_MAIN', prisonLocKey: 'location-key', startTime: '13:00', endTime: '14:00'  },
-          { appointmentType: 'VLB_COURT_POST', prisonLocKey: 'location-key', startTime: '14:00', endTime: '14:15'  },
+          { appointmentType: 'VLB_COURT_MAIN', prisonLocKey: 'location-key', startTime: '13:00', endTime: '14:00' },
+          { appointmentType: 'VLB_COURT_POST', prisonLocKey: 'location-key', startTime: '14:00', endTime: '14:15' },
         ],
         courtDescription: 'Nottingham Justice Centre',
         courtHearingTypeDescription: 'Appeal',
@@ -181,12 +183,15 @@ context('when the user does not have the roles', () => {
   beforeEach(() => {
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
 
-    cy.task('stubAppointmentLocations', {
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 1, dpsLocationId: 'dps-1' })
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 2, dpsLocationId: 'dps-2' })
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 3, dpsLocationId: 'dps-3' })
+    cy.task('stubGetLocationsByNonResidentialUsageType', {
       agency: 'MDI',
       locations: [
-        { userDescription: 'VCC Room 1', locationId: 1 },
-        { userDescription: 'Gymnasium', locationId: 2 },
-        { userDescription: 'VCC Room 2', locationId: 3 },
+        { localName: 'VCC Room 1', id: 'dps-1' },
+        { localName: 'Gymnasium', id: 'dps-2' },
+        { localName: 'VCC Room 2', id: 'dps-3' },
       ],
     })
     cy.task('stubAppointmentTypes', [

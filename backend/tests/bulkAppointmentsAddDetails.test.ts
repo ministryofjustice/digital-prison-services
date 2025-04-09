@@ -24,7 +24,8 @@ const buildBodyForDate = (date) => {
 
 describe('Add appointment details controller', () => {
   const appointmentsService = {}
-  const context = {}
+  const context = { _type: 'context' }
+  const systemOauthClient = { getClientCredentialsTokens: () => context }
 
   let req
   let res
@@ -40,7 +41,7 @@ describe('Add appointment details controller', () => {
         data: {},
       },
     }
-    res = { locals: {} }
+    res = { locals: { _type: 'locals' } }
     res.render = jest.fn()
     res.status = jest.fn()
     res.redirect = jest.fn()
@@ -54,7 +55,7 @@ describe('Add appointment details controller', () => {
       locationTypes: [],
     })
 
-    controller = bulkAppointmentsAddDetailsFactory(appointmentsService)
+    controller = bulkAppointmentsAddDetailsFactory(appointmentsService, systemOauthClient)
   })
 
   describe('Index', () => {
@@ -73,7 +74,7 @@ describe('Add appointment details controller', () => {
       await controller.index(req, res)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentOptions' does not exist on... Remove this comment to see the full error message
-      expect(appointmentsService.getAppointmentOptions).toHaveBeenCalledWith(context, 'LEI')
+      expect(appointmentsService.getAppointmentOptions).toHaveBeenCalledWith(res.locals, context, 'LEI')
     })
 
     it('should return handle api errors', async () => {
