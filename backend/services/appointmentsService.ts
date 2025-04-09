@@ -1,7 +1,10 @@
 import moment from 'moment'
-import { repeatTypes, endRecurringEndingDate } from '../shared/appointmentConstants'
+import { endRecurringEndingDate, repeatTypes } from '../shared/appointmentConstants'
 import { DATE_TIME_FORMAT_SPEC, Time } from '../../common/dateHelpers'
 import { properCaseName } from '../utils'
+import { prisonApiFactory } from '../api/prisonApi'
+import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../api/locationsInsidePrisonApi'
+import { nomisMappingClientFactory } from '../api/nomisMappingClient'
 
 export const isVideoLinkBooking = (appointmentType) => appointmentType === 'VLB'
 
@@ -54,25 +57,51 @@ export const toAppointmentDetailsSummary = ({
   return appointmentInfo
 }
 
-const mapLocationType = (location) => ({
-  value: location.locationId,
-  text: location.userDescription || location.description,
-})
+const mapLocationType = async (location, context, nomisMapping) => {
+  return {
+    value: (await nomisMapping.getNomisLocationMappingByDpsLocationId(context, location.locationId)).nomisLocationId,
+    text: location.userDescription || location.description,
+  }
+}
 
 const mapAppointmentType = (appointment) => ({
   value: appointment.code,
   text: appointment.description,
 })
 
-export const appointmentsServiceFactory = (prisonApi) => {
-  const getAppointmentOptions = async (context, agency) => {
+export function mapLocationApiResponse(location) {
+  return {
+    locationId: location.id,
+    locationType: location.locationType,
+    description: location.pathHierarchy,
+    agencyId: location.prisonId,
+    parentLocationId: location.parentId,
+    locationPrefix: location.key,
+    userDescription: location.localName,
+  }
+}
+
+export const appointmentsServiceFactory = (
+  prisonApi: ReturnType<typeof prisonApiFactory>,
+  locationsInsidePrisonApi: ReturnType<typeof locationsInsidePrisonApiFactory>,
+  nomisMapping: ReturnType<typeof nomisMappingClientFactory>
+) => {
+  const getAppointmentOptions = async (locals, context, agency) => {
     const [locationTypes, appointmentTypes] = await Promise.all([
-      prisonApi.getLocationsForAppointments(context, agency),
-      prisonApi.getAppointmentTypes(context),
+      locationsInsidePrisonApi.getLocationsByNonResidentialUsageType(
+        context,
+        agency,
+        NonResidentialUsageType.APPOINTMENT
+      ),
+      prisonApi.getAppointmentTypes(locals),
     ])
 
     return {
-      locationTypes: locationTypes && locationTypes.map(mapLocationType),
+      locationTypes:
+        locationTypes &&
+        (await Promise.all(
+          locationTypes.map(mapLocationApiResponse)?.map((lt) => mapLocationType(lt, context, nomisMapping))
+        )),
       appointmentTypes: appointmentTypes && appointmentTypes.map(mapAppointmentType),
     }
   }

@@ -27,7 +27,7 @@ module.exports = {
           headers: {
             'Content-Type': 'application/json;charset=UTF-8',
           },
-          jsonBody: { dpsLocationId }
+          jsonBody: { dpsLocationId, nomisLocationId },
         },
       }),
       stubFor({
@@ -40,8 +40,8 @@ module.exports = {
           headers: {
             'Content-Type': 'application/json;charset=UTF-8',
           },
-          jsonBody: { nomisLocationId }
+          jsonBody: { dpsLocationId, nomisLocationId },
         },
       }),
-    ])
+    ]),
 }

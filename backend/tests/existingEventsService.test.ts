@@ -1,14 +1,23 @@
 import moment from 'moment'
 import { DATE_ONLY_FORMAT_SPEC } from '../../common/dateHelpers'
 import existingEventsService from '../services/existingEventsService'
+import { prisonApiFactory } from '../api/prisonApi'
 
 describe('existing events', () => {
-  const prisonApi = {
+  const prisonApi: Partial<ReturnType<typeof prisonApiFactory>> & {
+    getActivitiesAtLocation: jest.Mock
+    getActivityList: jest.Mock
+    getLocationsByNonResidentialUsageType: jest.Mock
+    getSentenceData: jest.Mock
+    getVisits: jest.Mock
+    getAppointments: jest.Mock
+    getExternalTransfers: jest.Mock
+    getCourtEvents: jest.Mock
+    getActivities: jest.Mock
+  } = {
     getActivitiesAtLocation: jest.fn(),
     getActivityList: jest.fn(),
-    getLocations: jest.fn(),
-    getLocationsForAppointments: jest.fn(),
-    getEventsAtLocations: jest.fn(),
+    getLocationsByNonResidentialUsageType: jest.fn(),
     getSentenceData: jest.fn(),
     getVisits: jest.fn(),
     getAppointments: jest.fn(),
@@ -27,7 +36,7 @@ describe('existing events', () => {
 
   describe('location availability', () => {
     beforeEach(() => {
-      prisonApi.getLocations.mockReturnValue(Promise.resolve([]))
+      prisonApi.getLocationsByNonResidentialUsageType.mockReturnValue(Promise.resolve([]))
     })
 
     it('should handle time slot where location booking slightly overlap ', async () => {
