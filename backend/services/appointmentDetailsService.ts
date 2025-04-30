@@ -140,22 +140,19 @@ export default ({
     const basicDetails = {
       type: appointmentType?.description,
       location: locationType?.userDescription,
-      prisonVideoLink:
-        app.bvlsMasteredVlpmFeatureToggleEnabled && vlb && vlb.bookingType !== 'COURT'
-          ? vlb.videoLinkUrl || 'None entered'
-          : undefined,
+      prisonVideoLink: vlb && vlb.bookingType !== 'COURT' ? vlb.videoLinkUrl || 'None entered' : undefined,
       courtLocation: vlb?.courtDescription,
       probationTeam: vlb?.probationTeamDescription,
       probationOfficer:
-        app.bvlsMasteredVlpmFeatureToggleEnabled && vlb && vlb.bookingType === 'PROBATION'
+        vlb && vlb.bookingType === 'PROBATION'
           ? vlb.additionalBookingDetails?.contactName || 'Not yet known'
           : undefined,
       emailAddress:
-        app.bvlsMasteredVlpmFeatureToggleEnabled && vlb && vlb.bookingType === 'PROBATION'
+        vlb && vlb.bookingType === 'PROBATION'
           ? vlb.additionalBookingDetails?.contactEmail || 'Not yet known'
           : undefined,
       ukPhoneNumber:
-        app.bvlsMasteredVlpmFeatureToggleEnabled && vlb && vlb.bookingType === 'PROBATION'
+        vlb && vlb.bookingType === 'PROBATION'
           ? vlb.additionalBookingDetails?.contactNumber || 'None entered'
           : undefined,
       meetingType: vlb?.probationMeetingTypeDescription,
