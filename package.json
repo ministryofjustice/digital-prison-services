@@ -194,7 +194,7 @@
     "test": "jest --env=jsdom",
     "test-watch": "jest --env=jsdom --watch",
     "record-build-info": "node scripts/record-build-info",
-    "lint": "node node_modules/eslint/bin/eslint.js src backend",
+    "lint": "node node_modules/eslint/bin/eslint.js src backend --quiet",
     "verify": "npm run lint && npm test",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "int-test": "cypress run",

@@ -11,10 +11,13 @@ interface DpsJwtPayload extends JwtPayload {
   authorities?: string[]
 }
 
-interface AxiosResponse {
-   access_token: string
-   refresh_token: string
-   expires_in: number 
+type AxiosResponse = {
+  // eslint-disable-next-line camelcase
+  access_token: string
+  // eslint-disable-next-line camelcase
+  refresh_token: string
+  // eslint-disable-next-line camelcase
+  expires_in: number
 }
 
 class UserRole {
