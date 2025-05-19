@@ -200,5 +200,10 @@ module.exports = {
       path: false,
       common: path.resolve(__dirname, 'common/'),
     },
+    fallback: {
+      os: false,
+      zlib: false,
+      tty: false,
+    },
   },
 }
