@@ -5,7 +5,7 @@ import './azure-appinsights'
 import express from 'express'
 import 'express-async-errors'
 
-import csrf from 'csurf'
+import { csrfSync } from 'csrf-sync'
 import cookieParser from 'cookie-parser'
 
 import apis from './apis'
@@ -37,6 +37,7 @@ import { logError } from './logError'
 import requestLimiter from './middleware/requestLimiter'
 import homepageRedirect from './controllers/homepage/homepageRedirect'
 import getFrontendComponents, { feComponentsRoutes } from './middleware/getFeComponents'
+import setUpCsrf from './middleware/setUpCsrf'
 
 // We do not want the server to exit, partly because any log information will be lost.
 // Instead, log the error so we can trace, diagnose and fix the problem.
@@ -95,14 +96,7 @@ app.use(
     prisonerAlertsApi: apis.prisonerAlertsApi,
   })
 )
-app.use(csrf())
-app.use((req, res, next) => {
-  if (typeof req.csrfToken === 'function') {
-    res.locals.csrfToken = req.csrfToken()
-  }
-  next()
-})
-
+app.use(setUpCsrf())
 app.use(
   routes({
     prisonApi: apis.prisonApi,
