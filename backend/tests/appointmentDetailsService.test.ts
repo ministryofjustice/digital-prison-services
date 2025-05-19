@@ -300,7 +300,6 @@ describe('appointment details', () => {
     let videoLinkBookingAppointment
 
     beforeEach(() => {
-      config.app.bvlsMasteredVlpmFeatureToggleEnabled = true
       config.app.bvlsMasteredAppointmentTypes = ['VLB', 'VLPM']
 
       videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue({
