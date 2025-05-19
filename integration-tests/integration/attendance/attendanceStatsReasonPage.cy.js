@@ -19,22 +19,18 @@ const toReason = ($cell) => ({
 context('A user can view attendance reasons', () => {
   beforeEach(() => {
     cy.task('resetAndStubTokenVerification')
-
-    cy.session('hmpps-session-dev', () => {
-      cy.clearCookies()
-      cy.task('stubSignIn', {
-        username: 'ITAG_USER',
-        caseload: agencyId,
-        caseloads: [
-          {
-            caseLoadId: agencyId,
-            description: 'Wandsworth',
-            currentlyActive: true,
-          },
-        ],
-      })
-      cy.signIn()
+    cy.task('stubSignIn', {
+      username: 'ITAG_USER',
+      caseload: agencyId,
+      caseloads: [
+        {
+          caseLoadId: agencyId,
+          description: 'Wandsworth',
+          currentlyActive: true,
+        },
+      ],
     })
+    cy.signIn()
 
     cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
