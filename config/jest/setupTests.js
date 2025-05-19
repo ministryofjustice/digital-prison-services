@@ -2,6 +2,7 @@
 import { configure } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import 'regenerator-runtime/runtime'
+import { TextEncoder, TextDecoder } from 'util'
 
 configure({ adapter: new Adapter() })
 
@@ -15,3 +16,10 @@ process.env.USE_OF_FORCE_PRISONS = 'LEI'
 jest.mock('nanoid', () => ({
   nanoid: () => {},
 }))
+
+if (typeof global.TextEncoder === 'undefined') {
+  global.TextEncoder = TextEncoder
+}
+if (typeof global.TextDecoder === 'undefined') {
+  global.TextDecoder = TextDecoder
+}

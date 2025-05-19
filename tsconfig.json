@@ -9,7 +9,6 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "./dist",
-    "suppressImplicitAnyIndexErrors": true,
     "skipLibCheck": true,
     "noEmit": false,
     "allowJs": true,
