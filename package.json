@@ -43,7 +43,7 @@
     "@types/superagent": "^4.1.22",
     "agentkeepalive": "^4.2.1",
     "applicationinsights": "^2.5.1",
-    "axios": "^0.30.0",
+    "axios": "^1.8.2",
     "body-parser": "^1.20.2",
     "bunyan": "^1.8.15",
     "classnames": "^2.3.2",
