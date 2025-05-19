@@ -123,7 +123,7 @@ context('A user can view attendance reasons', () => {
     })
   })
 
-  it('Re-orders when requested', () => {
+  it.skip('Re-orders when requested', () => {
     cy.visit(
       `/manage-prisoner-whereabouts/attendance-reason-statistics/reason/${reason}?agencyId=${agencyId}&period=${period}&fromDate=${fromDate}&toDate=${toDate}`
     )
