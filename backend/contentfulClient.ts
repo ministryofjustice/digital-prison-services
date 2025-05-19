@@ -1,7 +1,7 @@
-import { createClient } from 'contentful'
+import * as contentful from 'contentful'
 import config from './config'
 
-export default createClient({
+export default contentful.createClient({
   space: config.app.contentfulSpaceId,
   accessToken: config.app.contentfulAccessToken,
 })
