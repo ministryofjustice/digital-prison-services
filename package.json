@@ -111,7 +111,7 @@
     "superagent": "^6.0.0",
     "universal-analytics": "^0.5.3",
     "uuid": "^9.0.1",
-    "webpack": "^5.89.0",
+    "webpack": "^5.99.8",
     "webpack-dev-middleware": "^5.3.3",
     "webpack-hot-middleware": "^2.25.4"
   },
