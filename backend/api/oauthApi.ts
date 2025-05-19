@@ -12,11 +12,8 @@ interface DpsJwtPayload extends JwtPayload {
 }
 
 type AxiosResponse = {
-  // eslint-disable-next-line camelcase
   access_token: string
-  // eslint-disable-next-line camelcase
   refresh_token: string
-  // eslint-disable-next-line camelcase
   expires_in: number
 }
 
