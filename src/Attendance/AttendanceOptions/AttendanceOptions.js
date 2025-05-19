@@ -51,7 +51,7 @@ export const updateOffenderAttendance = async (
     setOffenderAttendance(offenderIndex, offenderAttendanceData)
     updateSuccess = true
   } catch (error) {
-    if (error.response.status === 409) {
+    if (error.response?.status === 409) {
       window.scrollTo(0, 0)
       setErrorDispatch({
         message: 'An outcome for this offender has already been saved.',

@@ -8,7 +8,6 @@ context('Establishment roll has moved', () => {
     cy.signIn()
   })
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
   })

@@ -112,7 +112,6 @@ context('Prisoner private cash', () => {
 
   context('With data', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubGetTransactionHistory', {
         accountCode: 'cash',
@@ -252,7 +251,6 @@ context('Prisoner private cash', () => {
 
   context('Without data', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubGetTransactionHistory', {
         accountCode: 'cash',

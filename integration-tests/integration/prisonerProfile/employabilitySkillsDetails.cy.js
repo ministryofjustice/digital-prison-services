@@ -65,10 +65,6 @@ context('Employability skills details page', () => {
       cy.task('stubKeyworkerMigrated')
     })
 
-    beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    })
-
     it('should render the page with correct data and behaviour', () => {
       cy.task('stubLearnerEmployabilitySkills', employabilitySkillsData)
 

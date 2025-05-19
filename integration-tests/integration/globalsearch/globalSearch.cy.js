@@ -9,7 +9,6 @@ context('Global search', () => {
   })
 
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('resetAndStubTokenVerification')
     cy.task('stubSignIn', {})
     cy.task('stubOffenderImage')

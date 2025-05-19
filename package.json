@@ -137,7 +137,7 @@
     "babel-loader": "^8.3.0",
     "copy-webpack-plugin": "^7.0.0",
     "css-loader": "^6.8.1",
-    "cypress": "^10.3.0",
+    "cypress": "^13.17.0",
     "cypress-file-upload": "^5.0.8",
     "cypress-multi-reporters": "^1.6.4",
     "dotenv-expand": "^4.2.0",
