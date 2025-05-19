@@ -88,8 +88,10 @@ export const prisonApiFactory = (client) => {
   const put = (context, url, data) => client.put(context, url, data).then(processResponse(context))
 
   const userLocations = (context): [Location] =>
+    // @ts-expect-error: Type '[]' is not assignable to type '[CaseLoad]'. Source has 0 element(s) but target requires 1.
     context.authSource !== 'auth' ? get(context, '/api/users/me/locations') : []
   const userCaseLoads = (context): [CaseLoad] =>
+    // @ts-expect-error: Type '[]' is not assignable to type '[CaseLoad]'. Source has 0 element(s) but target requires 1.
     context.authSource !== 'auth' ? get(context, '/api/users/me/caseLoads') : []
 
   // NB. This function expects a caseload object.
