@@ -1,17 +1,18 @@
 import config from '../../config'
-import { isRedirectCaseLoad } from '../../utils'
+import logger from '../../log'
 
-export default ({ path, handler }) => {
+export default ({ path }) => {
   return async (req, res, next) => {
     const { offenderNo } = req.params
-    const { activeCaseLoadId } = req.session.userDetails
+    const { activeCaseLoadId, authSource } = req.session.userDetails
 
-    const redirectEnabled = isRedirectCaseLoad(activeCaseLoadId)
-
-    if (activeCaseLoadId && redirectEnabled) {
+    if (activeCaseLoadId) {
       return res.redirect(`${config.app.prisonerProfileRedirect.url}/prisoner/${offenderNo}${path}`)
     }
 
-    return handler(req, res, next)
+    logger.info(`User '${res.locals?.user?.username}' has no caseload, presenting no caseload message`)
+    const homepageUrl = authSource === 'nomis' ? config.app.homepageRedirect.url : config.apis.oauth2.url
+    const homepageLinkText = authSource === 'nomis' ? 'DPS homepage' : 'HMPPS Digital Services homepage'
+    return res.render('prisonerProfile/noCaseloads.njk', { homepageUrl, homepageLinkText })
   }
 }

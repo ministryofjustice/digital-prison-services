@@ -1,25 +1,53 @@
 import viewAppointments from '../controllers/appointments/viewAppointments'
+import { prisonApiFactory } from '../api/prisonApi'
+import { offenderSearchApiFactory } from '../api/offenderSearchApi'
+import { whereaboutsApiFactory } from '../api/whereaboutsApi'
+import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../api/locationsInsidePrisonApi'
+import { bookAVideoLinkApiFactory } from '../api/bookAVideoLinkApi'
+import { nomisMappingClientFactory } from '../api/nomisMappingClient'
+import { getSystemOauthApiClient } from '../api/systemOauthClient'
 
 describe('View appointments', () => {
-  const prisonApi = {
+  const prisonApi: Partial<ReturnType<typeof prisonApiFactory>> & {
+    getAppointmentTypes: jest.Mock
+    getStaffDetails: jest.Mock
+  } = {
     getAppointmentTypes: jest.fn(),
-    getLocationsForAppointments: jest.fn(),
     getStaffDetails: jest.fn(),
-    getDetails: jest.fn(),
   }
-  const whereaboutsApi = {
+  const offenderSearchApi: Partial<ReturnType<typeof offenderSearchApiFactory>> & {
+    getPrisonersDetails: jest.Mock
+  } = { getPrisonersDetails: jest.fn() }
+  const whereaboutsApi: Partial<ReturnType<typeof whereaboutsApiFactory>> & {
+    getAppointments: jest.Mock
+  } = {
     getAppointments: jest.fn(),
-    getVideoLinkAppointments: jest.fn(),
-    searchGroups: jest.fn(),
-    getAgencyGroupLocationPrefix: jest.fn(),
   }
-  const systemOauthClient = {
+
+  const locationsInsidePrisonApi: Partial<ReturnType<typeof locationsInsidePrisonApiFactory>> & {
+    getAgencyGroupLocationPrefix: jest.Mock
+    getLocationsByNonResidentialUsageType: jest.Mock
+    getSearchGroups: jest.Mock
+  } = {
+    getAgencyGroupLocationPrefix: jest.fn(),
+    getLocationsByNonResidentialUsageType: jest.fn(),
+    getSearchGroups: jest.fn(),
+  }
+  const bookAVideoLinkApi: Partial<ReturnType<typeof bookAVideoLinkApiFactory>> & {
+    getPrisonSchedule: jest.Mock
+  } = { getPrisonSchedule: jest.fn() }
+  const nomisMapping: Partial<ReturnType<typeof nomisMappingClientFactory>> & {
+    getNomisLocationMappingByDpsLocationId: jest.Mock
+  } = { getNomisLocationMappingByDpsLocationId: jest.fn() }
+  const systemOauthClient: Partial<ReturnType<typeof getSystemOauthApiClient>> & {
+    getClientCredentialsTokens: jest.Mock
+  } = {
     getClientCredentialsTokens: jest.fn(),
   }
+  const context = {}
 
   let req
   let res
-  let logError
   let controller
 
   const activeCaseLoadId = 'MDI'
@@ -37,27 +65,30 @@ describe('View appointments', () => {
       },
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
-    systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
-    logError = jest.fn()
+    systemOauthClient.getClientCredentialsTokens.mockResolvedValue(context)
 
+    locationsInsidePrisonApi.getLocationsByNonResidentialUsageType = jest.fn()
     prisonApi.getAppointmentTypes = jest.fn()
-    prisonApi.getLocationsForAppointments = jest.fn()
     prisonApi.getStaffDetails = jest.fn()
-    prisonApi.getDetails = jest.fn()
+    offenderSearchApi.getPrisonersDetails = jest.fn()
 
+    locationsInsidePrisonApi.getLocationsByNonResidentialUsageType.mockReturnValue([
+      { localName: 'VCC Room 1', id: 'abc-123' },
+    ])
     prisonApi.getAppointmentTypes.mockReturnValue([{ description: 'Video link booking', code: 'VLB' }])
-    prisonApi.getLocationsForAppointments.mockReturnValue([{ userDescription: 'VCC Room 1', locationId: '1' }])
     prisonApi.getStaffDetails.mockResolvedValue([])
-    prisonApi.getDetails.mockResolvedValue({})
+    offenderSearchApi.getPrisonersDetails.mockResolvedValue([])
 
     whereaboutsApi.getAppointments = jest.fn()
-    whereaboutsApi.getVideoLinkAppointments = jest.fn()
-    whereaboutsApi.searchGroups = jest.fn()
-    whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn()
-
-    whereaboutsApi.getVideoLinkAppointments.mockReturnValue({ appointments: [] })
     whereaboutsApi.getAppointments.mockReturnValue([])
-    whereaboutsApi.searchGroups.mockReturnValue([
+
+    bookAVideoLinkApi.getPrisonSchedule.mockResolvedValue([])
+
+    locationsInsidePrisonApi.getAgencyGroupLocationPrefix = jest.fn().mockReturnValue({
+      locationPrefix: 'MDI-1-',
+    })
+
+    locationsInsidePrisonApi.getSearchGroups.mockReturnValue([
       {
         name: 'Houseblock 1',
         key: 'H 1',
@@ -67,11 +98,16 @@ describe('View appointments', () => {
         key: 'H 2',
       },
     ])
-    whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn().mockReturnValue({
-      locationPrefix: 'MDI-1-',
-    })
 
-    controller = viewAppointments({ systemOauthClient, prisonApi, whereaboutsApi, logError })
+    controller = viewAppointments({
+      systemOauthClient,
+      prisonApi: prisonApi as ReturnType<typeof prisonApiFactory>,
+      offenderSearchApi: offenderSearchApi as ReturnType<typeof offenderSearchApiFactory>,
+      whereaboutsApi: whereaboutsApi as ReturnType<typeof whereaboutsApiFactory>,
+      locationsInsidePrisonApi: locationsInsidePrisonApi as ReturnType<typeof locationsInsidePrisonApiFactory>,
+      bookAVideoLinkApi: bookAVideoLinkApi as ReturnType<typeof bookAVideoLinkApiFactory>,
+      nomisMapping: nomisMapping as ReturnType<typeof nomisMappingClientFactory>,
+    })
   })
 
   afterAll(() => {
@@ -80,19 +116,34 @@ describe('View appointments', () => {
   })
 
   describe('when the page is first loaded with no results', () => {
+    beforeEach(() => {
+      nomisMapping.getNomisLocationMappingByDpsLocationId.mockImplementation(
+        async (_, id) =>
+          ({
+            'abc-123': { dpsLocationId: 'abc-123', nomisLocationId: 456 },
+            'zyx-321': { dpsLocationId: 'zyx-321', nomisLocationId: 789 },
+          }[id])
+      )
+    })
+
     it('should make the correct API calls', async () => {
       await controller(req, res)
 
       expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
-      expect(prisonApi.getLocationsForAppointments).toHaveBeenCalledWith(res.locals, activeCaseLoadId)
+      expect(locationsInsidePrisonApi.getLocationsByNonResidentialUsageType).toHaveBeenCalledWith(
+        context,
+        activeCaseLoadId,
+        NonResidentialUsageType.APPOINTMENT
+      )
       expect(whereaboutsApi.getAppointments).toHaveBeenCalledWith(res.locals, 'MDI', {
         date: '2020-01-01',
         locationId: undefined,
         offenderLocationPrefix: 'MDI',
         timeSlot: 'AM',
       })
-      expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [])
+      expect(bookAVideoLinkApi.getPrisonSchedule).toHaveBeenCalledWith(res.locals, 'MDI', '2020-01-01')
       expect(prisonApi.getStaffDetails).not.toHaveBeenCalled()
+      expect(offenderSearchApi.getPrisonersDetails).not.toHaveBeenCalled()
     })
 
     it('should render the correct template information', async () => {
@@ -102,7 +153,7 @@ describe('View appointments', () => {
         appointmentRows: [],
         date: '01/01/2020',
         formattedDate: '1 January 2020',
-        locations: [{ text: 'VCC Room 1', value: '1' }],
+        locations: [{ text: 'VCC Room 1', value: 456 }],
         residentialLocationOptions: [
           {
             text: 'Houseblock 1',
@@ -202,7 +253,7 @@ describe('View appointments', () => {
           appointmentTypeDescription: 'Video Link booking',
           appointmentTypeCode: 'VLB',
           locationDescription: 'VCC ROOM',
-          locationId: 789,
+          locationId: 456,
           auditUserId: 'STAFF_3',
           agencyId: 'MDI',
         },
@@ -247,7 +298,7 @@ describe('View appointments', () => {
           appointmentTypeDescription: 'Video Link booking',
           appointmentTypeCode: 'VLB',
           locationDescription: 'VCC ROOM',
-          locationId: 456,
+          locationId: 789,
           auditUserId: 'STAFF_3',
           agencyId: 'MDI',
         },
@@ -268,45 +319,66 @@ describe('View appointments', () => {
           lastName: 'THREE',
         })
 
-      prisonApi.getDetails
-        .mockResolvedValueOnce({ assignedLivingUnit: { description: '1-1-1' } })
-        .mockResolvedValueOnce({ assignedLivingUnit: { description: '2-1-1' } })
-        .mockResolvedValueOnce({ assignedLivingUnit: { description: '3-1-1' } })
+      offenderSearchApi.getPrisonersDetails.mockResolvedValueOnce([
+        {
+          prisonerNumber: 'ABC123',
+          cellLocation: '1-1-1',
+        },
+        {
+          prisonerNumber: 'ABC456',
+          cellLocation: '2-1-1',
+        },
+        {
+          prisonerNumber: 'ABC789',
+          cellLocation: '3-1-1',
+        },
+      ])
 
-      whereaboutsApi.getVideoLinkAppointments.mockReturnValue({
-        appointments: [
-          {
-            id: 1,
-            bookingId: 1,
-            appointmentId: 3,
-            court: 'Wimbledon',
-            hearingType: 'MAIN',
-            createdByUsername: 'username1',
-            madeByTheCourt: true,
-            mainAppointmentId: 3,
-          },
-          {
-            id: 2,
-            bookingId: 1,
-            appointmentId: 5,
-            court: 'Wimbledon',
-            hearingType: 'POST',
-            createdByUsername: 'username1',
-            madeByTheCourt: true,
-            mainAppointmentId: 3,
-          },
-          {
-            id: 3,
-            bookingId: 1,
-            appointmentId: 6,
-            court: 'Rotherham',
-            hearingType: 'MAIN',
-            createdByUsername: 'username1',
-            madeByTheCourt: true,
-            mainAppointmentId: 6,
-          },
-        ],
-      })
+      bookAVideoLinkApi.getPrisonSchedule.mockResolvedValue([
+        {
+          videoBookingId: 1,
+          prisonAppointmentId: 1,
+          prisonerNumber: 'ABC789',
+          startTime: '14:30',
+          endTime: '15:30',
+          courtDescription: 'Wimbledon',
+          dpsLocationId: 'abc-123',
+        },
+        {
+          videoBookingId: 1,
+          prisonAppointmentId: 2,
+          prisonerNumber: 'ABC789',
+          startTime: '15:30',
+          endTime: '15:45',
+          courtDescription: 'Wimbledon',
+          dpsLocationId: 'abc-123',
+        },
+        {
+          videoBookingId: 2,
+          prisonAppointmentId: 3,
+          prisonerNumber: 'ABC789',
+          startTime: '15:45',
+          endTime: '16:45',
+          probationTeamDescription: 'Rotherham',
+          dpsLocationId: 'zyx-321',
+        },
+        {
+          videoBookingId: 3,
+          prisonAppointmentId: 4,
+          prisonerNumber: 'ABC789',
+          startTime: '18:00',
+          endTime: '19:00',
+          probationTeamDescription: 'Rotherham',
+        },
+      ])
+
+      nomisMapping.getNomisLocationMappingByDpsLocationId.mockImplementation(
+        async (_, id) =>
+          ({
+            'abc-123': { dpsLocationId: 'abc-123', nomisLocationId: 456 },
+            'zyx-321': { dpsLocationId: 'zyx-321', nomisLocationId: 789 },
+          }[id])
+      )
 
       req.query = {
         date: '02/01/2020',
@@ -323,9 +395,9 @@ describe('View appointments', () => {
         offenderLocationPrefix: 'MDI-1',
         timeSlot: 'PM',
       })
-      expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4, 5, 6])
-      expect(whereaboutsApi.getAgencyGroupLocationPrefix).toHaveBeenCalledWith(res.locals, 'MDI', 'H 1')
-      expect(prisonApi.getDetails).toHaveBeenCalledTimes(6)
+      expect(bookAVideoLinkApi.getPrisonSchedule).toHaveBeenCalledWith({}, 'MDI', '2020-01-02')
+      expect(locationsInsidePrisonApi.getAgencyGroupLocationPrefix).toHaveBeenCalledWith({}, 'MDI', 'H 1')
+      expect(offenderSearchApi.getPrisonersDetails).toHaveBeenLastCalledWith(res.locals, ['ABC123', 'ABC456', 'ABC789'])
     })
 
     it('should render the correct template information', async () => {
@@ -383,7 +455,7 @@ describe('View appointments', () => {
                 attributes: { 'data-sort-value': 'FOUR' },
                 html: '<a href="/prisoner/ABC456" class="govuk-link">Four, Offender - ABC456</a>',
               },
-              { text: undefined },
+              { text: '2-1-1' },
               { text: 'Video Link booking' },
               { html: 'VCC ROOM' },
               {
@@ -397,11 +469,11 @@ describe('View appointments', () => {
                 attributes: { 'data-sort-value': 'THREE' },
                 html: '<a href="/prisoner/ABC789" class="govuk-link">Three, Offender - ABC789</a>',
               },
-              { text: undefined },
+              { text: '3-1-1' },
               { text: 'Video Link booking' },
               { html: 'VCC ROOM</br>with: Wimbledon' },
               {
-                html: '<a href="/appointment-details/3" class="govuk-link" aria-label="View details of Offender Three\'s appointment">View details </a>',
+                html: `<a href="/appointment-details/5" class="govuk-link" aria-label="View details of Offender Three's appointment">View details </a>`,
                 classes: 'govuk-!-display-none-print',
               },
             ],
@@ -411,7 +483,7 @@ describe('View appointments', () => {
                 attributes: { 'data-sort-value': 'THREE' },
                 html: '<a href="/prisoner/ABC789" class="govuk-link">Three, Offender - ABC789</a>',
               },
-              { text: undefined },
+              { text: '3-1-1' },
               { text: 'Video Link booking' },
               { html: 'VCC ROOM</br>with: Rotherham' },
               {
@@ -423,7 +495,7 @@ describe('View appointments', () => {
           date: '02/01/2020',
           formattedDate: '2 January 2020',
           locationId: undefined,
-          locations: [{ text: 'VCC Room 1', value: '1' }],
+          locations: [{ text: 'VCC Room 1', value: 456 }],
           residentialLocation: 'H 1',
           residentialLocationOptions: [
             { text: 'Houseblock 1', value: 'H 1' },
@@ -456,7 +528,7 @@ describe('View appointments', () => {
                   'data-sort-value': 'TWO',
                 },
               },
-              { text: '1-1-1' },
+              { text: '2-1-1' },
               { text: 'Gym - Exercise' },
               { html: 'GYM' },
               {

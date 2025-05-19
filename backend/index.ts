@@ -34,7 +34,6 @@ import returnUrl from './middleware/returnUrl'
 import pageNotFound from './setUpPageNotFound'
 import errorHandler from './middleware/errorHandler'
 import { logError } from './logError'
-import homepageController from './controllers/homepage/homepage'
 import requestLimiter from './middleware/requestLimiter'
 import homepageRedirect from './controllers/homepage/homepageRedirect'
 import getFrontendComponents, { feComponentsRoutes } from './middleware/getFeComponents'
@@ -88,10 +87,12 @@ app.use(
   setupApiRoutes({
     prisonApi: apis.prisonApi,
     whereaboutsApi: apis.whereaboutsApi,
+    locationsInsidePrisonApi: apis.locationsInsidePrisonApi,
     oauthApi: apis.oauthApi,
     getClientCredentialsTokens,
     hmppsManageUsersApi: apis.hmppsManageUsersApi,
     caseNotesApi: apis.caseNotesApi,
+    prisonerAlertsApi: apis.prisonerAlertsApi,
   })
 )
 app.use(csrf())
@@ -105,7 +106,10 @@ app.use((req, res, next) => {
 app.use(
   routes({
     prisonApi: apis.prisonApi,
+    prisonerAlertsApi: apis.prisonerAlertsApi,
     whereaboutsApi: apis.whereaboutsApi,
+    bookAVideoLinkApi: apis.bookAVideoLinkApi,
+    locationsInsidePrisonApi: apis.locationsInsidePrisonApi,
     oauthApi: apis.oauthApi,
     hmppsManageUsersApi: apis.hmppsManageUsersApi,
     deliusIntegrationApi: apis.deliusIntegrationApi,
@@ -121,12 +125,13 @@ app.use(
     incentivesApi: apis.incentivesApi,
     nonAssociationsApi: apis.nonAssociationsApi,
     restrictedPatientApi: apis.restrictedPatientApi,
-    adjudicationsApi: apis.adjudicationsApi,
+    nomisMapping: apis.nomisMapping,
     whereaboutsMaintenanceMode: config.app.whereaboutsMaintenanceMode,
+    getClientCredentialsTokens,
   })
 )
 app.use(setupReactRoutes())
-app.use('/$', homepageRedirect(homepageController({ ...apis, logError })))
+app.use('/$', homepageRedirect())
 app.use(pageNotFound)
 app.use(errorHandler({ logError }))
 

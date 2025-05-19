@@ -10,6 +10,8 @@ describe('Add appointment', () => {
   const whereaboutsApi = {} as any
   const offenderNo = 'ABC123'
   const bookingId = 123
+  const context = { _type: 'context' }
+  const systemOauthClient = { getClientCredentialsTokens: () => context }
 
   let req
   let res
@@ -47,7 +49,14 @@ describe('Add appointment', () => {
 
     whereaboutsApi.createAppointment = jest.fn()
 
-    controller = addAppointmentFactory(appointmentsService, existingEventsService, prisonApi, whereaboutsApi, logError)
+    controller = addAppointmentFactory(
+      appointmentsService,
+      systemOauthClient,
+      existingEventsService,
+      prisonApi,
+      whereaboutsApi,
+      logError
+    )
   })
 
   describe('index', () => {
@@ -66,7 +75,7 @@ describe('Add appointment', () => {
         await controller.index(req, res)
 
         expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-        expect(appointmentsService.getAppointmentOptions).toHaveBeenCalledWith(res.locals, 'MDI')
+        expect(appointmentsService.getAppointmentOptions).toHaveBeenCalledWith(res.locals, context, 'MDI')
         expect(res.render).toHaveBeenCalledWith('addAppointment/addAppointment.njk', {
           bookingId,
           offenderNo,
@@ -165,18 +174,6 @@ describe('Add appointment', () => {
           times: '1',
           repeats: 'DAILY',
         })
-
-        const spy = jest.spyOn(Date, 'now')
-        spy.mockRestore()
-      })
-
-      it('should redirect to the prepost appointment page when the appointment type is "VLB"', async () => {
-        jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
-        req.body = { ...validBody, appointmentType: 'VLB', date: moment().format(DAY_MONTH_YEAR) }
-
-        await controller.post(req, res)
-
-        expect(res.redirect).toHaveBeenCalledWith(`/offenders/${offenderNo}/prepost-appointments`)
 
         const spy = jest.spyOn(Date, 'now')
         spy.mockRestore()

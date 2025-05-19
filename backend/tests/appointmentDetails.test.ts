@@ -1,7 +1,13 @@
 import { makeNotFoundError } from './helpers'
+import { prisonApiFactory } from '../api/prisonApi'
 
 import appointmentDetails from '../controllers/appointmentDetails'
 import appointmentDetailsServiceFactory from '../services/appointmentDetailsService'
+import { oauthApiFactory } from '../api/oauthApi'
+import { whereaboutsApiFactory } from '../api/whereaboutsApi'
+import VideoLinkBookingService from '../services/videoLinkBookingService'
+import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../api/locationsInsidePrisonApi'
+import { nomisMappingClientFactory } from '../api/nomisMappingClient'
 
 describe('appointment details', () => {
   const testAppointment = {
@@ -18,9 +24,15 @@ describe('appointment details', () => {
     videoLinkBooking: null,
   }
 
-  const oauthApi = {}
-  const prisonApi = {}
-  const whereaboutsApi = {}
+  const oauthApi: Partial<ReturnType<typeof oauthApiFactory>> = {}
+  const prisonApi: Partial<ReturnType<typeof prisonApiFactory>> = {}
+  const whereaboutsApi: Partial<ReturnType<typeof whereaboutsApiFactory>> = {}
+  const videoLinkBookingService: Partial<ReturnType<typeof VideoLinkBookingService>> = {}
+  const locationsInsidePrisonApi: Partial<ReturnType<typeof locationsInsidePrisonApiFactory>> = {}
+  const nomisMapping: Partial<ReturnType<typeof nomisMappingClientFactory>> = {}
+  const getClientCredentialsTokens = jest.fn()
+  const systemOauthClient = { getClientCredentialsTokens }
+  const context = {}
 
   let req
   let res
@@ -34,61 +46,80 @@ describe('appointment details', () => {
       session: { userDetails: { activeCaseLoadId: 'MDI' } },
       flash: jest.fn(),
     }
-    res = { render: jest.fn() }
+    res = { render: jest.fn(), locals: { user: { username: 'jbloggs' } } }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-    oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
+    oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'INACTIVE_BOOKINGS' }, { roleCode: 'ACTIVITY_HUB' }])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({
       firstName: 'BARRY',
       lastName: 'SMITH',
       offenderNo: 'ABC123',
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocationsForAppointments' does not ex... Remove this comment to see the full error message
-    prisonApi.getLocationsForAppointments = jest.fn().mockResolvedValue([
-      { userDescription: 'VCC Room 1', locationId: '1' },
-      { userDescription: 'Gymnasium', locationId: '2' },
-      { userDescription: 'VCC Room 2', locationId: '3' },
-    ])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentTypes' does not exist on t... Remove this comment to see the full error message
     prisonApi.getAppointmentTypes = jest.fn().mockResolvedValue([
       { code: 'GYM', description: 'Gym' },
       { description: 'Video link booking', code: 'VLB' },
     ])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
     prisonApi.getStaffDetails = jest
       .fn()
       .mockResolvedValue({ username: 'TEST_USER', firstName: 'TEST', lastName: 'USER' })
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointment' does not exist on type '... Remove this comment to see the full error message
     whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(testAppointment)
 
-    appointmentDetailsService = appointmentDetailsServiceFactory({ prisonApi })
+    locationsInsidePrisonApi.getLocationByKey = jest.fn(
+      async (_, key) => ({ LOCATION_1: { id: 'abc-1' }, LOCATION_3: { id: 'abc-3' } }[key])
+    )
+    locationsInsidePrisonApi.getLocationsByNonResidentialUsageType = jest.fn().mockResolvedValue([
+      { localName: 'VCC Room 1', id: 'abc-1' },
+      { localName: 'Gymnasium', id: 'abc-2' },
+      { localName: 'VCC Room 2', id: 'abc-3' },
+    ])
 
-    controller = appointmentDetails({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService })
+    nomisMapping.getNomisLocationMappingByDpsLocationId = jest.fn(
+      async (_, id) =>
+        ({
+          'abc-1': { nomisLocationId: 1, dpsLocationId: 'abc-1' },
+          'abc-2': { nomisLocationId: 2, dpsLocationId: 'abc-2' },
+          'abc-3': { nomisLocationId: 3, dpsLocationId: 'abc-3' },
+        }[id])
+    )
+
+    videoLinkBookingService.bookingIsAmendable = jest.fn(() => true)
+    getClientCredentialsTokens.mockReturnValue(context)
+
+    appointmentDetailsService = appointmentDetailsServiceFactory({
+      prisonApi: prisonApi as ReturnType<typeof prisonApiFactory>,
+      videoLinkBookingService: videoLinkBookingService as ReturnType<typeof VideoLinkBookingService>,
+      locationsInsidePrisonApi: locationsInsidePrisonApi as ReturnType<typeof locationsInsidePrisonApiFactory>,
+      nomisMapping: nomisMapping as ReturnType<typeof nomisMappingClientFactory>,
+      getClientCredentialsTokens,
+    })
+
+    controller = appointmentDetails({
+      oauthApi,
+      prisonApi,
+      whereaboutsApi,
+      appointmentDetailsService,
+      systemOauthClient,
+    })
   })
 
   describe('viewAppointment', () => {
     it('should make the correct calls', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       expect(oauthApi.userRoles).toHaveBeenCalledWith(res.locals)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointment' does not exist on type '... Remove this comment to see the full error message
       expect(whereaboutsApi.getAppointment).toHaveBeenCalledWith(res.locals, 1)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, 'ABC123')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocationsForAppointments' does not ex... Remove this comment to see the full error message
-      expect(prisonApi.getLocationsForAppointments).toHaveBeenCalledWith(res.locals, 'MDI')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentTypes' does not exist on t... Remove this comment to see the full error message
+      expect(locationsInsidePrisonApi.getLocationsByNonResidentialUsageType).toHaveBeenCalledWith(
+        context,
+        'MDI',
+        NonResidentialUsageType.APPOINTMENT
+      )
       expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'TEST_USER')
     })
 
     it('should fall back to the user id if there are errors fetching the user details', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getStaffDetails = jest.fn().mockRejectedValue(makeNotFoundError())
 
       await controller(req, res)
@@ -108,13 +139,13 @@ describe('appointment details', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith('appointmentDetails', {
-        appointmentConfirmDeletionLink: false,
+        appointmentConfirmDeletionLink: '/appointment-details/1/confirm-deletion',
+        appointmentAmendLink: false, // Not allowed to edit non-vlb appointments
         additionalDetails: {
           comments: 'Not entered',
           addedBy: 'Test User',
         },
         basicDetails: {
-          date: '20 May 2021',
           location: 'Gymnasium',
           type: 'Gym',
         },
@@ -127,6 +158,7 @@ describe('appointment details', () => {
           recurring: 'No',
         },
         timeDetails: {
+          date: '20 May 2021',
           startTime: '13:00',
           endTime: 'Not entered',
         },
@@ -135,7 +167,6 @@ describe('appointment details', () => {
 
     describe('with activity hub role', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'ACTIVITY_HUB' }])
       })
 
@@ -153,7 +184,6 @@ describe('appointment details', () => {
 
     describe('with delete-a-prisoners-appointment role', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'DELETE_A_PRISONERS_APPOINTMENT' }])
       })
 
@@ -171,7 +201,6 @@ describe('appointment details', () => {
 
     describe('recurring appointment', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointment' does not exist on type '... Remove this comment to see the full error message
         whereaboutsApi.getAppointment = jest.fn().mockResolvedValue({
           ...testAppointment,
           recurring: {
@@ -201,6 +230,7 @@ describe('appointment details', () => {
 
     describe('video link appointments', () => {
       let videoLinkBookingAppointment
+      let videoLinkBooking
 
       beforeEach(() => {
         videoLinkBookingAppointment = {
@@ -212,19 +242,21 @@ describe('appointment details', () => {
             endTime: '2021-05-20T14:00:00',
             comment: 'Test appointment comments',
           },
-          videoLinkBooking: {
-            main: {
-              court: 'Nottingham Justice Centre',
-              hearingType: 'MAIN',
-              locationId: 1,
-              startTime: '2021-05-20T13:00:00',
-              endTime: '2021-05-20T14:00:00',
-            },
-          },
         }
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointment' does not exist on type '... Remove this comment to see the full error message
+        videoLinkBooking = {
+          bookingType: 'COURT',
+          courtDescription: 'Nottingham Justice Centre',
+          courtHearingTypeDescription: 'Appeal',
+          prisonAppointments: [
+            { appointmentType: 'VLB_COURT_MAIN', prisonLocKey: 'LOCATION_1', startTime: '13:00', endTime: '14:00' },
+          ],
+          comments: 'VLB comments',
+        }
+
         whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(videoLinkBookingAppointment)
+
+        videoLinkBookingService.getVideoLinkBookingFromAppointmentId = jest.fn().mockResolvedValue(videoLinkBooking)
       })
 
       it('should render with court location and correct vlb locations and types', async () => {
@@ -233,17 +265,20 @@ describe('appointment details', () => {
         expect(res.render).toHaveBeenCalledWith(
           'appointmentDetails',
           expect.objectContaining({
+            appointmentAmendLink: 'http://localhost:3000/prisoner/ABC123/edit-appointment/1', // Allowed to edit VLB appointments
             additionalDetails: {
-              courtLocation: 'Nottingham Justice Centre',
-              comments: 'Test appointment comments',
-              addedBy: 'Test User',
+              courtHearingLink: 'Not yet known',
+              comments: 'VLB comments',
+              addedBy: 'Court',
             },
             basicDetails: {
-              date: '20 May 2021',
               location: 'VCC Room 1',
               type: 'Video link booking',
+              courtLocation: 'Nottingham Justice Centre',
+              hearingType: 'Appeal',
             },
             timeDetails: {
+              date: '20 May 2021',
               startTime: '13:00',
               endTime: '14:00',
             },
@@ -253,15 +288,14 @@ describe('appointment details', () => {
 
       describe('with pre appointment', () => {
         beforeEach(() => {
-          videoLinkBookingAppointment.videoLinkBooking.pre = {
-            court: 'Nottingham Justice Centre',
-            hearingType: 'PRE',
-            locationId: 3,
-            startTime: '2021-05-20T12:45:00',
-            endTime: '2021-05-20T13:00:00',
-          }
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointment' does not exist on type '... Remove this comment to see the full error message
-          whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(videoLinkBookingAppointment)
+          videoLinkBooking.prisonAppointments.push({
+            appointmentType: 'VLB_COURT_PRE',
+            prisonLocKey: 'LOCATION_3',
+            startTime: '12:45',
+            endTime: '13:00',
+          })
+
+          videoLinkBookingService.getVideoLinkBookingFromAppointmentId = jest.fn().mockResolvedValue(videoLinkBooking)
         })
 
         it('should render with the correct pre appointment details', async () => {
@@ -280,15 +314,14 @@ describe('appointment details', () => {
 
       describe('with post appointment', () => {
         beforeEach(() => {
-          videoLinkBookingAppointment.videoLinkBooking.post = {
-            court: 'Nottingham Justice Centre',
-            hearingType: 'POST',
-            locationId: 3,
-            startTime: '2021-05-20T14:00:00',
-            endTime: '2021-05-20T14:15:00',
-          }
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointment' does not exist on type '... Remove this comment to see the full error message
-          whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(videoLinkBookingAppointment)
+          videoLinkBooking.prisonAppointments.push({
+            appointmentType: 'VLB_COURT_POST',
+            prisonLocKey: 'LOCATION_3',
+            startTime: '14:00',
+            endTime: '14:15',
+          })
+
+          videoLinkBookingService.getVideoLinkBookingFromAppointmentId = jest.fn().mockResolvedValue(videoLinkBooking)
         })
 
         it('should render with the correct post appointment details', async () => {

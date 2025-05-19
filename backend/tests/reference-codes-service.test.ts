@@ -1,27 +1,27 @@
 import factory from '../controllers/reference-codes-service'
 
 const context = {}
-const prisonApi = {
+const prisonerAlertsApi = {
   getAlertTypes: jest.fn(),
 }
-const service = factory(prisonApi)
+const service = factory(prisonerAlertsApi)
 
 const getAlertAPIData = [
   {
     domain: 'ALERT',
     code: 'A',
     description: 'Social Care',
-    activeFlag: 'Y',
+    isActive: true,
     listSeq: 12,
     systemDataFlag: 'N',
-    subCodes: [
+    alertCodes: [
       {
         domain: 'ALERT_CODE',
         code: 'AS',
         description: 'Social Care',
         parentDomain: 'ALERT',
-        parentCode: 'A',
-        activeFlag: 'Y',
+        alertTypeCode: 'A',
+        isActive: true,
         listSeq: 1,
         systemDataFlag: 'N',
         subCodes: [],
@@ -32,17 +32,17 @@ const getAlertAPIData = [
     domain: 'ALERT',
     code: 'C',
     description: 'Child Communication Measures',
-    activeFlag: 'Y',
+    isActive: true,
     listSeq: 3,
     systemDataFlag: 'N',
-    subCodes: [
+    alertCodes: [
       {
         domain: 'ALERT_CODE',
         code: 'C1',
         description: 'L1 Restriction No contact with any child',
         parentDomain: 'ALERT',
-        parentCode: 'C',
-        activeFlag: 'N',
+        alertTypeCode: 'C',
+        isActive: false,
         listSeq: 3,
         systemDataFlag: 'N',
         expiredDate: '2015-10-27',
@@ -54,8 +54,8 @@ const getAlertAPIData = [
 
 describe('Reference codes service', () => {
   beforeEach(() => {
-    prisonApi.getAlertTypes = jest.fn()
-    prisonApi.getAlertTypes.mockReturnValue(getAlertAPIData)
+    prisonerAlertsApi.getAlertTypes = jest.fn()
+    prisonerAlertsApi.getAlertTypes.mockReturnValue(getAlertAPIData)
   })
   it('should map to alert type sub type model', async () => {
     const model = await service.getAlertTypes(context)

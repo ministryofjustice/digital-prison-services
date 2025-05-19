@@ -27,6 +27,8 @@ config.apis.calculateReleaseDates = {
 
 config.app.neurodiversityEnabledPrisons = ['NOT-ACCELERATED', 'LEI']
 
+config.app.sunsetBannerEnabled = true
+
 describe('prisoner profile service', () => {
   const context = {}
   const prisonApi = {} as jest.Mocked<typeof apis.prisonApi>
@@ -240,9 +242,13 @@ describe('prisoner profile service', () => {
         alerts: [
           {
             alertCodes: ['XA'],
-            classes: 'alert-status alert-status--arsonist',
-            img: '/images/Arsonist_icon.png',
+            classes: 'alert-status alert-status--security',
             label: 'Arsonist',
+          },
+          {
+            alertCodes: ['VIP'],
+            classes: 'alert-status alert-status--isolated-prisoner',
+            label: 'Isolated',
           },
         ],
         age: undefined,
@@ -289,15 +295,8 @@ describe('prisoner profile service', () => {
         esweEnabled: false,
         hasDivergenceSupport: false,
         indeterminateSentence: false,
+        sunsetBannerEnabled: true,
       })
-
-      expect(getPrisonerProfileData).toEqual(
-        expect.objectContaining({
-          alerts: expect.not.arrayContaining([
-            { alertCodes: ['VIP'], classes: 'alert-status alert-status--isolated-prisoner', label: 'Isolated' },
-          ]),
-        })
-      )
     })
 
     it('should return the correct prisoner information when some data is missing', async () => {

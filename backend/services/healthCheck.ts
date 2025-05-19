@@ -45,7 +45,10 @@ export default function healthcheckFactory(
   tokenverificationUrl,
   offenderSearchUrl,
   complexityUrl,
-  incentivesApiUrl
+  incentivesApiUrl,
+  bookAVideoLinkUrl,
+  locationsInsidePrisonApiUrl,
+  nomisMappingUrl
 ) {
   const checks = [
     service('auth', authUrl),
@@ -58,6 +61,9 @@ export default function healthcheckFactory(
     service('offenderSearch', offenderSearchUrl),
     service('complexity', complexityUrl),
     service('incentivesApi', incentivesApiUrl),
+    service('locationsInsidePrisonApi', locationsInsidePrisonApiUrl),
+    service('nomisMapping', nomisMappingUrl),
+    service('bookAVideoLinkApi', bookAVideoLinkUrl),
   ]
 
   if (!config.app.whereaboutsMaintenanceMode) {

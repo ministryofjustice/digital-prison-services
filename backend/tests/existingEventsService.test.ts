@@ -1,14 +1,23 @@
 import moment from 'moment'
 import { DATE_ONLY_FORMAT_SPEC } from '../../common/dateHelpers'
 import existingEventsService from '../services/existingEventsService'
+import { prisonApiFactory } from '../api/prisonApi'
 
 describe('existing events', () => {
-  const prisonApi = {
+  const prisonApi: Partial<ReturnType<typeof prisonApiFactory>> & {
+    getActivitiesAtLocation: jest.Mock
+    getActivityList: jest.Mock
+    getLocationsByNonResidentialUsageType: jest.Mock
+    getSentenceData: jest.Mock
+    getVisits: jest.Mock
+    getAppointments: jest.Mock
+    getExternalTransfers: jest.Mock
+    getCourtEvents: jest.Mock
+    getActivities: jest.Mock
+  } = {
     getActivitiesAtLocation: jest.fn(),
     getActivityList: jest.fn(),
-    getLocations: jest.fn(),
-    getLocationsForAppointments: jest.fn(),
-    getEventsAtLocations: jest.fn(),
+    getLocationsByNonResidentialUsageType: jest.fn(),
     getSentenceData: jest.fn(),
     getVisits: jest.fn(),
     getAppointments: jest.fn(),
@@ -27,7 +36,7 @@ describe('existing events', () => {
 
   describe('location availability', () => {
     beforeEach(() => {
-      prisonApi.getLocations.mockReturnValue(Promise.resolve([]))
+      prisonApi.getLocationsByNonResidentialUsageType.mockReturnValue(Promise.resolve([]))
     })
 
     it('should handle time slot where location booking slightly overlap ', async () => {
@@ -212,39 +221,6 @@ describe('existing events', () => {
         {},
         { agencyId: 'MDI', date: '2019-10-10', locationId: 2, usage: 'APP' }
       )
-    })
-
-    it('should adjust the main appointment time by one minute in the future', async () => {
-      const locations = [{ locationId: 1, description: 'Location 1', locationType: 'VIDE' }]
-      const eventsAtLocations = [
-        {
-          locationId: 1,
-          startTime: '2019-10-10T10:00:00',
-          endTime: '2019-10-10T10:15:00',
-          description: 'Video booking for John',
-        },
-      ]
-
-      prisonApi.getLocationsForAppointments.mockReturnValue(locations)
-      prisonApi.getActivityList.mockReturnValue(Promise.resolve(eventsAtLocations))
-
-      const availableLocations = await service.getAvailableLocationsForVLB(
-        {},
-        {
-          agencyId: 'LEI',
-          startTime: '2019-10-10T10:15',
-          endTime: '2019-10-10T10:30',
-          date: '2019-10-10',
-          preAppointmentRequired: 'no',
-          postAppointmentRequired: 'no',
-        }
-      )
-
-      expect(availableLocations).toEqual({
-        mainLocations: [{ text: 'Location 1', value: 1 }],
-        postLocations: [],
-        preLocations: [],
-      })
     })
   })
 

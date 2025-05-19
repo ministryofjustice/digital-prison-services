@@ -11,6 +11,7 @@ import {
   hyphenatedStringToCamel,
   possessive,
   formatTimestampToDate,
+  filterNot,
 } from '../utils'
 import config from '../config'
 
@@ -187,6 +188,8 @@ export default (app: express.Express, conf: typeof config) => {
     const array = fullName.split(' ')
     return `${array[0][0]}. ${array.reverse()[0]}`
   })
+
+  njkEnv.addFilter('filterNot', filterNot)
 
   return njkEnv
 }

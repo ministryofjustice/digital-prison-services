@@ -58,18 +58,17 @@ context('Work inside prison details page', () => {
     }
   }
 
-  context('no data available', () => {
-    before(() => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
+    cy.session('hmpps-session-dev', () => {
       cy.clearCookies()
-      cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
       cy.signIn()
-      cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
     })
+  })
 
-    beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    })
+  context('no data available', () => {
     it('should show correct content and no table', () => {
       cy.visit(`/prisoner/${offenderNo}/work-activities`)
       cy.get('h1').should('have.text', 'John Smith’s work and activities for the last 12 months')
@@ -81,6 +80,7 @@ context('Work inside prison details page', () => {
       )
     })
   })
+
   context('One job available', () => {
     const dummyWorkHistory = {
       content: [
@@ -119,17 +119,10 @@ context('Work inside prison details page', () => {
       numberOfElements: 1,
       empty: false,
     }
-    before(() => {
-      cy.clearCookies()
-      cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.signIn()
-      cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
-      cy.task('stubOffenderWorkHistory', dummyWorkHistory)
-    })
 
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
+      cy.task('stubOffenderWorkHistory', dummyWorkHistory)
     })
 
     it('should show the correct content and number of results', () => {
@@ -143,6 +136,7 @@ context('Work inside prison details page', () => {
         .find('tr')
         .then(($tableRows) => {
           cy.get($tableRows).its('length').should('eq', 1)
+
           const jobs = Array.from($tableRows).map(($row) => tableData($row.cells))
 
           expect(jobs[0].role).to.contain('Cleaner HB1 AM')
@@ -222,17 +216,9 @@ context('Work inside prison details page', () => {
       empty: false,
     }
 
-    before(() => {
-      cy.clearCookies()
-      cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.signIn()
+    beforeEach(() => {
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubKeyworkerMigrated')
-    })
-
-    beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
     })
 
     it('should render the page with correct data', () => {

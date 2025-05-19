@@ -11,6 +11,12 @@ interface DpsJwtPayload extends JwtPayload {
   authorities?: string[]
 }
 
+type AxiosResponse = {
+  access_token: string
+  refresh_token: string
+  expires_in: number
+}
+
 class UserRole {
   roleCode: string
 
@@ -71,7 +77,7 @@ export const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
         logger.debug(
           `${msg} ${response.config.method} ${response.config.url} ${response.status} ${response.statusText}`
         )
-        return parseOauthTokens(response.data)
+        return parseOauthTokens(response.data as unknown as AxiosResponse)
       })
       .catch((error) => {
         const status = errorStatusCode(error)

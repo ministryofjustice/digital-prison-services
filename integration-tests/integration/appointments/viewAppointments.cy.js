@@ -1,21 +1,21 @@
 const ViewAppointmentsPage = require('../../pages/appointments/viewAppointmentsPage')
 
 context('A user can view list of appointments', () => {
-  before(() => {
-    cy.clearCookies()
-    cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
-  })
+  before(() => {})
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.task('resetAndStubTokenVerification')
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
+    })
     cy.task('stubAppointmentTypes', [
       { code: 'ACTI', description: 'Activities' },
       { code: 'VLB', description: 'Video Link Booking' },
     ])
     cy.task('stubAgencyDetails', { agencyId: 'MDI', details: {} })
     cy.task('stubUserEmail', 'ITAG_USER')
-    cy.task('stubGroups', { id: 'MDI' })
+    cy.task('stubGetSearchGroups', { id: 'MDI' })
     cy.task('stubGetWhereaboutsAppointments', [
       {
         id: 1,
@@ -62,51 +62,57 @@ context('A user can view list of appointments', () => {
         agencyId: 'MDI',
       },
     ])
-    cy.task('stubVideoLinkAppointments', [
+    cy.task('stubGetPrisonVideoLinkSchedule', [
       {
-        id: 1,
-        bookingId: 1,
-        appointmentId: 3,
-        court: 'Wimbledon',
-        hearingType: 'MAIN',
-        madeByTheCourt: false,
-        createdByUsername: 'STAFF_1',
+        videoBookingId: 1,
+        prisonAppointmentId: 1,
+        bookingType: 'COURT',
+        statusCode: 'ACTIVE',
+        courtDescription: 'Wimbledon',
+        prisonerNumber: 'ABC789',
+        startTime: '14:30',
+        endTime: '15:30',
+        dpsLocationId: 'abc-123',
       },
     ])
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 789, dpsLocationId: 'abc-123' })
 
-    cy.task('stubAppointmentLocations', {
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 1, dpsLocationId: 'dps-1' })
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 2, dpsLocationId: 'dps-2' })
+    cy.task('stubGetLocationsByNonResidentialUsageType', {
       agency: 'MDI',
       locations: [
         {
-          locationId: 1,
+          id: 'dps-1',
           locationType: 'VLB',
-          description: 'VLB Room 1',
-          userDescription: 'VLB Room 1',
-          agencyId: 'WWI',
-          createdByUsername: 'username1',
+          pathHierarchy: 'VLB Room 1',
+          localName: 'VLB Room 1',
+          prisonId: 'WWI',
         },
         {
-          locationId: 2,
+          id: 'dps-2',
           locationType: 'GYM',
-          description: 'Gym',
-          userDescription: 'Gym',
-          agencyId: 'WWI',
+          pathHierarchy: 'Gym',
+          localName: 'Gym',
+          prisonId: 'WWI',
         },
       ],
     })
 
-    cy.task('stubPrisonerFullDetail', {
-      prisonerDetail: { assignedLivingUnit: { description: '1-1-1' } },
-      offenderNo: 'ABC123',
-    })
-    cy.task('stubPrisonerFullDetail', {
-      prisonerDetail: { assignedLivingUnit: { description: '2-1-1' } },
-      offenderNo: 'ABC456',
-    })
-    cy.task('stubPrisonerFullDetail', {
-      prisonerDetail: { assignedLivingUnit: { description: '3-1-1' } },
-      offenderNo: 'ABC789',
-    })
+    cy.task('stubPrisonerSearchDetails', [
+      {
+        cellLocation: '1-1-1',
+        prisonerNumber: 'ABC123',
+      },
+      {
+        cellLocation: '2-1-1',
+        prisonerNumber: 'ABC456',
+      },
+      {
+        cellLocation: '3-1-1',
+        prisonerNumber: 'ABC789',
+      },
+    ])
   })
 
   it('A user can see appointments for the date and period', () => {
@@ -165,7 +171,7 @@ context('A user can view list of appointments', () => {
   it('A user is presented with the no data message when no data', () => {
     cy.task('stubAppointmentsAtAgency', 'MDI', [])
     cy.task('stubGetWhereaboutsAppointments')
-    cy.task('stubVideoLinkAppointments')
+    cy.task('stubGetPrisonVideoLinkSchedule')
 
     cy.visit('/view-all-appointments')
     const viewAppointmentsPage = ViewAppointmentsPage.verifyOnPage()

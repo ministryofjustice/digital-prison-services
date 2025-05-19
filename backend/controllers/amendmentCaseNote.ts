@@ -1,7 +1,9 @@
 import { capitalize, formatName, putLastNameFirst } from '../utils'
 import { serviceUnavailableMessage } from '../common-messages'
+import { getContextWithClientTokenAndRoles } from './prisonerProfile/prisonerProfileContext'
+import contextProperties from '../contextProperties'
 
-export default ({ prisonApi, caseNotesApi, logError }) => {
+export default ({ prisonApi, caseNotesApi, logError, systemOauthClient }) => {
   const getOffenderDetails = async (res, offenderNo) => {
     const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
 
@@ -13,11 +15,21 @@ export default ({ prisonApi, caseNotesApi, logError }) => {
   const index = async (req, res) => {
     const { offenderNo, caseNoteId } = req.params
 
+    const { context } = await getContextWithClientTokenAndRoles({
+      offenderNo,
+      res,
+      req,
+      oauthApi: null,
+      systemOauthClient,
+      restrictedPatientApi: null,
+    })
+
     try {
-      const [caseNote, prisonerDetails] = await Promise.all([
-        caseNotesApi.getCaseNote(res.locals, offenderNo, caseNoteId),
-        prisonApi.getDetails(res.locals, offenderNo),
-      ])
+      const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo)
+      if (prisonerDetails?.agencyId) {
+        contextProperties.setCustomRequestHeaders(context, { CaseloadId: prisonerDetails.agencyId })
+      }
+      const caseNote = await caseNotesApi.getCaseNote(context, offenderNo, caseNoteId)
 
       const { staffId } = req.session.userDetails
 
@@ -58,8 +70,17 @@ export default ({ prisonApi, caseNotesApi, logError }) => {
   }
 
   const makeAmendment = async (req, res, { offenderNo, caseNoteId, moreDetail }) => {
+    const { context } = await getContextWithClientTokenAndRoles({
+      offenderNo,
+      res,
+      req,
+      oauthApi: null,
+      systemOauthClient,
+      restrictedPatientApi: null,
+    })
+
     try {
-      await caseNotesApi.amendCaseNote(res.locals, offenderNo, caseNoteId, {
+      await caseNotesApi.amendCaseNote(context, offenderNo, caseNoteId, {
         text: moreDetail,
       })
 

@@ -3,14 +3,21 @@ import moment from 'moment'
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const prisonApi = {
   getInmates: jest.fn(),
-  getAlerts: jest.fn(),
   getMovementsInBetween: jest.fn(),
+}
+const prisonerAlertsApi = {
+  getAlerts: jest.fn(),
 }
 const systemOauthClient = {
   getClientCredentialsTokens: jest.fn(),
 }
 const now = moment('2020-01-10')
-const covidService = require('../services/covidService').covidServiceFactory(systemOauthClient, prisonApi, () => now)
+const covidService = require('../services/covidService').covidServiceFactory(
+  systemOauthClient,
+  prisonApi,
+  prisonerAlertsApi,
+  () => now
+)
 
 const returnSize = (count) => (context) => {
   // eslint-disable-next-line no-param-reassign,
@@ -64,11 +71,13 @@ describe('Covid Service', () => {
       const req = { session: { userDetails: { username: 'ITAG_USER' } } }
       const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
 
-      prisonApi.getAlerts.mockResolvedValue([
-        { offenderNo: 'AA1234A', alertCode: 'AA1', expired: false, dateCreated: '2020-01-02' },
-        { offenderNo: 'AA1234A', alertCode: 'UPIU', expired: false, dateCreated: '2020-01-03' },
-        { offenderNo: 'BB1234A', alertCode: 'UPIU', expired: false, dateCreated: '2020-01-04' },
-      ])
+      prisonerAlertsApi.getAlerts.mockResolvedValue({
+        content: [
+          { prisonNumber: 'AA1234A', alertCode: { code: 'AA1' }, isActive: true, createdAt: '2020-01-02' },
+          { prisonNumber: 'AA1234A', alertCode: { code: 'UPIU' }, isActive: true, createdAt: '2020-01-03' },
+          { prisonNumber: 'BB1234A', alertCode: { code: 'UPIU' }, isActive: true, createdAt: '2020-01-04' },
+        ],
+      })
 
       prisonApi.getInmates.mockResolvedValue([
         {
@@ -110,7 +119,7 @@ describe('Covid Service', () => {
         alerts: 'UPIU',
       })
 
-      expect(prisonApi.getAlerts).toHaveBeenCalledWith(expect.objectContaining({ requestHeaders }), {
+      expect(prisonerAlertsApi.getAlerts).toHaveBeenCalledWith(expect.objectContaining({ requestHeaders }), {
         agencyId: 'MDI',
         offenderNumbers: ['AA1234A', 'BB1234A'],
       })
@@ -120,11 +129,13 @@ describe('Covid Service', () => {
       const req = { session: { userDetails: { username: 'ITAG_USER' } } }
       const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
 
-      prisonApi.getAlerts.mockResolvedValue([
-        { offenderNo: 'AA1234A', alertCode: 'UPIU', expired: false, dateCreated: '2020-01-03' },
-        { offenderNo: 'AA1234A', alertCode: 'UPIU', expired: true, dateCreated: '2020-01-05' },
-        { offenderNo: 'BB1234A', alertCode: 'UPIU', expired: false, dateCreated: '2020-01-04' },
-      ])
+      prisonerAlertsApi.getAlerts.mockResolvedValue({
+        content: [
+          { prisonNumber: 'AA1234A', alertCode: { code: 'UPIU' }, isActive: true, createdAt: '2020-01-03' },
+          { prisonNumber: 'AA1234A', alertCode: { code: 'UPIU' }, isActive: false, createdAt: '2020-01-05' },
+          { prisonNumber: 'BB1234A', alertCode: { code: 'UPIU' }, isActive: true, createdAt: '2020-01-04' },
+        ],
+      })
 
       prisonApi.getInmates.mockResolvedValue([
         {
@@ -173,12 +184,16 @@ describe('Covid Service', () => {
     it('success', async () => {
       const context = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
 
-      prisonApi.getAlerts.mockResolvedValue([
-        { offenderNo: 'AA1234A', alertCode: 'AA1', expired: false, dateCreated: '2020-01-02' },
-        { offenderNo: 'AA1234A', alertCode: 'UPIU', expired: false, dateCreated: '2020-01-03' },
-        { offenderNo: 'BB1234A', alertCode: 'UPIU', expired: false, dateCreated: '2020-01-04' },
-        { offenderNo: 'DD1234A', alertCode: 'AA2', expired: false, dateCreated: '2020-01-05' },
-      ])
+      systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
+
+      prisonerAlertsApi.getAlerts.mockResolvedValue({
+        content: [
+          { prisonNumber: 'AA1234A', alertCode: { code: 'AA1' }, isActive: true, createdAt: '2020-01-02' },
+          { prisonNumber: 'AA1234A', alertCode: { code: 'UPIU' }, isActive: true, createdAt: '2020-01-03' },
+          { prisonNumber: 'BB1234A', alertCode: { code: 'UPIU' }, isActive: true, createdAt: '2020-01-04' },
+          { prisonNumber: 'DD1234A', alertCode: { code: 'AA2' }, isActive: true, createdAt: '2020-01-05' },
+        ],
+      })
 
       prisonApi.getMovementsInBetween.mockResolvedValue([
         {
@@ -215,7 +230,10 @@ describe('Covid Service', () => {
         },
       ])
 
-      const response = await covidService.getUnassignedNewEntrants(context)
+      const response = await covidService.getUnassignedNewEntrants(
+        { session: { userDetails: { username: 'name' } } },
+        context
+      )
 
       expect(response).toEqual([
         {
@@ -238,7 +256,7 @@ describe('Covid Service', () => {
         fromDateTime: '2019-12-27T00:00:00',
       })
 
-      expect(prisonApi.getAlerts).toHaveBeenCalledWith(expect.objectContaining({ requestHeaders }), {
+      expect(prisonerAlertsApi.getAlerts).toHaveBeenCalledWith(expect.objectContaining({}), {
         agencyId: 'MDI',
         offenderNumbers: ['AA1234A', 'BB1234A', 'CC1234A', 'DD1234A'],
       })

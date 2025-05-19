@@ -27,9 +27,9 @@ export const app = {
   whereaboutsMaintenanceMode: process.env.WHEREABOUTS_MAINTENANCE_MODE === 'true' || false,
   keyworkerMaintenanceMode: process.env.KEYWORKER_MAINTENANCE_MODE === 'true' || false,
   covidUnitsEnabled: process.env.COVID_UNITS_ENABLED === 'true' || false,
+  videoConferenceScheduleUrl: process.env.VIDEO_CONFERENCE_SCHEDULE_URL,
   prisonerProfileRedirect: {
-    url: process.env.PRISONER_PROFILE_REDIRECT_URL,
-    exemptions: process.env.PRISONER_PROFILE_REDIRECT_EXEMPTIONS || '',
+    url: process.env.PRISONER_PROFILE_REDIRECT_URL || 'http://localhost:3000',
   },
   homepageRedirect: {
     url: process.env.HOMEPAGE_REDIRECT_URL,
@@ -38,7 +38,9 @@ export const app = {
     scheduleRedirectForPrisons: process.env.HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS || '',
     exemptions: process.env.HOMEPAGE_REDIRECT_EXEMPTIONS || '',
   },
+  bvlsMasteredAppointmentTypes: ['VLB', 'VLPM'].filter(Boolean),
   gitRef: process.env.GIT_REF || '',
+  sunsetBannerEnabled: process.env.SUNSET_BANNER_ENABLED === 'true',
 }
 
 export const analytics = {
@@ -101,6 +103,14 @@ export const apis = {
     url: process.env.API_WHEREABOUTS_ENDPOINT_URL || 'http://localhost:8082/',
     timeoutSeconds: toNumber(process.env.API_WHEREABOUTS_ENDPOINT_TIMEOUT_SECONDS) || 30,
   },
+  locationsInsidePrisonApi: {
+    url: process.env.API_LOCATIONS_INSIDE_PRISON_ENDPOINT_URL || 'http://localhost:8082/',
+    timeoutSeconds: toNumber(process.env.API_LOCATIONS_INSIDE_PRISON_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
+  nomisMapping: {
+    url: process.env.API_NOMIS_MAPPING_ENDPOINT_URL || 'http://localhost:8090/',
+    timeoutSeconds: toNumber(process.env.API_NOMIS_MAPPING_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
   deliusIntegration: {
     url: process.env.API_DELIUS_ENDPOINT_URL || 'http://localhost:8083/delius',
     timeoutSeconds: toNumber(process.env.API_DELIUS_ENDPOINT_TIMEOUT_SECONDS) || 30,
@@ -153,6 +163,10 @@ export const apis = {
     url: process.env.CASENOTES_API_URL || 'http://localhost:8083',
     timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
   },
+  prisonerAlerts: {
+    url: process.env.ALERTS_API_URL || 'http://localhost:8083',
+    timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
   allocationManager: {
     url: process.env.ALLOCATION_MANAGER_ENDPOINT_URL || '',
     timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
@@ -174,6 +188,10 @@ export const apis = {
   },
   bookVideoLink: {
     url: process.env.BVL_URL || 'http://localhost:3000',
+  },
+  bookAVideoLinkApi: {
+    url: process.env.BOOK_A_VIDEO_LINK_API_URL || 'http://localhost:8083/',
+    timeoutSeconds: toNumber(process.env.BOOK_A_VIDEO_LINK_API_TIMEOUT_SECONDS) || 30,
   },
   welcomePeopleIntoPrison: {
     url: process.env.WELCOME_PEOPLE_INTO_PRISON_URL,
@@ -242,63 +260,13 @@ export const apis = {
   prepareSomeoneForRelease: {
     ui_url: process.env.PREPARE_SOMEONE_FOR_RELEASE_URL,
   },
-  adjudicationsApi: {
-    url: process.env.MANAGE_ADJUDICATIONS_API_URL || 'http://localhost:8087',
-    timeoutSeconds: toNumber(process.env.MANAGE_ADJUDICATIONS_API_ENDPOINT_TIMEOUT_SECONDS) || 30,
-  },
   frontendComponents: {
     url: process.env.COMPONENT_API_URL || 'http://localhost:8082',
     timeoutSeconds: toNumber(process.env.COMPONENT_API_TIMEOUT_SECONDS) || 5,
     latestFeatures: process.env.COMPONENT_API_LATEST === 'true',
   },
-}
-export const notifications = {
-  enabled: process.env.NOTIFY_ENABLED ? process.env.NOTIFY_ENABLED === 'true' : true,
-  notifyKey: process.env.NOTIFY_API_KEY || '',
-  confirmBookingPrisonTemplateId: '391bb0e0-89b3-4aef-b11e-c6550b71fee8',
-  emails: {
-    WWI: {
-      omu: process.env.WANDSWORTH_OMU_EMAIL,
-    },
-    TSI: {
-      omu: process.env.THAMESIDE_OMU_EMAIL,
-    },
-    HEI: {
-      omu: process.env.HEWELL_OMU_EMAIL,
-    },
-    BWI: {
-      omu: process.env.BERWYN_OMU_EMAIL,
-    },
-    NMI: {
-      omu: process.env.NOTTINGHAM_OMU_EMAIL,
-    },
-    EYI: {
-      omu: process.env.ELMLEY_OMU_EMAIL,
-    },
-    BNI: {
-      omu: process.env.BULLINGDON_OMU_EMAIL,
-    },
-    PBI: {
-      omu: process.env.PETERBOROUGH_OMU_EMAIL,
-    },
-    BMI: {
-      omu: process.env.BIRMINGHAM_OMU_EMAIL,
-    },
-    NWI: {
-      omu: process.env.NORWICH_OMU_EMAIL,
-    },
-    PNI: {
-      omu: process.env.PRESTON_OMU_EMAIL,
-    },
-    BZI: {
-      omu: process.env.BRONZEFIELD_OMU_EMAIL,
-    },
-    PVI: {
-      omu: process.env.PENTONVILLE_OMU_EMAIL,
-    },
-    EXI: {
-      omu: process.env.EXETER_OMU_EMAIL,
-    },
+  changeSomeonesCell: {
+    ui_url: process.env.CHANGE_SOMEONES_CELL_URL || 'http://localhost:3002',
   },
 }
 
@@ -309,8 +277,6 @@ export default {
   analytics,
   hmppsCookie,
   redis,
-  applications,
   apis,
-  notifications,
   phaseName,
 }

@@ -10,7 +10,7 @@ export default ({ covidService }) => {
   })
 
   return async (req, res) => {
-    const results = await covidService.getUnassignedNewEntrants(res)
+    const results = await covidService.getUnassignedNewEntrants(req, res)
     const formattedResults = results.map(formatResult).sort((left, right) => left.name.localeCompare(right.name))
 
     return res.render('covid/notInUnit.njk', {

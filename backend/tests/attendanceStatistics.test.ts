@@ -337,7 +337,8 @@ describe('Attendance reason statistics', () => {
 
       expect(whereaboutsApi.getAttendanceChanges).toHaveBeenCalledWith(
         {},
-        { fromDateTime: '2019-10-10T00:00', toDateTime: '2019-10-11T23:59' }
+        { fromDateTime: '2019-10-10T00:00', toDateTime: '2019-10-11T23:59' },
+        'LEI'
       )
     })
 
@@ -355,7 +356,8 @@ describe('Attendance reason statistics', () => {
 
       expect(whereaboutsApi.getAttendanceChanges).toHaveBeenCalledWith(
         {},
-        { fromDateTime: '2019-10-10T00:00', toDateTime: '2019-10-11T11:59' }
+        { fromDateTime: '2019-10-10T00:00', toDateTime: '2019-10-11T11:59' },
+        'LEI'
       )
     })
 
@@ -373,7 +375,8 @@ describe('Attendance reason statistics', () => {
 
       expect(whereaboutsApi.getAttendanceChanges).toHaveBeenCalledWith(
         {},
-        { fromDateTime: '2019-10-10T12:00', toDateTime: '2019-10-11T16:59' }
+        { fromDateTime: '2019-10-10T12:00', toDateTime: '2019-10-11T16:59' },
+        'LEI'
       )
     })
 
@@ -406,7 +409,7 @@ describe('Attendance reason statistics', () => {
 
     it('should render the attendance reasons statistics view with the correctly formatted parameters', async () => {
       whereaboutsApi.getAttendanceStats.mockReturnValue(stats)
-      whereaboutsApi.getAttendanceChanges.mockReturnValue({ changes: [{ prisonId: 'MDI' }, { prisonId: 'LEI' }] })
+      whereaboutsApi.getAttendanceChanges.mockReturnValue({ changes: [{ prisonId: 'LEI' }] })
 
       const { attendanceStatistics } = attendanceStatisticsFactory(
         oauthApi,

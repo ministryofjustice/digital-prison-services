@@ -139,9 +139,13 @@ context('Houseblock list page list page', () => {
     cy.task('reset')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload })
     cy.signIn()
-    cy.task('stubGroups', { id: caseload })
+    cy.task('stubGetSearchGroups', { id: caseload })
     cy.task('stubActivityLocations')
-    cy.task('stubGetAgencyGroupLocations', { agencyId: caseload, groupName: 1, response: [1] })
+    cy.task('stubGetAgencyGroupLocations', {
+      agencyId: caseload,
+      groupName: 1,
+      response: [{ pathHierarchy: 'A-1-1' }],
+    })
     cy.task('stubGetAttendancesForBookings', {
       agencyId: caseload,
       date,
@@ -160,7 +164,7 @@ context('Houseblock list page list page', () => {
     cy.task('stubSentenceData')
     cy.task('stubCourtEvents')
     cy.task('stubExternalTransfers')
-    cy.task('stubAlerts', { locationId: 'MDI', alerts: [] })
+    cy.task('stubGetAlerts', { locationId: 'MDI', alerts: [] })
     cy.task('stubAssessments', ['A1234AA', 'A1234AB', 'A1234AC'])
 
     cy.task('stubGetAbsenceReasons')
@@ -516,8 +520,7 @@ context('Houseblock list page list page', () => {
   })
 
   it('Marks attendance', () => {
-    cy.server()
-    cy.route('POST', /.\/api\/attendance*/).as('request')
+    cy.intercept('POST', /.\/api\/attendance*/).as('request')
 
     cy.task('stubPostAttendance', {
       id: 1,
@@ -612,9 +615,8 @@ context('Houseblock list page list page', () => {
       response: eventsAtLocation,
     })
 
-    cy.server()
-    cy.route('POST', /.\/api\/attendance*/).as('request')
-    cy.route('GET', /.*houseblocklist.*/).as('getHouseBlockList')
+    cy.intercept('POST', /.\/api\/attendance*/).as('request')
+    cy.intercept('GET', /.*houseblocklist.*/).as('getHouseBlockList')
 
     cy.task('stubPostAttendance', {
       id: 1,

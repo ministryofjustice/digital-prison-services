@@ -1,5 +1,7 @@
 import asyncMiddleware from '../middleware/asyncHandler'
 import { serviceUnavailableMessage } from '../common-messages'
+import { getContextWithClientTokenAndRoles } from './prisonerProfile/prisonerProfileContext'
+import contextProperties from '../contextProperties'
 
 export const factory = ({
   activityListService,
@@ -9,6 +11,7 @@ export const factory = ({
   csvParserService,
   offenderActivitiesService,
   caseNotesApi,
+  prisonApi,
   logError,
 }) => {
   const getActivityList = async (req, res) => {
@@ -105,10 +108,25 @@ export const factory = ({
 
   const getCaseNote = asyncMiddleware(async (req, res) => {
     const { offenderNumber, caseNoteId } = req.params
-    const caseNote = await caseNotesApi.getCaseNote(res.locals, offenderNumber, caseNoteId)
+    const { context } = await getContextWithClientTokenAndRoles({
+      offenderNo: offenderNumber,
+      res,
+      req,
+      oauthApi: null,
+      systemOauthClient: null,
+      restrictedPatientApi: null,
+    })
+
+    const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNumber)
+    if (prisonerDetails?.agencyId) {
+      contextProperties.setCustomRequestHeaders(context, { CaseloadId: prisonerDetails.agencyId })
+    }
+
+    const caseNote = await caseNotesApi.getCaseNote(context, offenderNumber, caseNoteId)
 
     const translateToFirstLast = (lastNameFirstName) => {
       if (!lastNameFirstName) return ''
+      if (!lastNameFirstName.includes(',')) return lastNameFirstName
       const reversed = lastNameFirstName.split(',').reverse()
       return `${reversed[0].trim()}, ${reversed[1].trim()}`
     }

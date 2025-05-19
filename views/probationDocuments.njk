@@ -45,7 +45,7 @@
 {% macro documentDetail(document, offenderDetails) %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <a class="qa-document-link" href="/offenders/{{offenderDetails.offenderNo}}/probation-documents/{{document.id}}/download">{{ document.name }}</a>
+      <a class="govuk-link" data-test="document-link" href="/offenders/{{offenderDetails.offenderNo}}/probation-documents/{{document.id}}/download">{{ document.name }}</a>
     </div>
     <div class="govuk-grid-column-full">
       {{ document.type}} created by {{ document.author }}
@@ -76,6 +76,7 @@
     {{ govukTable({
       firstCellIsHeader: false,
       caption: caption,
+      captionClasses: 'govuk-heading-m',
       head: [
         {
           text: "Details"
@@ -167,7 +168,7 @@
       ), convictionItems) %}
   {% endfor %}
 
-  <h3 class="govuk-heading-s govuk-!-margin-top-9 govuk-!-margin-bottom-0">Documents related to each sentence</h3>
+  <h3 class="govuk-heading-m govuk-!-margin-top-9 govuk-!-margin-bottom-0">Documents related to each sentence</h3>
   {{ govukAccordion({
   id: "accordion-default",
   items: convictionItems

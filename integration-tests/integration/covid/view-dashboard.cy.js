@@ -15,7 +15,7 @@ context('Covid dashboard page', () => {
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.signIn()
 
-    cy.task('stubAlerts', { locationId: 'MDI', alerts: [] })
+    cy.task('stubGetAlerts', { locationId: 'MDI', alerts: [] })
 
     cy.task('stubInmates', { locationId: 'MDI', params: {}, count: 102 })
     cy.task('stubInmates', { locationId: 'MDI', params: alert('UPIU'), count: 8 })

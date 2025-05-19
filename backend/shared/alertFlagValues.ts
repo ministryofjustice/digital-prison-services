@@ -1,84 +1,88 @@
 export const alertFlagLabels = [
-  { alertCodes: ['HA'], classes: 'alert-status alert-status--acct', label: 'ACCT open' },
+  { alertCodes: ['HA'], classes: 'alert-status alert-status--self-harm', label: 'ACCT open' },
   {
     alertCodes: ['HA1'],
-    classes: 'alert-status alert-status--acct-post-closure',
+    classes: 'alert-status alert-status--self-harm',
     label: 'ACCT post closure',
   },
   {
-    alertCodes: ['XSA'],
-    classes: 'alert-status alert-status--assault',
+    alertCodes: ['XSA', 'SA'],
+    classes: 'alert-status alert-status--security',
     label: 'Staff assaulter',
   },
   {
     alertCodes: ['XA'],
-    classes: 'alert-status alert-status--arsonist',
+    classes: 'alert-status alert-status--security',
     label: 'Arsonist',
-    img: '/images/Arsonist_icon.png',
   },
   {
     alertCodes: ['PEEP'],
-    classes: 'alert-status alert-status--disability',
+    classes: 'alert-status alert-status--medical',
     label: 'PEEP',
-    img: '/images/Disability_icon.png',
   },
-  { alertCodes: ['XEL'], classes: 'alert-status alert-status--elist', label: 'E-list' },
+  {
+    alertCodes: ['HID'],
+    classes: 'alert-status alert-status--medical',
+    label: 'Hidden disability',
+  },
+  { alertCodes: ['XEL'], classes: 'alert-status alert-status--security', label: 'E-list' },
+  { alertCodes: ['XELH'], classes: 'alert-status alert-status--security', label: 'E-list heightened' },
+  { alertCodes: ['XER'], classes: 'alert-status alert-status--security', label: 'Escape risk' },
   {
     alertCodes: ['XRF'],
-    classes: 'alert-status alert-status--risk-females',
+    classes: 'alert-status alert-status--security',
     label: 'Risk to females',
   },
-  { alertCodes: ['XTACT'], classes: 'alert-status alert-status--tact', label: 'TACT' },
+  { alertCodes: ['XTACT'], classes: 'alert-status alert-status--security', label: 'TACT' },
   {
     alertCodes: ['XCO'],
-    classes: 'alert-status alert-status--corruptor',
+    classes: 'alert-status alert-status--security',
     label: 'Corruptor',
-    img: '/images/CU_icon.png',
   },
   {
     alertCodes: ['XCA'],
-    classes: 'alert-status alert-status--chemical-attacker',
+    classes: 'alert-status alert-status--security',
     label: 'Chemical attacker',
   },
   {
     alertCodes: ['XCI'],
-    classes: 'alert-status alert-status--concerted-indiscipline',
+    classes: 'alert-status alert-status--security',
     label: 'Concerted indiscipline',
   },
-  { alertCodes: ['XR'], classes: 'alert-status alert-status--racist', label: 'Racist' },
+  { alertCodes: ['XR'], classes: 'alert-status alert-status--security', label: 'Racist' },
   {
     alertCodes: ['RTP', 'RLG'],
-    classes: 'alert-status alert-status--risk-lgbt',
+    classes: 'alert-status alert-status--risk',
     label: 'Risk to LGBT',
   },
   {
     alertCodes: ['XHT'],
-    classes: 'alert-status alert-status--hostage-taker',
+    classes: 'alert-status alert-status--security',
     label: 'Hostage taker',
   },
   {
     alertCodes: ['XCU'],
-    classes: 'alert-status alert-status--controlled-unlock',
+    classes: 'alert-status alert-status--security',
     label: 'Controlled unlock',
   },
   {
     alertCodes: ['XGANG'],
-    classes: 'alert-status alert-status--gang-member',
+    classes: 'alert-status alert-status--security',
     label: 'Gang member',
   },
-  { alertCodes: ['CSIP'], classes: 'alert-status alert-status--csip', label: 'CSIP' },
-  { alertCodes: ['F1'], classes: 'alert-status alert-status--veteran', label: 'Veteran' },
+  { alertCodes: ['CSIP'], classes: 'alert-status alert-status--other', label: 'CSIP' },
+  { alertCodes: ['F1'], classes: 'alert-status alert-status--ex-armed-forces', label: 'Veteran' },
   {
     alertCodes: ['LCE'],
-    classes: 'alert-status alert-status--care-experienced',
+    classes: 'alert-status alert-status--care-leaver',
     label: 'Care experienced',
   },
   {
     alertCodes: ['RNO121'],
-    classes: 'alert-status alert-status--no-one-to-one',
+    classes: 'alert-status alert-status--risk',
     label: 'No one-to-one',
   },
-  { alertCodes: ['RCON'], classes: 'alert-status alert-status--conflict', label: 'Conflict' },
+  { alertCodes: ['RCON'], classes: 'alert-status alert-status--risk', label: 'Conflict' },
   {
     alertCodes: ['RCDR'],
     classes: 'alert-status alert-status--quarantined',
@@ -99,6 +103,16 @@ export const alertFlagLabels = [
   { alertCodes: ['RKS'], classes: 'alert-status alert-status--risk-to-known-adults', label: 'Risk to known adults' },
   { alertCodes: ['VIP'], classes: 'alert-status alert-status--isolated-prisoner', label: 'Isolated' },
   { alertCodes: ['PVN'], classes: 'alert-status alert-status--multicase alert-status--visor', label: 'ViSOR' },
+  {
+    alertCodes: ['XCDO'],
+    classes: 'alert-status alert-status--security',
+    label: 'Involved in 2024 civil disorder',
+  },
+  {
+    alertCodes: ['XVL'],
+    classes: 'alert-status alert-status--security',
+    label: 'Violent',
+  },
 ].sort((a, b) => a.label.localeCompare(b.label))
 
 export const cellMoveAlertCodes = [
@@ -111,6 +125,8 @@ export const cellMoveAlertCodes = [
   'XR',
   'XA',
   'XEL',
+  'XELH',
+  'XER',
   'CSIP',
   'URCU',
   'UPIU',
@@ -122,6 +138,8 @@ export const cellMoveAlertCodes = [
   'HA1',
   'RTP',
   'PVN',
+  'XCDO',
+  'XVL',
 ]
 
 export const profileAlertCodes = [
@@ -130,7 +148,10 @@ export const profileAlertCodes = [
   'XSA',
   'XA',
   'PEEP',
+  'HID',
   'XEL',
+  'XELH',
+  'XER',
   'XRF',
   'XTACT',
   'XCO',
@@ -153,10 +174,13 @@ export const profileAlertCodes = [
   'USU',
   'URS',
   'PVN',
+  'RKS',
+  'VIP',
+  'XCDO',
+  'XVL',
 ]
 
 export type AlertLabelFlag = {
-  img: string
   label: string
   classes: string
 }

@@ -1,7 +1,9 @@
-export const getHouseblockLocationsFactory = ({ whereaboutsApi, logError }) => {
+export const getHouseblockLocationsFactory = (getClientCredentialsTokens, locationsInsidePrisonApi, logError) => {
   const getHouseblockLocations = async (req, res) => {
     try {
-      const response = await whereaboutsApi.searchGroups(res.locals, req.query.agencyId)
+      const systemContext = await getClientCredentialsTokens()
+
+      const response = await locationsInsidePrisonApi.getSearchGroups(systemContext, req.query.agencyId)
       return res.json(response)
     } catch (error) {
       if (error.code === 'ECONNRESET' || (error.stack && error.stack.toLowerCase().includes('timeout')))

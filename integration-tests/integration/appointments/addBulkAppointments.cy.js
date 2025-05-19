@@ -8,19 +8,15 @@ const BulkAppointmentsNotAddedPage = require('../../pages/appointments/bulkAppoi
 const BulkAppointmentUploadCSVPage = require('../../pages/appointments/bulkAppointmentsUploadCSVPage')
 
 context('A user can add a bulk appointment', () => {
-  before(() => {
-    cy.clearCookies()
-    cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
-  })
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.task('resetAndStubTokenVerification')
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
+    })
     const offenderNo = 'A12345'
-    cy.task('stubAppointmentTypes', [
-      { code: 'ACTI', description: 'Activities' },
-      { code: 'VLB', description: 'Video Link Booking' },
-    ])
+    cy.task('stubAppointmentTypes', [{ code: 'ACTI', description: 'Activities' }])
     cy.task('stubPostAppointments')
     cy.task('stubSchedules', {
       agency: 'MDI',
@@ -31,10 +27,11 @@ context('A user can add a bulk appointment', () => {
       activities: [],
     })
     cy.task('stubLocation', { locationId: 123456 })
-    cy.task('stubAppointmentLocations', {
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 1, dpsLocationId: 'dps-1' })
+    cy.task('stubGetLocationsByNonResidentialUsageType', {
       agency: 'MDI',
       locations: [
-        { locationId: 1, locationType: 'ADJU', description: 'Adjudication', userDescription: 'Adj', agencyId: 'MDI' },
+        { id: 'dps-1', locationType: 'ADJU', pathHierarchy: 'Adjudication', localName: 'Adj', prisonId: 'MDI' },
       ],
     })
     cy.task('stubBookingOffenders', [
