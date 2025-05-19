@@ -2,15 +2,12 @@ import React from 'react'
 import { mount } from 'enzyme'
 import moment from 'moment'
 import { JSDOM } from 'jsdom'
-// import { TextDecoder, TextEncoder } from 'util'
 import DateOfBirthInput from './DateOfBirthInput'
 
 const jsdom = new JSDOM('<!doctype html><html lang="en"><body></body></html>')
 const { window } = jsdom
 global.window = window
 global.document = window.document
-// global.TextEncoder = TextEncoder
-// global.TextDecoder = TextDecoder
 
 describe('DateOfBirthInput', () => {
   it('Should render', () => {
