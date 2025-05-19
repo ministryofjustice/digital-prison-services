@@ -1,7 +1,6 @@
 import express from 'express'
 
 import { logError } from './logError'
-import { alertFactory } from './controllers/alert'
 import { probationDocumentsFactory } from './controllers/probationDocuments'
 import { downloadProbationDocumentFactory } from './controllers/downloadProbationDocument'
 import { attendanceStatisticsFactory } from './controllers/attendance/attendanceStatistics'
@@ -155,29 +154,9 @@ const setup = ({
     })
   )
 
-  router.get(
-    '/edit-alert',
-    alertFactory(oauthApi, systemOauthClient, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonerAlertsApi))
-      .displayEditAlertPage
-  )
-  router.post(
-    '/edit-alert/:bookingId/:alertId',
-    alertFactory(oauthApi, systemOauthClient, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonerAlertsApi))
-      .handleEditAlertForm
-  )
-  router.get(
-    '/offenders/:offenderNo/create-alert',
-    alertFactory(oauthApi, systemOauthClient, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonerAlertsApi))
-      .displayCreateAlertPage
-  )
-  router.post(
-    '/offenders/:offenderNo/create-alert',
-    alertFactory(oauthApi, systemOauthClient, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonerAlertsApi))
-      .handleCreateAlertForm
-  )
   router.use(
     '/prisoner/:offenderNo/add-case-note',
-    createCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi })
+    createCaseNoteRouter({ prisonApi, oauthApi, systemOauthClient, restrictedPatientApi })
   )
 
   if (whereaboutsMaintenanceMode) {
@@ -260,7 +239,14 @@ const setup = ({
   router.use(
     '/bulk-appointments/add-appointment-details',
     isAppointmentsRolledOut,
-    bulkAppointmentsAddDetailsRouter({ prisonApi, oauthApi, logError })
+    bulkAppointmentsAddDetailsRouter({
+      prisonApi,
+      locationsInsidePrisonApi,
+      nomisMapping,
+      systemOauthClient,
+      oauthApi,
+      logError,
+    })
   )
   router.use(
     '/bulk-appointments/appointments-added',
@@ -301,7 +287,7 @@ const setup = ({
       '/offenders/:offenderNo/add-appointment',
       isCreateIndividualAppointmentRolledOut,
       redirectToPrisonerProfileForAppointments,
-      addAppointmentRouter({ systemOauthClient, prisonApi, whereaboutsApi, logError })
+      addAppointmentRouter({ systemOauthClient, prisonApi, locationsInsidePrisonApi, whereaboutsApi, logError })
     )
   }
 
@@ -322,7 +308,7 @@ const setup = ({
   router.use(
     '/offenders/:offenderNo/confirm-appointment',
     isAppointmentsRolledOut,
-    confirmAppointmentRouter({ prisonApi, logError })
+    confirmAppointmentRouter({ prisonApi, locationsInsidePrisonApi, systemOauthClient, logError })
   )
 
   router.use(
@@ -430,6 +416,7 @@ const setup = ({
         }),
         videoLinkBookingService,
         getClientCredentialsTokens,
+        systemOauthClient,
       }).index
     )
     router.post(
@@ -446,6 +433,7 @@ const setup = ({
         }),
         videoLinkBookingService,
         getClientCredentialsTokens,
+        systemOauthClient,
       }).post
     )
     router.get(
@@ -477,6 +465,7 @@ const setup = ({
           nomisMapping,
           getClientCredentialsTokens,
         }),
+        systemOauthClient,
       })
     )
   }

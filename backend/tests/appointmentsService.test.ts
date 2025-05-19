@@ -1,52 +1,65 @@
 import { appointmentsServiceFactory } from '../services/appointmentsService'
+import { prisonApiFactory } from '../api/prisonApi'
+import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../api/locationsInsidePrisonApi'
+import { nomisMappingClientFactory } from '../api/nomisMappingClient'
 
 describe('Appointments service', () => {
-  const prisonApi = {}
-  const context = {}
+  const prisonApi: Partial<ReturnType<typeof prisonApiFactory>> = {}
+  const locationsInsidePrisonApi: Partial<ReturnType<typeof locationsInsidePrisonApiFactory>> = {}
+  const nomisMapping: Partial<ReturnType<typeof nomisMappingClientFactory>> = {
+    getNomisLocationMappingByDpsLocationId: (_context, id) =>
+      ({
+        'abc-1': { dpsLocationId: 'abc-1', nomisLocationId: 27187 },
+        'abc-2': { dpsLocationId: 'abc-2', nomisLocationId: 27188 },
+      }[id]),
+  }
+  const locals = { _type: 'locals' }
+  const context = { _type: 'context' }
   const agency = 'LEI'
   const appointmentTypes = [{ code: 'ACTI', description: 'Activities' }]
   const locationTypes = [
     {
-      locationId: 27187,
+      id: 'abc-1',
       locationType: 'ADJU',
-      description: 'RES-MCASU-MCASU',
-      agencyId: 'MDI',
-      parentLocationId: 27186,
-      currentOccupancy: 0,
-      locationPrefix: 'MDI-RES-MCASU-MCASU',
-      userDescription: 'Adj',
+      pathHierarchy: 'RES-MCASU-MCASU',
+      prisonId: 'MDI',
+      parentId: 'abc-0',
+      key: 'MDI-RES-MCASU-MCASU',
+      localName: 'Adj',
     },
     {
-      locationId: 27188,
+      id: 'abc-2',
       locationType: 'ADJU',
-      description: 'RES-MCASU-MCASU',
-      agencyId: 'MDI',
-      parentLocationId: 27186,
-      currentOccupancy: 0,
-      locationPrefix: 'MDI-RES-MCASU-MCASU',
+      pathHierarchy: 'RES-MCASU-MCASU',
+      prisonId: 'MDI',
+      parentId: 'abc-0',
+      key: 'MDI-RES-MCASU-MCASU',
     },
   ]
 
   let service
 
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocationsForAppointments' does not ex... Remove this comment to see the full error message
-    prisonApi.getLocationsForAppointments = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentTypes' does not exist on t... Remove this comment to see the full error message
+    locationsInsidePrisonApi.getLocationsByNonResidentialUsageType = jest.fn()
     prisonApi.getAppointmentTypes = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
     prisonApi.addAppointments = jest.fn()
 
-    service = appointmentsServiceFactory(prisonApi)
+    service = appointmentsServiceFactory(
+      prisonApi as ReturnType<typeof prisonApiFactory>,
+      locationsInsidePrisonApi as ReturnType<typeof locationsInsidePrisonApiFactory>,
+      nomisMapping as ReturnType<typeof nomisMappingClientFactory>
+    )
   })
 
   it('should make a request for appointment locations and types', async () => {
-    await service.getAppointmentOptions(context, agency)
+    await service.getAppointmentOptions(locals, context, agency)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocationsForAppointments' does not ex... Remove this comment to see the full error message
-    expect(prisonApi.getLocationsForAppointments).toHaveBeenCalledWith(context, agency)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentTypes' does not exist on t... Remove this comment to see the full error message
-    expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(context)
+    expect(locationsInsidePrisonApi.getLocationsByNonResidentialUsageType).toHaveBeenCalledWith(
+      context,
+      agency,
+      NonResidentialUsageType.APPOINTMENT
+    )
+    expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(locals)
   })
 
   it('should handle empty responses from appointment types and locations', async () => {
@@ -56,10 +69,8 @@ describe('Appointments service', () => {
   })
 
   it('should map appointment types and locations correctly', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocationsForAppointments' does not ex... Remove this comment to see the full error message
-    prisonApi.getLocationsForAppointments.mockReturnValue(locationTypes)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentTypes' does not exist on t... Remove this comment to see the full error message
-    prisonApi.getAppointmentTypes.mockReturnValue(appointmentTypes)
+    ;(locationsInsidePrisonApi.getLocationsByNonResidentialUsageType as jest.Mock).mockReturnValue(locationTypes)
+    ;(prisonApi.getAppointmentTypes as jest.Mock).mockReturnValue(appointmentTypes)
 
     const response = await service.getAppointmentOptions(context, agency)
 

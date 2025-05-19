@@ -38,11 +38,7 @@ export const app = {
     scheduleRedirectForPrisons: process.env.HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS || '',
     exemptions: process.env.HOMEPAGE_REDIRECT_EXEMPTIONS || '',
   },
-  bvlsMasteredVlpmFeatureToggleEnabled: process.env.BVLS_MASTERED_VLPM_FEATURE_TOGGLE_ENABLED === 'true',
-  bvlsMasteredAppointmentTypes: [
-    'VLB',
-    process.env.BVLS_MASTERED_VLPM_FEATURE_TOGGLE_ENABLED === 'true' ? 'VLPM' : undefined,
-  ].filter(Boolean),
+  bvlsMasteredAppointmentTypes: ['VLB', 'VLPM'].filter(Boolean),
   gitRef: process.env.GIT_REF || '',
   sunsetBannerEnabled: process.env.SUNSET_BANNER_ENABLED === 'true',
 }

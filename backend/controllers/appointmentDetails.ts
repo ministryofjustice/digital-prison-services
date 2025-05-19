@@ -1,35 +1,49 @@
 import { formatName } from '../utils'
 import config, { app } from '../config'
 
-export default ({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService }) =>
+export default ({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService, systemOauthClient }) =>
   async (req, res) => {
     const { id } = req.params
     const { activeCaseLoadId } = req.session.userDetails
 
     const appointmentDetails = await whereaboutsApi.getAppointment(res.locals, id)
+    const context = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
 
     const [prisonerDetails, appointmentViewModel] = await Promise.all([
       prisonApi.getDetails(res.locals, appointmentDetails.appointment.offenderNo),
-      appointmentDetailsService.getAppointmentViewModel(res, appointmentDetails, activeCaseLoadId),
+      appointmentDetailsService.getAppointmentViewModel(context, res, appointmentDetails, activeCaseLoadId),
     ])
 
-    const { additionalDetails, basicDetails, prepostData, recurringDetails, timeDetails, canAmendVlb } =
-      appointmentViewModel
+    const {
+      additionalDetails,
+      basicDetails,
+      prepostData,
+      recurringDetails,
+      timeDetails,
+      canAmendAppointment,
+      canDeleteAppointment,
+    } = appointmentViewModel
 
     const userRoles = oauthApi.userRoles(res.locals)
 
-    const canAmendAppointment =
+    const canAmend =
       userRoles &&
       userRoles.some(
         (role) => role.roleCode === 'ACTIVITY_HUB' || role.roleCode === 'DELETE_A_PRISONERS_APPOINTMENT'
       ) &&
-      canAmendVlb
+      canAmendAppointment
+
+    const canDelete =
+      userRoles &&
+      userRoles.some(
+        (role) => role.roleCode === 'ACTIVITY_HUB' || role.roleCode === 'DELETE_A_PRISONERS_APPOINTMENT'
+      ) &&
+      canDeleteAppointment
 
     return res.render('appointmentDetails', {
-      appointmentConfirmDeletionLink: canAmendAppointment && `/appointment-details/${id}/confirm-deletion`,
+      appointmentConfirmDeletionLink: canDelete && `/appointment-details/${id}/confirm-deletion`,
       appointmentAmendLink:
-        canAmendAppointment &&
-        app.bvlsMasteredAppointmentTypes.includes(appointmentDetails.appointment.appointmentTypeCode) &&
+        canAmend &&
         `${config.app.prisonerProfileRedirect.url}/prisoner/${appointmentDetails.appointment.offenderNo}/edit-appointment/${id}`,
       additionalDetails,
       basicDetails,

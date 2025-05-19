@@ -2,6 +2,12 @@ import moment from 'moment'
 import { endRecurringEndingDate, repeatTypes } from '../shared/appointmentConstants'
 import { formatName, getDate, getTime, getWith404AsNull } from '../utils'
 import { app } from '../config'
+import { prisonApiFactory } from '../api/prisonApi'
+import VideoLinkBookingService from './videoLinkBookingService'
+import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../api/locationsInsidePrisonApi'
+import { nomisMappingClientFactory } from '../api/nomisMappingClient'
+import { getClientCredentialsTokens as GetClientCredentialsToken } from '../api/systemOauthClient'
+import { mapLocationApiResponse } from './appointmentsService'
 
 export default ({
   prisonApi,
@@ -9,6 +15,12 @@ export default ({
   locationsInsidePrisonApi,
   nomisMapping,
   getClientCredentialsTokens,
+}: {
+  prisonApi: ReturnType<typeof prisonApiFactory>
+  videoLinkBookingService: ReturnType<typeof VideoLinkBookingService>
+  locationsInsidePrisonApi: ReturnType<typeof locationsInsidePrisonApiFactory>
+  nomisMapping: ReturnType<typeof nomisMappingClientFactory>
+  getClientCredentialsTokens: typeof GetClientCredentialsToken
 }) => {
   const getAddedByUser = async (res, userId) => {
     const staffDetails = await getWith404AsNull(prisonApi.getStaffDetails(res.locals, userId))
@@ -30,13 +42,25 @@ export default ({
     }
   }
 
-  const getAppointmentViewModel = async (res, appointmentDetails, activeCaseLoadId) => {
+  const getAppointmentViewModel = async (context, res, appointmentDetails, activeCaseLoadId) => {
     const { appointment, recurring } = appointmentDetails
 
-    const [locationTypes, appointmentTypes] = await Promise.all([
-      prisonApi.getLocationsForAppointments(res.locals, activeCaseLoadId),
+    const [appointmentLocationsUnmapped, appointmentTypes] = await Promise.all([
+      locationsInsidePrisonApi.getLocationsByNonResidentialUsageType(
+        context,
+        activeCaseLoadId,
+        NonResidentialUsageType.APPOINTMENT
+      ),
       prisonApi.getAppointmentTypes(res.locals),
     ])
+
+    const appointmentLocations = appointmentLocationsUnmapped.map(mapLocationApiResponse)
+
+    const locationMappings = await Promise.all(
+      [...new Set(appointmentLocations.map((l) => l.locationId))].map((id) =>
+        nomisMapping.getNomisLocationMappingByDpsLocationId(context, id)
+      )
+    )
 
     const appointmentType = appointmentTypes?.find((type) => type.code === appointment.appointmentTypeCode)
 
@@ -51,9 +75,13 @@ export default ({
     const prepostData = {}
 
     const createLocationAndTimeString = (appt) =>
-      `${locationTypes.find((loc) => Number(loc.locationId) === Number(appt.locationId)).userDescription} - ${getTime(
-        appt.startTime
-      )} to ${getTime(appt.endTime)}`
+      `${
+        appointmentLocations.find(
+          (loc) =>
+            locationMappings.find((lm) => lm.dpsLocationId === loc.locationId)?.nomisLocationId ===
+            Number(appt.locationId)
+        ).userDescription
+      } - ${getTime(appt.startTime)} to ${getTime(appt.endTime)}`
 
     let vlb
     let locationType
@@ -69,9 +97,7 @@ export default ({
 
       locationType = await locationsInsidePrisonApi
         .getLocationByKey(systemContext, mainAppointment.prisonLocKey)
-        .then((l) => nomisMapping.getNomisLocationMappingByDpsLocationId(systemContext, l.id))
-        .then((mapping) => mapping.nomisLocationId)
-        .then((id) => locationTypes.find((loc) => Number(loc.locationId) === Number(id)))
+        .then((l) => appointmentLocations.find((loc) => loc.locationId === l.id))
 
       if (preAppointment) {
         const locationId = await locationsInsidePrisonApi
@@ -99,7 +125,11 @@ export default ({
         })
       }
     } else {
-      locationType = locationTypes?.find((loc) => Number(loc.locationId) === Number(appointment.locationId))
+      locationType = appointmentLocations?.find(
+        (loc) =>
+          locationMappings.find((lm) => lm.dpsLocationId === loc.locationId)?.nomisLocationId ===
+          Number(appointment.locationId)
+      )
     }
 
     const getAddedBy = () => {
@@ -110,22 +140,19 @@ export default ({
     const basicDetails = {
       type: appointmentType?.description,
       location: locationType?.userDescription,
-      prisonVideoLink:
-        app.bvlsMasteredVlpmFeatureToggleEnabled && vlb && vlb.bookingType !== 'COURT'
-          ? vlb.videoLinkUrl || 'None entered'
-          : undefined,
+      prisonVideoLink: vlb && vlb.bookingType !== 'COURT' ? vlb.videoLinkUrl || 'None entered' : undefined,
       courtLocation: vlb?.courtDescription,
       probationTeam: vlb?.probationTeamDescription,
       probationOfficer:
-        app.bvlsMasteredVlpmFeatureToggleEnabled && vlb && vlb.bookingType === 'PROBATION'
+        vlb && vlb.bookingType === 'PROBATION'
           ? vlb.additionalBookingDetails?.contactName || 'Not yet known'
           : undefined,
       emailAddress:
-        app.bvlsMasteredVlpmFeatureToggleEnabled && vlb && vlb.bookingType === 'PROBATION'
+        vlb && vlb.bookingType === 'PROBATION'
           ? vlb.additionalBookingDetails?.contactEmail || 'Not yet known'
           : undefined,
       ukPhoneNumber:
-        app.bvlsMasteredVlpmFeatureToggleEnabled && vlb && vlb.bookingType === 'PROBATION'
+        vlb && vlb.bookingType === 'PROBATION'
           ? vlb.additionalBookingDetails?.contactNumber || 'None entered'
           : undefined,
       meetingType: vlb?.probationMeetingTypeDescription,
@@ -161,9 +188,12 @@ export default ({
       prepostData,
       recurringDetails,
       timeDetails,
-      canAmendVlb: vlb
+      canAmendAppointment: vlb
         ? videoLinkBookingService.bookingIsAmendable(fetchVlbAppointments(vlb), vlb.statusCode)
-        : !app.bvlsMasteredAppointmentTypes.includes(appointment.appointmentTypeCode),
+        : false,
+      canDeleteAppointment: vlb
+        ? videoLinkBookingService.bookingIsAmendable(fetchVlbAppointments(vlb), vlb.statusCode)
+        : true,
     }
   }
 

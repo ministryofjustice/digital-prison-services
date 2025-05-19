@@ -5,9 +5,17 @@ import existingEventsServiceFactory from '../../services/existingEventsService'
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ systemOauthClient, prisonApi, whereaboutsApi, logError }) => {
+const controller = ({
+  systemOauthClient,
+  prisonApi,
+  locationsInsidePrisonApi,
+  whereaboutsApi,
+  nomisMapping,
+  logError,
+}) => {
   const { index, post } = addAppointmentFactory(
-    appointmentsServiceFactory(prisonApi),
+    appointmentsServiceFactory(prisonApi, locationsInsidePrisonApi, nomisMapping),
+    systemOauthClient,
     existingEventsServiceFactory(systemOauthClient.getClientCredentialsTokens, prisonApi),
     prisonApi,
     whereaboutsApi,

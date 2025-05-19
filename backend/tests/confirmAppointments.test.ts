@@ -22,6 +22,8 @@ describe('Confirm appointments', () => {
     comment: 'Test',
     court: 'London',
   }
+  const context = { _type: 'context' }
+  const systemOauthClient = { getClientCredentialsTokens: () => context }
 
   beforeEach(() => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
@@ -74,6 +76,7 @@ describe('Confirm appointments', () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
       prisonApi,
       appointmentsService,
+      systemOauthClient,
       logError: () => {},
     })
 
@@ -102,6 +105,7 @@ describe('Confirm appointments', () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
       prisonApi,
       appointmentsService,
+      systemOauthClient,
       logError: () => {},
     })
 
@@ -156,6 +160,7 @@ describe('Confirm appointments', () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
       prisonApi,
       appointmentsService,
+      systemOauthClient,
       logError: () => {},
     })
 
@@ -197,6 +202,7 @@ describe('Confirm appointments', () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
       prisonApi,
       appointmentsService,
+      systemOauthClient,
       logError: () => {},
     })
 
@@ -245,6 +251,7 @@ describe('Confirm appointments', () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
       prisonApi,
       appointmentsService,
+      systemOauthClient,
       logError: () => {},
     })
 
@@ -282,6 +289,7 @@ describe('Confirm appointments', () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
       prisonApi,
       appointmentsService,
+      systemOauthClient,
       logError,
     })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{}'.
@@ -300,6 +308,7 @@ describe('Confirm appointments', () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
       prisonApi,
       appointmentsService,
+      systemOauthClient,
       logError,
     })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{}'.
