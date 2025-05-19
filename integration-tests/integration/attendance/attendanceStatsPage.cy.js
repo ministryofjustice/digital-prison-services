@@ -188,7 +188,6 @@ context('Attendance - suspended stats', () => {
   })
 
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
     cy.task('stubAttendanceChanges', [

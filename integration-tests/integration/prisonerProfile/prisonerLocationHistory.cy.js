@@ -15,7 +15,6 @@ context('Prisoner location history', () => {
 
   context('Basic page functionality', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubAttributesForLocation', {
         id: 1,

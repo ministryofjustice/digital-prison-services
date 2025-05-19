@@ -10,7 +10,6 @@ context('Prisoner damage obligations', () => {
 
   context('Basic page functionality', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubGetPrisonerDamageObligations', {
         damageObligations: [

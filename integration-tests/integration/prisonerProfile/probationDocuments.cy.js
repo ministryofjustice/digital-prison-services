@@ -12,7 +12,6 @@ context('Prisoner probation documents', () => {
 
   context('Basic page functionality', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubClientCredentialsRequest')
       cy.task('stubOffenderBasicDetails', offenderBasicDetails)
       cy.task('stubStaff', {

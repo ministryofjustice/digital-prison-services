@@ -10,7 +10,6 @@ context('Prisoner CSRA review', () => {
   })
 
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubOffenderBasicDetails', { firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
     cy.task('stubCsraReviewForPrisoner', {
       bookingId,
