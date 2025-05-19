@@ -133,21 +133,18 @@ export const businessNonPrimary = {
 }
 
 context('Prisoner professional contacts', () => {
-  before(() => {
-    cy.clearCookies()
+  beforeEach(() => {
     cy.task('resetAndStubTokenVerification')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
-  })
-
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.signIn()
+    })
     cy.task('stubPathFinderOffenderDetails', null)
     cy.task('stubClientCredentialsRequest')
   })
 
   context('When there is data', () => {
-
     beforeEach(() => {
       cy.task('stubProfessionalContacts', {
         offenderBasicDetails,

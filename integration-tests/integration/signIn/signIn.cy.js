@@ -8,7 +8,7 @@ context('Sign in functionality', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubUserLocations')
-    cy.task('stubStaffRoles', [])
+    cy.task('stubStaffRoles', { roles: [] })
     cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })
     cy.task('stubKeyworkerMigrated')
     cy.task('stubComponentsFail')
@@ -51,6 +51,26 @@ context('Sign in functionality', () => {
     cy.request('/auth/sign-out').its('body').should('contain', 'Sign in')
   })
 
+  it('Page shown when roles are unauthorised', () => {
+    cy.task('stubSignIn', {})
+    cy.task('stubStaffRoles', { roles: [], status: 403 })
+    cy.signIn()
+    HomePage.verifyOnPage()
+
+    // can't do a visit here as cypress requires only one domain
+    cy.request('/auth/sign-out').its('body').should('contain', 'Sign in')
+  })
+
+  it('Page shown when roles are not found', () => {
+    cy.task('stubSignIn', {})
+    cy.task('stubStaffRoles', { roles: [], status: 404 })
+    cy.signIn()
+    HomePage.verifyOnPage()
+
+    // can't do a visit here as cypress requires only one domain
+    cy.request('/auth/sign-out').its('body').should('contain', 'Sign in')
+  })
+
   it('Token verification failure takes user to sign in page', () => {
     cy.task('stubSignIn', {})
     cy.signIn()
@@ -63,8 +83,15 @@ context('Sign in functionality', () => {
 
   it('Token verification failure clears user session', () => {
     cy.task('stubSignIn', {})
+    cy.task('stubPSInmates', {
+      locationId: 'MDI',
+      count: 0,
+      data: [],
+    })
+    cy.task('stubUserLocations')
     cy.signIn()
-    const homePage = HomePage.verifyOnPage()
+    cy.visit(`/prisoner-search?feature=new`)
+    const homePage = HomePage.verifyOnPage('Prisoner search results')
     homePage.fallbackHeaderUserName().contains('J. Stuart')
     cy.task('stubVerifyToken', false)
 
@@ -74,6 +101,7 @@ context('Sign in functionality', () => {
     cy.task('stubVerifyToken', true)
     cy.task('stubUserMe', { name: 'Bobby Brown' })
     cy.signIn()
+    cy.visit(`/prisoner-search?feature=new`)
 
     homePage.fallbackHeaderUserName().contains('B. Brown')
   })

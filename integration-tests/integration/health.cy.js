@@ -21,6 +21,9 @@ context('Health page reports health correctly', () => {
         offenderSearch: 'UP',
         complexity: 'UP',
         incentivesApi: 'UP',
+        locationsInsidePrisonApi: 'UP',
+        nomisMapping: 'UP',
+        bookAVideoLinkApi: 'UP',
       })
     })
   })
@@ -46,6 +49,9 @@ context('Health page reports health correctly', () => {
         offenderSearch: 'UP',
         complexity: 'UP',
         incentivesApi: 'UP',
+        locationsInsidePrisonApi: 'UP',
+        nomisMapping: 'UP',
+        bookAVideoLinkApi: 'UP',
       })
     })
   })

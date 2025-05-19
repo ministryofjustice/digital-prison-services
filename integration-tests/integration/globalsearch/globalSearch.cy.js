@@ -124,8 +124,28 @@ context('Global search', () => {
         .first()
         .invoke('attr', 'href')
         .then((href) => {
-          expect(href).to.equal('/prisoner/A1234AC')
+          expect(href).to.equal('http://localhost:9191/prisonerprofile/prisoner/A1234AC')
         })
+    })
+  })
+
+  it('should display the missing profile picture', () => {
+    cy.task('stubGlobalSearch')
+    cy.visit('/global-search/results?searchText=quimby')
+    const globalSearchPage = GlobalSearchPage.verifyOnResultsPage()
+
+    globalSearchPage.prisonerImages().then(($prisonerImages) => {
+      cy.get($prisonerImages).its('length').should('eq', 2)
+
+      cy.get($prisonerImages)
+        .first()
+        .invoke('attr', 'src')
+        .then((src) => expect(src).to.equal('/app/images/A1234AC/data'))
+
+      cy.get($prisonerImages)
+        .last()
+        .invoke('attr', 'src')
+        .then((src) => expect(src).to.equal('/images/image-missing.jpg'))
     })
   })
 
@@ -255,14 +275,14 @@ context('when user can has INACTIVE_BOOKINGS role', () => {
         .first()
         .invoke('attr', 'href')
         .then((href) => {
-          expect(href).to.equal('/prisoner/A1234AC')
+          expect(href).to.equal('http://localhost:9191/prisonerprofile/prisoner/A1234AC')
         })
 
       cy.get($profileLinks)
         .last()
         .invoke('attr', 'href')
         .then((href) => {
-          expect(href).to.equal('/prisoner/A1234AA')
+          expect(href).to.equal('http://localhost:9191/prisonerprofile/prisoner/A1234AA')
         })
     })
   })

@@ -15,6 +15,8 @@ generic-service:
    OAUTH_ENDPOINT_URL: https://sign-in-dev.hmpps.service.justice.gov.uk/auth/
    HMPPS_MANAGE_USERS_API_URL: https://manage-users-api-dev.hmpps.service.justice.gov.uk
    API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api-dev.service.justice.gov.uk/
+   API_LOCATIONS_INSIDE_PRISON_ENDPOINT_URL: https://locations-inside-prison-api-dev.hmpps.service.justice.gov.uk
+   API_NOMIS_MAPPING_ENDPOINT_URL: https://nomis-sync-prisoner-mapping-dev.hmpps.service.justice.gov.uk
    LICENCES_URL: https://licences-dev.prison.service.justice.gov.uk/
    HMPPS_COOKIE_NAME: hmpps-session-dev
    API_DELIUS_ENDPOINT_URL: https://dps-and-delius-dev.hmpps.service.justice.gov.uk
@@ -44,11 +46,12 @@ generic-service:
    NEURODIVERSITY_ENABLED_PRISONS: "BLI,NHI,LII,SLI,MDI"
    CURIOUS_URL: https://testservices.sequation.net/sequation-virtual-campus2-api/
    SYSTEM_PHASE: DEV
-   BVL_URL: https://book-video-link-dev.prison.service.justice.gov.uk
+   BVL_URL: https://book-a-video-link-dev.prison.service.justice.gov.uk
+   BOOK_A_VIDEO_LINK_API_URL: https://book-a-video-link-api-dev.prison.service.justice.gov.uk
    MOIC_URL: https://dev.moic.service.justice.gov.uk
    OMIC_URL: https://dev.manage-key-workers.service.justice.gov.uk
    MANAGE_AUTH_ACCOUNTS_URL: https://manage-users-dev.hmpps.service.justice.gov.uk
-   PECS_URL: https://hmpps-book-secure-move-frontend-staging.apps.live-1.cloud-platform.service.justice.gov.uk
+   PECS_URL: https://hmpps-book-secure-move-frontend-staging.apps.cloud-platform.service.justice.gov.uk
    COMPLEXITY_OF_NEED_URI: https://complexity-of-need-staging.hmpps.service.justice.gov.uk
    PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS: "MDI,LEI"
    MANAGE_ADJUDICATIONS_URL: https://manage-adjudications-dev.hmpps.service.justice.gov.uk/
@@ -66,24 +69,17 @@ generic-service:
    CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence-dev.hmpps.service.justice.gov.uk/
    CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CKI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FHI,FKI,FMI,FNI,FSI,FWI,GHI,GMI,GNI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WTI,WWI"
    ACTIVITIES_URL: https://activities-dev.prison.service.justice.gov.uk/activities
-   ACTIVITIES_ENABLED_PRISONS: "LEI,RSI"
+   ACTIVITIES_ENABLED_PRISONS: "RSI,LPI,WDI,IWI,FKI,FMI,WMI,GTI,LTI,BCI,LEI,FNI,RNI"
    APPOINTMENTS_URL: https://activities-dev.prison.service.justice.gov.uk/appointments
-   APPOINTMENTS_ENABLED_PRISONS: "LEI,RSI"
+   APPOINTMENTS_ENABLED_PRISONS: "RSI,LPI,WDI,IWI,FKI,FMI,WMI,GTI,LTI,BCI,LEI,FNI,RNI"
    RESTRICTED_PATIENT_API_URL: https://restricted-patients-api-dev.hmpps.service.justice.gov.uk/
-   HISTORICAL_PRISONER_APPLICATION_URL: 	https://hpa-stage.hmpps.dsd.io
+   HISTORICAL_PRISONER_APPLICATION_URL: 	https://historical-prisoner-dev.prison.service.justice.gov.uk
    WHEREABOUTS_MAINTENANCE_MODE: false
    KEYWORKER_MAINTENANCE_MODE: false
    COVID_UNITS_ENABLED: false
    GET_SOMEONE_READY_FOR_WORK_URL: https://get-ready-for-work-dev.hmpps.service.justice.gov.uk
    LEARNING_AND_WORK_PROGRESS_URL: https://ciag-induction-dev.hmpps.service.justice.gov.uk
    PRISONER_PROFILE_REDIRECT_URL: http://prisoner-dev.digital.prison.service.justice.gov.uk
-   PRISONER_PROFILE_REDIRECT_ENABLED_DATE: 2023-09-27T18:00:00
-   PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: "LEI,FNI,HMI,NHI,WDI,WEI,HLI,MDI,LHI,HDI,WYI,AGI,DNI,RSI"
-   PRISONER_PROFILE_SCHEDULE_REDIRECT_FOR_PRISONS: "RSI"
-   PRISONER_PROFILE_REDIRECT_BUNDLE_ONE: 2023-11-20T02:00:00
-   PRISONER_PROFILE_REDIRECT_BUNDLE_TWO: 2023-11-21T02:00:00
-   PRISONER_PROFILE_REDIRECT_BUNDLE_THREE: 2023-11-22T02:00:00
-   PRISONER_PROFILE_REDIRECT_BUNDLE_FOUR: 2023-11-23T02:00:00
    HOMEPAGE_REDIRECT_URL: http://dps-dev.prison.service.justice.gov.uk
    HOMEPAGE_REDIRECT_ENABLED_DATE: ""
    HOMEPAGE_REDIRECT_ENABLED_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CKI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FEI,FHI,FKI,FMI,FNI,FSI,FWI,FYI,GHI,GMI,GNI,GTI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KTI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,MWI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,PYI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WNI,WRI,WSI,WTI,WWI,WYI"
@@ -93,3 +89,11 @@ generic-service:
    COMPONENT_API_URL: https://frontend-components-dev.hmpps.service.justice.gov.uk
    COMPONENT_API_LATEST: false
    PREPARE_SOMEONE_FOR_RELEASE_URL: https://resettlement-passport-ui-dev.hmpps.service.justice.gov.uk
+   HOMEPAGE_REDIRECT_EXEMPTIONS: ""
+   VIDEO_CONFERENCE_SCHEDULE_URL: https://video-conference-schedule-dev.prison.service.justice.gov.uk
+   CHANGE_SOMEONES_CELL_URL: https://change-someones-cell-dev.prison.service.justice.gov.uk
+   SUNSET_BANNER_ENABLED: true
+   ALERTS_API_URL: "https://alerts-api-dev.hmpps.service.justice.gov.uk"
+
+generic-prometheus-alerts:
+ alertSeverity: digital-prison-service-dev

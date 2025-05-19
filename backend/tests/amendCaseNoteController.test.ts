@@ -10,11 +10,12 @@ describe('Amendment case note', () => {
   const req = {
     flash: {},
     headers: {},
-    session: {},
+    session: { userDetails: { username: 'ITAG_USER' } } as any,
     body: {},
     originalUrl: '/prisoner/A12345/case-notes/amend-case-note/1',
   }
   const res = { render: {}, redirect: {}, locals: {} }
+  const systemOauthClient = { getClientCredentialsTokens: () => ({ access_token: 'CLIENT_TOKEN' }) }
 
   beforeEach(() => {
     caseNotesApi.getCaseNote = jest.fn().mockResolvedValue({
@@ -32,9 +33,10 @@ describe('Amendment case note', () => {
     prisonApi.getDetails = jest.fn().mockResolvedValue({
       firstName: 'BOB',
       lastName: 'SMITH',
+      agencyId: 'LEI',
     })
 
-    controller = amendCaseNoteController({ caseNotesApi, prisonApi, logError: jest.fn() })
+    controller = amendCaseNoteController({ caseNotesApi, prisonApi, logError: jest.fn(), systemOauthClient })
 
     res.render = jest.fn()
     res.redirect = jest.fn()
@@ -88,7 +90,11 @@ describe('Amendment case note', () => {
     it('should make a request for an offenders case note', async () => {
       await controller.index(req, res)
 
-      expect(caseNotesApi.getCaseNote).toHaveBeenCalledWith({}, 'A12345', 1)
+      expect(caseNotesApi.getCaseNote).toHaveBeenCalledWith(
+        { access_token: 'CLIENT_TOKEN', customRequestHeaders: { caseloadid: 'LEI' } },
+        'A12345',
+        1
+      )
     })
 
     it('should make a call to retrieve an prisoners name', async () => {
@@ -200,7 +206,9 @@ describe('Amendment case note', () => {
     it('should make an amendment', async () => {
       await controller.post(req, res)
 
-      expect(caseNotesApi.amendCaseNote).toHaveBeenCalledWith({}, 'A12345', 1, { text: 'Hello, world' })
+      expect(caseNotesApi.amendCaseNote).toHaveBeenCalledWith({ access_token: 'CLIENT_TOKEN' }, 'A12345', 1, {
+        text: 'Hello, world',
+      })
     })
 
     it('should validate the presence of an amendment', async () => {
@@ -288,19 +296,19 @@ describe('Amendment case note', () => {
 
   describe('confirm()', () => {
     it('should save the case note if confirmed', async () => {
-      req.session = { draftCaseNoteDetail: { moreDetail: 'hello' } }
+      req.session = { userDetails: { username: 'ITAG_USER' }, draftCaseNoteDetail: { moreDetail: 'hello' } }
       req.body = { confirmed: 'Yes' }
 
       await controller.confirm(req, res)
 
-      expect(caseNotesApi.amendCaseNote).toBeCalledWith(res.locals, 'A12345', 1, {
+      expect(caseNotesApi.amendCaseNote).toBeCalledWith({ ...res.locals, access_token: 'CLIENT_TOKEN' }, 'A12345', 1, {
         text: 'hello',
       })
       expect(res.redirect).toBeCalledWith('/prisoner/A12345/case-notes')
     })
 
     it('should redirect if case note save fails', async () => {
-      req.session = { draftCaseNoteDetail: { moreDetail: 'hello' } }
+      req.session = { userDetails: { username: 'ITAG_USER' }, draftCaseNoteDetail: { moreDetail: 'hello' } }
       req.body = { confirmed: 'Yes' }
       const error400 = makeError('response', {
         status: 400,
@@ -313,7 +321,7 @@ describe('Amendment case note', () => {
 
       await controller.confirm(req, res)
 
-      expect(caseNotesApi.amendCaseNote).toBeCalledWith(res.locals, 'A12345', 1, {
+      expect(caseNotesApi.amendCaseNote).toBeCalledWith({ ...res.locals, access_token: 'CLIENT_TOKEN' }, 'A12345', 1, {
         text: 'hello',
       })
       expect(req.flash).toHaveBeenNthCalledWith(1, 'amendmentErrors', [

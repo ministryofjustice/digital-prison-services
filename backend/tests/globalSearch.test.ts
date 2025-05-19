@@ -1,4 +1,5 @@
 import globalSearchController from '../controllers/globalSearch'
+import config from '../config'
 
 describe('Global search', () => {
   const offenderSearchApi = {}
@@ -302,6 +303,7 @@ describe('Global search', () => {
               locationDescription: 'Leeds HMP',
               name: 'Quimby, Fred',
               offenderNo: 'A1234AC',
+              prisonerProfileUrl: 'http://localhost:3000/prisoner/A1234AC',
               showProfileLink: true,
               showUpdateLicenceLink: false,
               updateLicenceLink: 'http://localhost:3003/hdc/taskList/1',
@@ -320,6 +322,7 @@ describe('Global search', () => {
               locationDescription: 'Moorland HMP',
               name: 'Anderson, Arthur',
               offenderNo: 'A1234AA',
+              prisonerProfileUrl: 'http://localhost:3000/prisoner/A1234AA',
               showProfileLink: false,
               showUpdateLicenceLink: false,
               updateLicenceLink: 'http://localhost:3003/hdc/taskList/2',
@@ -338,6 +341,7 @@ describe('Global search', () => {
               locationDescription: 'Leeds HMP',
               name: 'Humphry, Tim',
               offenderNo: 'A1234AD',
+              prisonerProfileUrl: 'http://localhost:3000/prisoner/A1234AD',
               showProfileLink: false,
               showUpdateLicenceLink: false,
               updateLicenceLink: undefined,
@@ -345,6 +349,37 @@ describe('Global search', () => {
             },
           ],
         })
+      })
+
+      it('should not provide profile links for users without a caseload', async () => {
+        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ paginationService: {}; offende... Remove this comment to see the full error message
+        controller = globalSearchController({ paginationService, offenderSearchApi, oauthApi, telemetry, logError })
+
+        req.query = {
+          searchText: 'Smith Ben',
+          locationFilter: 'ALL',
+          genderFilter: 'ALL',
+        }
+
+        res = {
+          ...res,
+          locals: {
+            user: { activeCaseLoad: null },
+          },
+        }
+
+        await controller.resultsPage(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'globalSearch/globalSearchResults.njk',
+          expect.objectContaining({
+            results: [
+              expect.objectContaining({ showProfileLink: false }),
+              expect.objectContaining({ showProfileLink: false }),
+              expect.objectContaining({ showProfileLink: false }),
+            ],
+          })
+        )
       })
 
       it('should call the pagination service', async () => {

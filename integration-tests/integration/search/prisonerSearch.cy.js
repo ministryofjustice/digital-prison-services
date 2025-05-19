@@ -1,38 +1,28 @@
 const moment = require('moment')
-const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
-const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
-const { quickLookFullDetails } = require('../prisonerProfile/prisonerQuickLook.cy')
 
 context('Prisoner search', () => {
-  const inmate1Iep = {
-    bookingId: 1,
-    iepLevel: 'Standard',
-  }
-
-  before(() => {
-    cy.clearCookies()
-    cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', {
-      username: 'ITAG_USER',
-      caseload: 'MDI',
-      caseloads: [
-        {
-          caseLoadId: 'MDI',
-          description: 'Moorland',
-          currentlyActive: true,
-        },
-        {
-          caseLoadId: 'WWI',
-          description: 'Wandsworth',
-          currentlyActive: false,
-        },
-      ],
-    })
-    cy.signIn()
-  })
-
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.session('hmpps-prisoner-dev', () => {
+      cy.clearCookies()
+      cy.task('resetAndStubTokenVerification')
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'MDI',
+        caseloads: [
+          {
+            caseLoadId: 'MDI',
+            description: 'Moorland',
+            currentlyActive: true,
+          },
+          {
+            caseLoadId: 'WWI',
+            description: 'Wandsworth',
+            currentlyActive: false,
+          },
+        ],
+      })
+      cy.signIn()
+    })
   })
 
   context('Search using search api', () => {
@@ -93,7 +83,7 @@ context('Prisoner search', () => {
             .then(($tableRows) => {
               cy.get($tableRows).its('length').should('eq', 3) // 2 results plus table header
               expect($tableRows.get(1).innerText).to.contain(
-                '\tSaunders, John\tA1234BC\tUNIT-1\tStandard\t29\t\nARSONIST\n\nCAT A'
+                '\tSaunders, John\tA1234BC\tUNIT-1\tStandard\t29\t\nArsonist\nViolent\nCAT A'
               )
               expect($tableRows.get(2).innerText).to.contain('\tSmith, Steve\tB4567CD\tUNIT-2\tStandard\t30\t')
             })
@@ -115,7 +105,7 @@ context('Prisoner search', () => {
             })
         })
       })
-      it('will silently not find any prisoners when prison is not in any caseload assighned to user', () => {
+      it('will silently not find any prisoners when prison is not in any caseload assigned to user', () => {
         // stubbed - but actually it will never be clalled
         cy.task('stubPSInmates', {
           locationId: 'BXI',
@@ -282,37 +272,6 @@ context('Prisoner search', () => {
             '?keywords=Saunders&location=MDI&feature=new&alerts%5B%5D=XA&sortFieldsWithOrder=assignedLivingUnitDesc%3AASC'
           )
         })
-      })
-
-      it('should show the correct most recent search link when visiting a profile page from search', () => {
-        const searchUrl = '/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA&feature=new'
-
-        cy.task('stubPSInmates', {
-          locationId: 'MDI',
-          count: 1,
-          data: [inmate1],
-        })
-        cy.task('stubPrisonerProfileHeaderData', {
-          offenderBasicDetails,
-          offenderFullDetails,
-          iepSummary: [inmate1Iep],
-          caseNoteSummary: {},
-          offenderNo: 'A12345',
-        })
-        cy.task('stubQuickLook', quickLookFullDetails)
-        cy.task('stubPathFinderOffenderDetails', null)
-        cy.task('stubClientCredentialsRequest')
-        cy.visit(searchUrl)
-
-        cy.get('[data-test="prisoner-search-results-table"]').then(($table) => {
-          cy.get($table)
-            .find('tr')
-            .then(($tableRows) => {
-              cy.get($tableRows).find('a').click()
-            })
-        })
-
-        cy.get('[data-test="back-link"]').should('have.attr', 'href', `http://localhost:3008${searchUrl}`)
       })
     })
   })

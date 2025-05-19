@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { toMap } from '../utils'
+import logger from '../log'
 
 export const movementsServiceFactory = (prisonApi, systemOauthClient, incentivesApi) => {
   const getCsraForMultipleOffenders = async (systemContext, offenderNumbers) => {
@@ -119,7 +120,10 @@ export const movementsServiceFactory = (prisonApi, systemOauthClient, incentives
   const getOffendersInReception = async (context, agencyId) => {
     const offenders = await prisonApi.getOffendersInReception(context, agencyId)
 
-    if (!offenders) return []
+    if (!offenders || offenders.length === 0) {
+      logger.info(`Agency ${agencyId} has no prisoners in reception`)
+      return []
+    }
 
     const offenderNumbers = extractOffenderNumbers(offenders)
     const bookingIds = extractBookingIds(offenders)

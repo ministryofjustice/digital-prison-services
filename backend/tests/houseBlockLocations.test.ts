@@ -2,7 +2,14 @@ import { getHouseblockLocationsFactory } from '../controllers/attendance/housebl
 import { makeResetError, makeError } from './helpers'
 
 describe('House block locations', () => {
-  const whereaboutsApi = {}
+  const getClientCredentialsTokens = jest.fn()
+
+  const systemContext = {
+    access_token: 'someToken',
+    refresh_token: undefined,
+    expires_in: 100,
+  }
+  const locationsInsidePrisonApi = {}
   const res = { locals: {} }
   const req = {
     query: {
@@ -14,8 +21,9 @@ describe('House block locations', () => {
   let logError
 
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
-    whereaboutsApi.searchGroups = jest.fn()
+    getClientCredentialsTokens.mockResolvedValue(systemContext)
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSearchGroups' does not exist on type '{}... Remove this comment to see the full error message
+    locationsInsidePrisonApi.getSearchGroups = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'json' does not exist on type '{ locals: ... Remove this comment to see the full error message
     res.json = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'status' does not exist on type '{ locals... Remove this comment to see the full error message
@@ -24,14 +32,14 @@ describe('House block locations', () => {
     res.end = jest.fn()
     logError = jest.fn()
 
-    controller = getHouseblockLocationsFactory({ whereaboutsApi, logError })
+    controller = getHouseblockLocationsFactory(getClientCredentialsTokens, locationsInsidePrisonApi, logError)
   })
 
-  it('should call searchGroups with the correct parameters', async () => {
+  it('should call getSearchGroups with the correct parameters', async () => {
     await controller.getHouseblockLocations(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
-    expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith({}, 'LEI')
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSearchGroups' does not exist on type '{}... Remove this comment to see the full error message
+    expect(locationsInsidePrisonApi.getSearchGroups).toHaveBeenCalledWith(systemContext, 'LEI')
   })
 
   it('should pipe response out into json', async () => {
@@ -52,8 +60,8 @@ describe('House block locations', () => {
       },
     ]
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
-    whereaboutsApi.searchGroups.mockReturnValue(response)
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSearchGroups' does not exist on type '{}... Remove this comment to see the full error message
+    locationsInsidePrisonApi.getSearchGroups.mockReturnValue(response)
     await controller.getHouseblockLocations(req, res)
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'json' does not exist on type '{ locals: ... Remove this comment to see the full error message
@@ -61,8 +69,8 @@ describe('House block locations', () => {
   })
 
   it('should catch and log error', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
-    whereaboutsApi.searchGroups.mockRejectedValue(new Error('Test error'))
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSearchGroups' does not exist on type '{}... Remove this comment to see the full error message
+    locationsInsidePrisonApi.getSearchGroups.mockRejectedValue(new Error('Test error'))
 
     await controller.getHouseblockLocations(req, res)
 
@@ -72,8 +80,8 @@ describe('House block locations', () => {
   })
 
   it('should not log connection reset API errors', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
-    whereaboutsApi.searchGroups.mockRejectedValue(makeResetError())
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSearchGroups' does not exist on type '{}... Remove this comment to see the full error message
+    locationsInsidePrisonApi.getSearchGroups.mockRejectedValue(makeResetError())
 
     await controller.getHouseblockLocations(req, res)
 
@@ -83,8 +91,8 @@ describe('House block locations', () => {
   })
 
   it('should respond with the correct status codes', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
-    whereaboutsApi.searchGroups.mockRejectedValue(makeError('status', 403))
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSearchGroups' does not exist on type '{}... Remove this comment to see the full error message
+    locationsInsidePrisonApi.getSearchGroups.mockRejectedValue(makeError('status', 403))
     await controller.getHouseblockLocations(req, res)
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'status' does not exist on type '{ locals... Remove this comment to see the full error message
@@ -92,8 +100,8 @@ describe('House block locations', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'end' does not exist on type '{ locals: {... Remove this comment to see the full error message
     expect(res.end).toHaveBeenCalled()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
-    whereaboutsApi.searchGroups.mockRejectedValue(makeError('response', { status: 404 }))
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSearchGroups' does not exist on type '{}... Remove this comment to see the full error message
+    locationsInsidePrisonApi.getSearchGroups.mockRejectedValue(makeError('response', { status: 404 }))
     await controller.getHouseblockLocations(req, res)
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'status' does not exist on type '{ locals... Remove this comment to see the full error message
@@ -101,8 +109,8 @@ describe('House block locations', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'end' does not exist on type '{ locals: {... Remove this comment to see the full error message
     expect(res.end).toHaveBeenCalled()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
-    whereaboutsApi.searchGroups.mockRejectedValue(new Error())
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSearchGroups' does not exist on type '{}... Remove this comment to see the full error message
+    locationsInsidePrisonApi.getSearchGroups.mockRejectedValue(new Error())
     await controller.getHouseblockLocations(req, res)
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'status' does not exist on type '{ locals... Remove this comment to see the full error message

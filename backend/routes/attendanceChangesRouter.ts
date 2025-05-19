@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { Request, Response } from 'express'
 import { properCaseName, capitalize, pascalToString } from '../utils'
 
 const toActivitiesMap = (activities) =>
@@ -40,14 +41,15 @@ const sortByLastNameThenByDate = (activitiesMap) => (left, right) => {
   return 0
 }
 
-export default ({ prisonApi, whereaboutsApi }) =>
-  async (req, res) => {
+export default ({ prisonApi, whereaboutsApi, systemOauthClient }) =>
+  async (req: Partial<Request>, res: Partial<Response>) => {
     const { agencyId, fromDateTime, toDateTime, subHeading } = req.query
 
-    if (!fromDateTime || !toDateTime || !subHeading)
+    if (!fromDateTime || !toDateTime || !subHeading) {
       return res.redirect('/manage-prisoner-whereabouts/attendance-reason-statistics')
+    }
 
-    const { changes } = await whereaboutsApi.getAttendanceChanges(res.locals, { fromDateTime, toDateTime })
+    const { changes } = await whereaboutsApi.getAttendanceChanges(res.locals, { fromDateTime, toDateTime }, agencyId)
 
     if (!changes.length) {
       return res.render('attendanceChanges.njk', {
@@ -60,40 +62,39 @@ export default ({ prisonApi, whereaboutsApi }) =>
     const activities = await prisonApi.getScheduledActivities(res.locals, { agencyId, eventIds })
 
     const userNames = [...new Set(changes.map((change) => change.changedBy))]
-    const userDetails = await prisonApi.getUserDetailsList(res.locals, userNames)
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
+    const userDetails = await prisonApi.getUserDetailsList(systemContext, userNames)
 
     const activitiesMap = toActivitiesMap(activities)
     const userMap = toUserMap(userDetails)
 
     changes.sort(sortByLastNameThenByDate(activitiesMap))
 
-    const attendanceChanges = changes
-      .filter((change) => change.prisonId === agencyId)
-      .map((change) => {
-        const { firstName, lastName, offenderNo, activity } = activitiesMap[change.eventId] || {}
+    const attendanceChanges = changes.map((change) => {
+      const { firstName, lastName, offenderNo, activity } = activitiesMap[change.eventId] || {}
 
-        return [
-          {
-            html: `<a href="/prisoner/${offenderNo}" class="govuk-link">${properCaseName(lastName)}, ${properCaseName(
-              firstName
-            )}</a>`,
-            attributes: {
-              'data-sort-value': lastName,
-            },
+      return [
+        {
+          html: `<a href="/prisoner/${offenderNo}" class="govuk-link">${properCaseName(lastName)}, ${properCaseName(
+            firstName
+          )}</a>`,
+          attributes: {
+            'data-sort-value': lastName,
           },
-          { text: offenderNo },
-          { text: activity },
-          { text: capitalize(pascalToString(change.changedFrom)) },
-          { text: capitalize(pascalToString(change.changedTo)) },
-          {
-            text: moment(change.changedOn).format('D MMMM YYYY - HH:mm'),
-            attributes: {
-              'data-sort-value': moment(change.changedOn).unix(),
-            },
+        },
+        { text: offenderNo },
+        { text: activity },
+        { text: capitalize(pascalToString(change.changedFrom)) },
+        { text: capitalize(pascalToString(change.changedTo)) },
+        {
+          text: moment(change.changedOn).format('D MMMM YYYY - HH:mm'),
+          attributes: {
+            'data-sort-value': moment(change.changedOn).unix(),
           },
-          { text: userMap[change.changedBy] },
-        ]
-      })
+        },
+        { text: userMap[change.changedBy] },
+      ]
+    })
 
     return res.render('attendanceChanges.njk', {
       subHeading,

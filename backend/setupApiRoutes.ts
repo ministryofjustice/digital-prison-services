@@ -32,19 +32,28 @@ const router = express.Router()
 export const setup = ({
   prisonApi,
   whereaboutsApi,
+  locationsInsidePrisonApi,
   oauthApi,
   getClientCredentialsTokens,
   hmppsManageUsersApi,
   caseNotesApi,
+  prisonerAlertsApi,
 }) => {
   const controller = controllerFactory({
-    activityListService: activityListFactory(getClientCredentialsTokens, prisonApi, whereaboutsApi),
-    houseblockListService: houseblockListFactory(getClientCredentialsTokens, prisonApi, whereaboutsApi),
+    activityListService: activityListFactory(getClientCredentialsTokens, prisonApi, whereaboutsApi, prisonerAlertsApi),
+    houseblockListService: houseblockListFactory(
+      getClientCredentialsTokens,
+      prisonApi,
+      whereaboutsApi,
+      locationsInsidePrisonApi,
+      prisonerAlertsApi
+    ),
     attendanceService: attendanceFactory(whereaboutsApi),
     offenderLoader: offenderLoaderFactory(prisonApi),
     csvParserService: csvParserService({ fs, isBinaryFileSync }),
     offenderActivitiesService: offenderActivitiesFactory(getClientCredentialsTokens, prisonApi, whereaboutsApi),
     caseNotesApi,
+    prisonApi,
     logError,
   })
 
@@ -71,7 +80,7 @@ export const setup = ({
   router.use('/api/userLocations', userLocationsFactory(prisonApi).userLocations)
   router.use(
     '/api/houseblockLocations',
-    houseblockLocationsFactory({ whereaboutsApi, logError }).getHouseblockLocations
+    houseblockLocationsFactory(getClientCredentialsTokens, locationsInsidePrisonApi, logError).getHouseblockLocations
   )
   router.use('/api/activityLocations', activityLocationsFactory({ prisonApi, logError }).getActivityLocations)
   router.use('/api/houseblocklist', controller.getHouseblockList)

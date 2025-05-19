@@ -39,16 +39,18 @@ context('Prisoner spends', () => {
     },
   ]
 
-  before(() => {
-    cy.clearCookies()
+  beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
+
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.signIn()
+    })
   })
 
   context('With data', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubGetTransactionHistory', {
         accountCode: 'spends',
@@ -89,7 +91,8 @@ context('Prisoner spends', () => {
       cy.get('h1').contains('Spends account for John Smith')
       cy.get('[data-test="spends-current-balance"]').contains('£50.00')
       cy.get('[data-test="spends-month"]').should('have.value', '10')
-      cy.get('[data-test="spends-year"]').should('have.value', '2020')
+      const earliestYear = moment().year() - 3
+      cy.get('[data-test="spends-year"]').should('have.value', earliestYear)
       cy.get('[data-test="spends-table"]').then(($table) => {
         cy.get($table)
           .find('tbody')
@@ -109,7 +112,6 @@ context('Prisoner spends', () => {
 
   context('Without data', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubGetTransactionHistory', {
         accountCode: 'spends',

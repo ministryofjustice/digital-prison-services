@@ -3,15 +3,7 @@ import { mapToQueryString } from '../utils'
 export const whereaboutsApiFactory = (client) => {
   const processResponse = () => (response) => response.body
 
-  const map404ToNull = (error) => {
-    if (!error.response) throw error
-    if (!error.response.status) throw error
-    if (error.response.status !== 404) throw error
-    return null
-  }
-
   const get = (context, url) => client.get(context, url).then(processResponse())
-  const getWith404AsNull = (context, url) => client.get(context, url).then(processResponse()).catch(map404ToNull)
   const getWithCustomTimeout = (context, path, overrides) =>
     client.getWithCustomTimeout(context, path, overrides).then(processResponse())
   const post = (context, url, data) => client.post(context, url, data).then(processResponse())
@@ -67,22 +59,12 @@ export const whereaboutsApiFactory = (client) => {
       `/attendances/offender/${offenderNo}/unacceptable-absences?fromDate=${fromDate}&toDate=${toDate}&page=${page}`
     )
 
-  const searchGroups = (context, agencyId) => get(context, `/agencies/${agencyId}/locations/groups`)
-
-  const getAgencyGroupLocationPrefix = (context, agencyId, groupName) =>
-    getWith404AsNull(context, `/locations/${agencyId}/${groupName}/location-prefix`)
-
-  const getAgencyGroupLocations = (context, agencyId, groupName) =>
-    get(context, `/locations/groups/${agencyId}/${groupName}`)
-
-  const getCourtLocations = (context) => get(context, '/court/courts')
-
-  const addVideoLinkBooking = (context, body) => post(context, '/court/video-link-bookings', body)
-
-  const getVideoLinkAppointments = (context, body) => post(context, '/court/video-link-appointments', body)
-
-  const getAttendanceChanges = (context, { fromDateTime, toDateTime }) =>
-    get(context, `/attendances/changes?fromDateTime=${fromDateTime}&toDateTime=${toDateTime}`)
+  const getAttendanceChanges = (context, { fromDateTime, toDateTime }, agencyId) => {
+    const path =
+      `/attendances/changes?fromDateTime=${fromDateTime}&toDateTime=${toDateTime}` +
+      `${agencyId && `&agencyId=${agencyId}`}`
+    return get(context, path)
+  }
 
   const getCellsWithCapacity = (context, { agencyId, groupName, attribute }) => {
     const attributeQuery = attribute ? `?attribute=${attribute}` : ''
@@ -136,12 +118,6 @@ export const whereaboutsApiFactory = (client) => {
     getAbsences,
     getUnacceptableAbsences,
     getUnacceptableAbsenceDetail,
-    searchGroups,
-    getAgencyGroupLocationPrefix,
-    getAgencyGroupLocations,
-    getCourtLocations,
-    addVideoLinkBooking,
-    getVideoLinkAppointments,
     getAttendanceChanges,
     getCellsWithCapacity,
     moveToCell,

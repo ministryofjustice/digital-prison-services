@@ -95,20 +95,6 @@ describe('Whereabouts maintenance mode flag is true', () => {
       })
   })
 
-  it('should display maintenance page when user navigates to /offenders/:offenderNo/prepost-appointments', () => {
-    return supertest(app)
-      .get('/offenders/ABC123/prepost-appointments')
-      .expect(200)
-      .expect(() => {
-        expect(res.render).toHaveBeenCalledWith(
-          'maintenancePage.njk',
-          expect.objectContaining({
-            title: 'Appointment details',
-          })
-        )
-      })
-  })
-
   it('should display maintenance page when user navigates to /appointment-details/:id/confirm-deletion', () => {
     return supertest(app)
       .get('/appointment-details/123/confirm-deletion')

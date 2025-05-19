@@ -9,8 +9,8 @@ import notInUnitController from '../controllers/covid/notInUnitController'
 
 const router = express.Router({ mergeParams: true })
 
-export default (systemOauthClient, prisonApi) => {
-  const covidService = covidServiceFactory(systemOauthClient, prisonApi)
+export default (systemOauthClient, prisonApi, prisonerAlertsApi) => {
+  const covidService = covidServiceFactory(systemOauthClient, prisonApi, prisonerAlertsApi)
 
   router.get('/', covidDashboardController({ covidService }))
   router.get('/reverse-cohorting-unit', reverseCohortingUnitController({ covidService }))

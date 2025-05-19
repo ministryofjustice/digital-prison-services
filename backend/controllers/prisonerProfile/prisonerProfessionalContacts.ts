@@ -1,3 +1,4 @@
+import { Request, Response } from 'express'
 import moment from 'moment'
 import logErrorAndContinue from '../../shared/logErrorAndContinue'
 
@@ -30,7 +31,7 @@ const sortByPrimaryAndStartDate = (left, right) => {
 }
 
 export default ({ prisonApi, personService, allocationManagerApi, systemOauthClient }) =>
-  async (req, res) => {
+  async (req: Request, res: Response): Promise<void> => {
     const { offenderNo } = req.params
     const { username } = req.session.userDetails
 
@@ -60,7 +61,7 @@ export default ({ prisonApi, personService, allocationManagerApi, systemOauthCli
           activeOfficialContacts
             .sort((left, right) => left.firstName.localeCompare(right.firstName))
             .map(async (contact) => {
-              const personContactDetails = await personService.getPersonContactDetails(res.locals, contact.personId)
+              const personContactDetails = await personService.getPersonContactDetails(systemContext, contact.personId)
               const { addresses, emails, phones } = personContactDetails
 
               return addresses

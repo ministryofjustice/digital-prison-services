@@ -101,11 +101,13 @@ context('Prisoner private cash', () => {
     },
   ]
 
-  before(() => {
-    cy.clearCookies()
+  beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.signIn()
+    })
   })
 
   context('With data', () => {
@@ -161,7 +163,8 @@ context('Prisoner private cash', () => {
       cy.get('[data-test="private-cash-current-balance"]').contains('£95.00')
       // cy.get('[data-test="private-cash-pending-balance"]').contains('-£30.00')
       cy.get('[data-test="private-cash-month"]').should('have.value', '10')
-      cy.get('[data-test="private-cash-year"]').should('have.value', '2020')
+      const earliestYear = moment().year() - 3
+      cy.get('[data-test="private-cash-year"]').should('have.value', earliestYear)
       cy.get('[data-test="private-cash-pending-table"]').then(($table) => {
         cy.get($table)
           .find('tbody')

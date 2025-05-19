@@ -10,7 +10,8 @@ import canAccessProbationDocuments from '../shared/probationDocumentsAccess'
 import { NeurodivergenceSupport } from '../api/curious/types/Enums'
 import { canViewNeurodivergenceSupportData } from '../shared/neuroDivergenceHelper'
 
-export const isComplexityEnabledFor = (agencyId) => config.apis.complexity.enabled_prisons?.includes(agencyId)
+export const isComplexityEnabledFor = (agencyId: string): boolean =>
+  config.apis.complexity.enabled_prisons?.includes(agencyId)
 
 export default ({
   prisonApi,
@@ -31,11 +32,12 @@ export default ({
     apis: {
       calculateReleaseDates: { ui_url: calculateReleaseDatesUrl },
       categorisation: { ui_url: categorisationUrl },
+      incentives: { ui_url: incentivesUrl },
       pathfinder: { ui_url: pathfinderUrl },
       soc: { ui_url: socUrl, enabled: socEnabled },
       useOfForce: { prisons: useOfForcePrisons, ui_url: useOfForceUrl },
     },
-    app: { displayRetentionLink, esweEnabled, neurodiversityEnabledPrisons },
+    app: { displayRetentionLink, esweEnabled, neurodiversityEnabledPrisons, sunsetBannerEnabled },
   } = config
 
   const needNeuroDivergenceSupport = (divergenceData) => {
@@ -114,7 +116,7 @@ export default ({
     ] = await Promise.all(
       [
         incentivesApi.getIepSummaryForBookingIds(systemContext, [bookingId]),
-        prisonApi.getCaseNoteSummaryByTypes(context, { type: 'KA', subType: 'KS', numMonths: 1, bookingId }),
+        prisonApi.getCaseNoteSummaryByTypes(systemContext, { type: 'KA', subType: 'KS', numMonths: 1, bookingId }),
         prisonApi.userCaseLoads(context),
         prisonApi.getStaffRoles(context, currentUser.staffId, currentUser.activeCaseLoadId),
         keyworkerApi.getKeyworkerByCaseloadAndOffenderNo(context, agencyId, offenderNo),
@@ -237,6 +239,7 @@ export default ({
       csraReviewDate: csraClassificationDate && moment(csraClassificationDate).format('DD/MM/YYYY'),
       displayRetentionLink,
       incentiveLevel: iepDetails && iepDetails[0] && iepDetails[0].iepLevel,
+      incentivesUrl,
       keyWorkerLastSession:
         keyworkerSessions && keyworkerSessions[0] && moment(keyworkerSessions[0].latestCaseNote).format('D MMMM YYYY'),
       keyWorkerName:
@@ -274,6 +277,7 @@ export default ({
       esweEnabled,
       hasDivergenceSupport,
       indeterminateSentence,
+      sunsetBannerEnabled,
     }
   }
 

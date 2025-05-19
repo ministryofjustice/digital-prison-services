@@ -5,15 +5,15 @@ const RetentionReasonsPage = require('../../pages/dataCompliance/retentionReason
 const offenderNo = 'A12345'
 
 context('Retention reasons', () => {
-  before(() => {
-    cy.clearCookies()
+  beforeEach(() => {
     cy.task('resetAndStubTokenVerification')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
-  })
 
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.signIn()
+    })
+
     cy.task('stubGetOffenderRetentionReasons')
     cy.task('stubNoExistingOffenderRecord', { offenderNo })
     cy.task('stubAgencyDetails', { agencyId: 'MDI', details: { description: 'Moorland' } })

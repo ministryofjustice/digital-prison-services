@@ -59,10 +59,11 @@ export default (getClientCredentialsTokens, prisonApi) => {
   const getExistingEventsForLocation = async (context, agencyId, locationId, date) => {
     const formattedDate = switchDateFormat(date)
     const searchCriteria = { agencyId, date: formattedDate, locationId }
+    const systemContext = await getClientCredentialsTokens()
 
     try {
       const eventsAtLocationByUsage = await Promise.all([
-        prisonApi.getActivitiesAtLocation(context, searchCriteria),
+        prisonApi.getActivitiesAtLocation(systemContext, searchCriteria),
         prisonApi.getActivityList(context, { ...searchCriteria, usage: 'VISIT' }),
         prisonApi.getActivityList(context, { ...searchCriteria, usage: 'APP' }),
       ]).then((events) => events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))
@@ -115,56 +116,10 @@ export default (getClientCredentialsTokens, prisonApi) => {
     return locations.filter((location) => !fullyBookedLocations.includes(location))
   }
 
-  const getAvailableLocationsForVLB = async (
-    context,
-    { agencyId, startTime, endTime, date, preAppointmentRequired, postAppointmentRequired }
-  ) => {
-    const appointmentsService = appointmentsServiceFactory(prisonApi)
-    const locations = await appointmentsService.getLocations(context, agencyId, 'VIDE')
-
-    const eventsAtLocations = await getAppointmentsAtLocations(context, {
-      agency: agencyId,
-      date,
-      locations,
-    })
-
-    const mainStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC).add(1, 'minute').format(DATE_TIME_FORMAT_SPEC)
-    const mainLocations = await getAvailableLocations(context, {
-      timeSlot: { startTime: mainStartTime, endTime },
-      locations,
-      eventsAtLocations,
-    })
-
-    const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(20, 'minutes').format(DATE_TIME_FORMAT_SPEC)
-
-    const preLocations =
-      preAppointmentRequired === 'yes'
-        ? await getAvailableLocations(context, {
-            timeSlot: { startTime: preStartTime, endTime: startTime },
-            locations,
-            eventsAtLocations,
-          })
-        : []
-
-    const postEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC).add(20, 'minutes').format(DATE_TIME_FORMAT_SPEC)
-
-    const postLocations =
-      postAppointmentRequired === 'yes'
-        ? await getAvailableLocations(context, {
-            timeSlot: { startTime: endTime, endTime: postEndTime },
-            locations,
-            eventsAtLocations,
-          })
-        : []
-
-    return { mainLocations, preLocations, postLocations }
-  }
-
   return {
     getExistingEventsForOffender,
     getExistingEventsForLocation,
     getAvailableLocations,
-    getAvailableLocationsForVLB,
     getAppointmentsAtLocations,
   }
 }

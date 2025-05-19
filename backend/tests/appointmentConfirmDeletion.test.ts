@@ -1,10 +1,13 @@
 import { makeNotFoundError } from './helpers'
 
 import appointmentConfirmDeletion from '../controllers/appointmentConfirmDeletion'
+import { getSystemOauthApiClient } from '../api/systemOauthClient'
 
-const res = { locals: {}, send: jest.fn(), redirect: jest.fn() }
+const res = { locals: { user: { username: 'USER' } }, send: jest.fn(), redirect: jest.fn() }
 const whereaboutsApi = {}
 const appointmentDetailsService = {}
+const videoLinkBookingService = {}
+const getClientCredentialsTokens = jest.fn()
 
 const testAppointment = {
   appointment: {
@@ -39,6 +42,13 @@ const testAppointmentViewModel = {
   },
 }
 
+const systemOauthClient: Partial<ReturnType<typeof getSystemOauthApiClient>> & {
+  getClientCredentialsTokens: jest.Mock
+} = {
+  getClientCredentialsTokens: jest.fn(),
+}
+const context = {}
+
 let controller
 
 beforeEach(() => {
@@ -46,8 +56,15 @@ beforeEach(() => {
   whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(testAppointment)
   // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentViewModel' does not exist ... Remove this comment to see the full error message
   appointmentDetailsService.getAppointmentViewModel = jest.fn().mockResolvedValue(testAppointmentViewModel)
+  systemOauthClient.getClientCredentialsTokens.mockResolvedValue(context)
 
-  controller = appointmentConfirmDeletion({ whereaboutsApi, appointmentDetailsService })
+  controller = appointmentConfirmDeletion({
+    whereaboutsApi,
+    appointmentDetailsService,
+    videoLinkBookingService,
+    getClientCredentialsTokens,
+    systemOauthClient,
+  })
 
   // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
   res.render = jest.fn()
@@ -66,7 +83,7 @@ describe('any appointment deletion', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointment' does not exist on type '... Remove this comment to see the full error message
     expect(whereaboutsApi.getAppointment).toHaveBeenCalledWith(res.locals, 123)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentViewModel' does not exist ... Remove this comment to see the full error message
-    expect(appointmentDetailsService.getAppointmentViewModel).toHaveBeenCalledWith(res, testAppointment, 'MDI')
+    expect(appointmentDetailsService.getAppointmentViewModel).toHaveBeenCalledWith(context, res, testAppointment, 'MDI')
   })
 
   it('should show the correct data', async () => {

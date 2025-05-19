@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { DATE_TIME_FORMAT_SPEC } from '../common/dateHelpers'
+import { DATE_TIME_FORMAT_SPEC, MOMENT_TIME } from '../common/dateHelpers'
 import abbreviations from '../common/abbreviations'
 import config from './config'
 
@@ -175,9 +175,10 @@ export const getDate = (dateTimeString: string, format = 'dddd D MMMM YYYY'): st
 }
 
 export const getTime = (dateTimeString: string): string => {
+  if (moment(dateTimeString, MOMENT_TIME, true).isValid()) return dateTimeString
   if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date or time'
 
-  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format('HH:mm')
+  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format(MOMENT_TIME)
 }
 
 export const forenameToInitial = (name: { charAt: () => unknown; split: (arg0: string) => unknown[] }): string => {
@@ -343,28 +344,8 @@ export const stringWithAbbreviationsProcessor = (string: string): string => {
   return establishmentName
 }
 
-// Either explicitly enable redirect for enabled prisons or check for the developer role
-export const isRedirectEnabled = (res, activeCaseLoadId): boolean => {
-  const redirectUrl = config.app.prisonerProfileRedirect.url
-  const redirectDate = config.app.prisonerProfileRedirect.enabledDate
-  const { scheduleRedirectForPrisons } = config.app.prisonerProfileRedirect
-
-  if (scheduleRedirectForPrisons?.split(',')?.includes(activeCaseLoadId) && redirectUrl && redirectDate < Date.now()) {
-    return true
-  }
-  return (
-    (redirectUrl && !scheduleRedirectForPrisons?.split(',')?.includes(activeCaseLoadId)) ||
-    res.locals.user?.userRoles?.some((role) => role === 'ROLE_DPS_APPLICATION_DEVELOPER')
-  )
-}
-
-export const isRedirectCaseLoad = (activeCaseLoadId: string): boolean => {
-  return config.app.prisonerProfileRedirect.enabledPrisons?.split(',')?.includes(activeCaseLoadId)
-}
-
-export const useNewProfile = (redirectEnabled: boolean, redirectCaseLoadEnabled: boolean): boolean => {
-  return !!(redirectCaseLoadEnabled && redirectEnabled)
-}
+export const filterNot = (array: any[], key: string, neq: unknown[]) =>
+  array.filter((object) => !neq.includes(object[key]))
 
 export default {
   isBeforeToday,
@@ -416,7 +397,5 @@ export default {
   joinUrlPath,
   getWith404AsNull,
   stringWithAbbreviationsProcessor,
-  isRedirectEnabled,
-  isRedirectCaseLoad,
-  useNewProfile,
+  filterNot,
 }

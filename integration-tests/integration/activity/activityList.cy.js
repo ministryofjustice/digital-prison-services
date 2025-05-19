@@ -7,8 +7,8 @@ const date = new Date().toISOString().split('T')[0]
 context('Activity list page', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubGroups', { id: caseload })
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload })
+    cy.task('stubGetAlerts', { locationId: 'MDI', alerts: [] })
     cy.signIn()
     cy.task('stubActivityLocations')
 

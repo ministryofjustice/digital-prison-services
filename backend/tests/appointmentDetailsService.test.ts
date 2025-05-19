@@ -1,6 +1,11 @@
 import { makeNotFoundError } from './helpers'
 
 import appointmentDetailsServiceFactory from '../services/appointmentDetailsService'
+import config from '../config'
+import { prisonApiFactory } from '../api/prisonApi'
+import VideoLinkBookingService from '../services/videoLinkBookingService'
+import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../api/locationsInsidePrisonApi'
+import { nomisMappingClientFactory } from '../api/nomisMappingClient'
 
 describe('appointment details', () => {
   const testAppointment = {
@@ -17,56 +22,103 @@ describe('appointment details', () => {
     videoLinkBooking: null,
   }
 
-  const prisonApi = {}
+  const prisonApi: Partial<ReturnType<typeof prisonApiFactory>> = {}
+  const videoLinkBookingService: Partial<ReturnType<typeof VideoLinkBookingService>> & {
+    getVideoLinkBookingFromAppointmentId: jest.Mock
+    bookingIsAmendable: jest.Mock
+  } = {
+    getVideoLinkBookingFromAppointmentId: jest.fn(),
+    bookingIsAmendable: jest.fn(),
+  }
+  const locationsInsidePrisonApi: Partial<ReturnType<typeof locationsInsidePrisonApiFactory>> & {
+    getLocationByKey: jest.Mock
+  } = {
+    getLocationByKey: jest.fn(),
+  }
+  const nomisMapping: Partial<ReturnType<typeof nomisMappingClientFactory>> & {
+    getNomisLocationMappingByDpsLocationId: jest.Mock
+  } = {
+    getNomisLocationMappingByDpsLocationId: jest.fn(),
+  }
+  const getClientCredentialsTokens = jest.fn()
+  const context = {}
 
   let res
   let service
 
   beforeEach(() => {
-    res = { render: jest.fn() }
+    res = { locals: { user: { username: 'USER' } }, render: jest.fn() }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({
       firstName: 'BARRY',
       lastName: 'SMITH',
       offenderNo: 'ABC123',
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocationsForAppointments' does not ex... Remove this comment to see the full error message
-    prisonApi.getLocationsForAppointments = jest.fn().mockResolvedValue([
-      { userDescription: 'VCC Room 1', locationId: '1' },
-      { userDescription: 'Gymnasium', locationId: '2' },
-      { userDescription: 'VCC Room 2', locationId: '3' },
-    ])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentTypes' does not exist on t... Remove this comment to see the full error message
     prisonApi.getAppointmentTypes = jest.fn().mockResolvedValue([
       { code: 'GYM', description: 'Gym' },
-      { description: 'Video link booking', code: 'VLB' },
+      { description: 'Video Link - Court Hearing', code: 'VLB' },
+      { description: 'Video Link - Probation Meeting', code: 'VLPM' },
     ])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
     prisonApi.getStaffDetails = jest
       .fn()
       .mockResolvedValue({ username: 'TEST_USER', firstName: 'TEST', lastName: 'USER' })
 
-    service = appointmentDetailsServiceFactory({ prisonApi })
+    locationsInsidePrisonApi.getLocationByKey.mockResolvedValue({ id: 'abc-123' })
+    locationsInsidePrisonApi.getLocationByKey.mockImplementation((_, id) =>
+      Promise.resolve(
+        {
+          ROOM2: { id: 'cba-222' },
+          ROOM3: { id: 'zyx-321' },
+        }[id]
+      )
+    )
+    locationsInsidePrisonApi.getLocationsByNonResidentialUsageType = jest.fn().mockResolvedValue([
+      { key: 'ROOM1', localName: 'VCC Room 1', id: 'abc-123' },
+      { key: 'ROOM2', localName: 'Gymnasium', id: 'cba-222' },
+      { key: 'ROOM3', localName: 'VCC Room 2', id: 'zyx-321' },
+    ])
+
+    nomisMapping.getNomisLocationMappingByDpsLocationId.mockImplementation((_, id) =>
+      Promise.resolve(
+        {
+          'abc-123': { nomisLocationId: 1, dpsLocationId: 'abc-123' },
+          'cba-222': { nomisLocationId: 2, dpsLocationId: 'cba-222' },
+          'zyx-321': { nomisLocationId: 3, dpsLocationId: 'zyx-321' },
+        }[id]
+      )
+    )
+    getClientCredentialsTokens.mockResolvedValue(context)
+
+    service = appointmentDetailsServiceFactory({
+      prisonApi: prisonApi as ReturnType<typeof prisonApiFactory>,
+      videoLinkBookingService: videoLinkBookingService as ReturnType<typeof VideoLinkBookingService>,
+      locationsInsidePrisonApi: locationsInsidePrisonApi as ReturnType<typeof locationsInsidePrisonApiFactory>,
+      nomisMapping: nomisMapping as ReturnType<typeof nomisMappingClientFactory>,
+      getClientCredentialsTokens,
+    })
+  })
+
+  afterEach(() => {
+    jest.resetAllMocks()
   })
 
   describe('an appointment view model request', () => {
     it('should call the correct prison api methods', async () => {
-      await service.getAppointmentViewModel(res, testAppointment, 'MDI')
+      await service.getAppointmentViewModel(context, res, testAppointment, 'MDI')
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocationsForAppointments' does not ex... Remove this comment to see the full error message
-      expect(prisonApi.getLocationsForAppointments).toHaveBeenCalledWith(res.locals, 'MDI')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentTypes' does not exist on t... Remove this comment to see the full error message
       expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'TEST_USER')
+      expect(locationsInsidePrisonApi.getLocationsByNonResidentialUsageType).toHaveBeenCalledWith(
+        context,
+        'MDI',
+        NonResidentialUsageType.APPOINTMENT
+      )
     })
 
     it('should fall back to the user id if there are errors fetching the user details', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getStaffDetails = jest.fn().mockRejectedValue(makeNotFoundError())
 
-      const appointmentDetails = await service.getAppointmentViewModel(res, testAppointment, 'MDI')
+      const appointmentDetails = await service.getAppointmentViewModel(context, res, testAppointment, 'MDI')
 
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
@@ -79,7 +131,7 @@ describe('appointment details', () => {
 
   describe('single appointment view model request', () => {
     it('should return the correct data', async () => {
-      const appointmentDetails = await service.getAppointmentViewModel(res, testAppointment, 'MDI')
+      const appointmentDetails = await service.getAppointmentViewModel(context, res, testAppointment, 'MDI')
 
       expect(appointmentDetails).toEqual({
         isRecurring: false,
@@ -88,7 +140,6 @@ describe('appointment details', () => {
           addedBy: 'Test User',
         },
         basicDetails: {
-          date: '20 May 2021',
           location: 'Gymnasium',
           type: 'Gym',
         },
@@ -97,9 +148,12 @@ describe('appointment details', () => {
           recurring: 'No',
         },
         timeDetails: {
+          date: '20 May 2021',
           startTime: '13:00',
           endTime: 'Not entered',
         },
+        canAmendAppointment: false,
+        canDeleteAppointment: true,
       })
     })
   })
@@ -121,7 +175,7 @@ describe('appointment details', () => {
     })
 
     it('should return the correct data', async () => {
-      const appointmentDetails = await service.getAppointmentViewModel(res, recurringAppointment, 'MDI')
+      const appointmentDetails = await service.getAppointmentViewModel(context, res, recurringAppointment, 'MDI')
 
       expect(appointmentDetails).toMatchObject({
         recurringDetails: {
@@ -136,121 +190,167 @@ describe('appointment details', () => {
   describe('video link appointment view model request', () => {
     let videoLinkBookingAppointment
 
+    const buildVideoLinkBooking = (bookingType, createdByPrison) => ({
+      bookingType,
+      prisonAppointments:
+        bookingType === 'COURT'
+          ? [
+              {
+                appointmentType: 'VLB_COURT_PRE',
+                prisonLocKey: 'ROOM2',
+                appointmentDate: '2024-09-06',
+                startTime: '09:45',
+                endTime: '10:00',
+              },
+              {
+                appointmentType: 'VLB_COURT_MAIN',
+                prisonLocKey: 'ROOM3',
+                appointmentDate: '2024-09-06',
+                startTime: '10:00',
+                endTime: '11:00',
+              },
+              {
+                appointmentType: 'VLB_COURT_POST',
+                prisonLocKey: 'ROOM2',
+                appointmentDate: '2024-09-06',
+                startTime: '11:00',
+                endTime: '11:15',
+              },
+            ]
+          : [
+              {
+                appointmentType: 'VLB_PROBATION',
+                prisonLocKey: 'ROOM3',
+                appointmentDate: '2024-09-06',
+                startTime: '10:00',
+                endTime: '11:00',
+              },
+            ],
+      courtCode: bookingType === 'COURT' ? 'ABERFC' : undefined,
+      courtDescription: bookingType === 'COURT' ? 'Aberystwyth Family' : undefined,
+      courtHearingType: bookingType === 'COURT' ? 'APPLICATION' : undefined,
+      courtHearingTypeDescription: bookingType === 'COURT' ? 'Application' : undefined,
+      probationTeamCode: bookingType === 'PROBATION' ? 'BLAPP' : undefined,
+      probationTeamDescription: bookingType === 'PROBATION' ? 'Blackpool' : undefined,
+      probationMeetingType: bookingType === 'PROBATION' ? 'PSR' : undefined,
+      probationMeetingTypeDescription: bookingType === 'PROBATION' ? 'Post sentence recall' : undefined,
+      createdByPrison,
+      createdBy: 'TEST_USER',
+    })
+
     beforeEach(() => {
       videoLinkBookingAppointment = {
         appointment: {
           ...testAppointment.appointment,
-          locationId: 1,
           appointmentTypeCode: 'VLB',
           startTime: '2021-05-20T13:00:00',
           endTime: '2021-05-20T14:00:00',
           comment: 'Test appointment comments',
-          addedBy: 'Test User',
-        },
-        videoLinkBooking: {
-          main: {
-            court: 'Nottingham Justice Centre',
-            hearingType: 'MAIN',
-            locationId: 1,
-            startTime: '2021-05-20T13:00:00',
-            endTime: '2021-05-20T14:00:00',
-            createdByUsername: 'AUSER',
-            madeByTheCourt: false,
-          },
         },
       }
     })
 
     it('should render with court location and correct vlb locations and types', async () => {
-      const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
+      videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
+        buildVideoLinkBooking('COURT', false)
+      )
+
+      const appointmentDetails = await service.getAppointmentViewModel(context, res, videoLinkBookingAppointment, 'MDI')
 
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
-          courtLocation: 'Nottingham Justice Centre',
+          courtHearingLink: 'Not yet known',
           comments: 'Test appointment comments',
+          addedBy: 'Court',
         },
         basicDetails: {
-          date: '20 May 2021',
-          location: 'VCC Room 1',
-          type: 'Video link booking',
+          location: 'VCC Room 2',
+          type: 'Video Link - Court Hearing',
+          courtLocation: 'Aberystwyth Family',
+          hearingType: 'Application',
         },
         timeDetails: {
-          startTime: '13:00',
-          endTime: '14:00',
+          date: '20 May 2021',
+          startTime: '10:00',
+          endTime: '11:00',
+        },
+        prepostData: {
+          'pre-court hearing briefing': 'Gymnasium - 09:45 to 10:00',
+          'post-court hearing briefing': 'Gymnasium - 11:00 to 11:15',
         },
       })
     })
 
-    describe('with pre appointment', () => {
-      beforeEach(() => {
-        videoLinkBookingAppointment.videoLinkBooking.pre = {
-          court: 'Nottingham Justice Centre',
-          hearingType: 'PRE',
-          locationId: 3,
-          startTime: '2021-05-20T12:45:00',
-          endTime: '2021-05-20T13:00:00',
-          createdByUsername: 'AUSER',
-          madeByTheCourt: false,
-        }
-      })
+    it('should render addedBy with the correct username', async () => {
+      videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
+        buildVideoLinkBooking('COURT', true)
+      )
 
-      it('should render with the correct pre appointment details', async () => {
-        const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
+      const appointmentDetails = await service.getAppointmentViewModel(context, res, videoLinkBookingAppointment, 'MDI')
 
-        expect(appointmentDetails).toMatchObject({
-          prepostData: {
-            'pre-court hearing briefing': 'VCC Room 2 - 12:45 to 13:00',
-          },
-        })
+      expect(appointmentDetails).toMatchObject({
+        additionalDetails: {
+          addedBy: 'Test User',
+        },
       })
     })
+  })
 
-    describe('with post appointment', () => {
-      beforeEach(() => {
-        videoLinkBookingAppointment.videoLinkBooking.post = {
-          court: 'Nottingham Justice Centre',
-          hearingType: 'POST',
-          locationId: 3,
-          startTime: '2021-05-20T14:00:00',
-          endTime: '2021-05-20T14:15:00',
-          createdByUsername: 'AUSER',
-          madeByTheCourt: false,
-        }
-      })
+  describe('video link appointment view model request - probation meeting', () => {
+    let videoLinkBookingAppointment
 
-      it('should render with the correct post appointment details', async () => {
-        const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
+    beforeEach(() => {
+      config.app.bvlsMasteredAppointmentTypes = ['VLB', 'VLPM']
 
-        expect(appointmentDetails).toMatchObject({
-          prepostData: {
-            'post-court hearing briefing': 'VCC Room 2 - 14:00 to 14:15',
+      videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue({
+        bookingType: 'PROBATION',
+        prisonAppointments: [
+          {
+            appointmentType: 'VLB_PROBATION',
+            prisonLocKey: 'ROOM3',
+            appointmentDate: '2024-09-06',
+            startTime: '10:00',
+            endTime: '11:00',
           },
-        })
+        ],
+        probationTeamCode: 'ABERFC',
+        probationTeamDescription: 'Aberystwyth Family',
+        probationMeetingType: 'PSR',
+        probationMeetingTypeDescription: 'Recall hearing',
+        createdByPrison: true,
+        createdBy: 'TEST_USER',
       })
+
+      videoLinkBookingAppointment = {
+        appointment: {
+          ...testAppointment.appointment,
+          appointmentTypeCode: 'VLPM',
+          startTime: '2021-05-20T13:00:00',
+          endTime: '2021-05-20T14:00:00',
+          comment: 'Test appointment comments',
+        },
+      }
     })
 
-    describe('with VLB appointment made by a court user', () => {
-      beforeEach(() => {
-        videoLinkBookingAppointment.videoLinkBooking.main = {
-          court: 'Nottingham Justice Centre',
-          hearingType: 'POST',
-          locationId: 3,
-          startTime: '2021-05-20T14:00:00',
-          endTime: '2021-05-20T14:15:00',
-          createdByUsername: 'VLB_COURT',
-          madeByTheCourt: true,
-        }
-      })
+    it('should render with court location and correct vlb locations and types', async () => {
+      const appointmentDetails = await service.getAppointmentViewModel(context, res, videoLinkBookingAppointment, 'MDI')
 
-      it('should render with the added by of Court', async () => {
-        const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
-
-        expect(appointmentDetails).toMatchObject({
-          additionalDetails: {
-            comments: 'Test appointment comments',
-            addedBy: 'Court',
-          },
-        })
+      expect(appointmentDetails).toMatchObject({
+        additionalDetails: {
+          comments: 'Test appointment comments',
+          addedBy: 'Test User',
+        },
+        basicDetails: {
+          location: 'VCC Room 2',
+          type: 'Video Link - Probation Meeting',
+          meetingType: 'Recall hearing',
+          probationTeam: 'Aberystwyth Family',
+        },
+        timeDetails: {
+          date: '20 May 2021',
+          startTime: '10:00',
+          endTime: '11:00',
+        },
       })
     })
   })

@@ -7,25 +7,25 @@ const agencyId = 'MDI'
 
 context('A user can view attendance changes', () => {
   const period = 'AM'
-  before(() => {
-    cy.clearCookies()
-    cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', {
-      username: 'ITAG_USER',
-      caseload: 'MDI',
-      caseloads: [
-        {
-          caseLoadId: 'MDI',
-          description: 'Wandsworth',
-          currentlyActive: true,
-        },
-      ],
-    })
-    cy.signIn()
-  })
 
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.task('resetAndStubTokenVerification')
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'MDI',
+        caseloads: [
+          {
+            caseLoadId: 'MDI',
+            description: 'Wandsworth',
+            currentlyActive: true,
+          },
+        ],
+      })
+      cy.signIn()
+    })
+
     cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
     cy.task('stubAttendanceChanges', [

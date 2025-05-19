@@ -1,14 +1,23 @@
 import moment from 'moment'
 import { DATE_ONLY_FORMAT_SPEC } from '../../common/dateHelpers'
 import existingEventsService from '../services/existingEventsService'
+import { prisonApiFactory } from '../api/prisonApi'
 
 describe('existing events', () => {
-  const prisonApi = {
+  const prisonApi: Partial<ReturnType<typeof prisonApiFactory>> & {
+    getActivitiesAtLocation: jest.Mock
+    getActivityList: jest.Mock
+    getLocationsByNonResidentialUsageType: jest.Mock
+    getSentenceData: jest.Mock
+    getVisits: jest.Mock
+    getAppointments: jest.Mock
+    getExternalTransfers: jest.Mock
+    getCourtEvents: jest.Mock
+    getActivities: jest.Mock
+  } = {
     getActivitiesAtLocation: jest.fn(),
     getActivityList: jest.fn(),
-    getLocations: jest.fn(),
-    getLocationsForAppointments: jest.fn(),
-    getEventsAtLocations: jest.fn(),
+    getLocationsByNonResidentialUsageType: jest.fn(),
     getSentenceData: jest.fn(),
     getVisits: jest.fn(),
     getAppointments: jest.fn(),
@@ -16,7 +25,8 @@ describe('existing events', () => {
     getCourtEvents: jest.fn(),
     getActivities: jest.fn(),
   }
-  const getClientCredentialsTokens = jest.fn().mockResolvedValue({})
+  const systemToken = { system: 'system' }
+  const getClientCredentialsTokens = jest.fn().mockResolvedValue(systemToken)
 
   let service
 
@@ -26,7 +36,7 @@ describe('existing events', () => {
 
   describe('location availability', () => {
     beforeEach(() => {
-      prisonApi.getLocations.mockReturnValue(Promise.resolve([]))
+      prisonApi.getLocationsByNonResidentialUsageType.mockReturnValue(Promise.resolve([]))
     })
 
     it('should handle time slot where location booking slightly overlap ', async () => {
@@ -212,39 +222,6 @@ describe('existing events', () => {
         { agencyId: 'MDI', date: '2019-10-10', locationId: 2, usage: 'APP' }
       )
     })
-
-    it('should adjust the main appointment time by one minute in the future', async () => {
-      const locations = [{ locationId: 1, description: 'Location 1', locationType: 'VIDE' }]
-      const eventsAtLocations = [
-        {
-          locationId: 1,
-          startTime: '2019-10-10T10:00:00',
-          endTime: '2019-10-10T10:15:00',
-          description: 'Video booking for John',
-        },
-      ]
-
-      prisonApi.getLocationsForAppointments.mockReturnValue(locations)
-      prisonApi.getActivityList.mockReturnValue(Promise.resolve(eventsAtLocations))
-
-      const availableLocations = await service.getAvailableLocationsForVLB(
-        {},
-        {
-          agencyId: 'LEI',
-          startTime: '2019-10-10T10:15',
-          endTime: '2019-10-10T10:30',
-          date: '2019-10-10',
-          preAppointmentRequired: 'no',
-          postAppointmentRequired: 'no',
-        }
-      )
-
-      expect(availableLocations).toEqual({
-        mainLocations: [{ text: 'Location 1', value: 1 }],
-        postLocations: [],
-        preLocations: [],
-      })
-    })
   })
 
   describe('getting events for offenders', () => {
@@ -257,11 +234,11 @@ describe('existing events', () => {
 
       await service.getExistingEventsForOffender({}, 'LEI', '11/12/2019', 'ABC123')
 
-      expect(prisonApi.getVisits).toHaveBeenCalledWith({}, expectedParameters)
-      expect(prisonApi.getAppointments).toHaveBeenCalledWith({}, expectedParameters)
-      expect(prisonApi.getExternalTransfers).toHaveBeenCalledWith({}, expectedParameters)
-      expect(prisonApi.getCourtEvents).toHaveBeenCalledWith({}, expectedParameters)
-      expect(prisonApi.getActivities).toHaveBeenCalledWith({}, expectedParameters)
+      expect(prisonApi.getVisits).toHaveBeenCalledWith(systemToken, expectedParameters)
+      expect(prisonApi.getAppointments).toHaveBeenCalledWith(systemToken, expectedParameters)
+      expect(prisonApi.getExternalTransfers).toHaveBeenCalledWith(systemToken, expectedParameters)
+      expect(prisonApi.getCourtEvents).toHaveBeenCalledWith(systemToken, expectedParameters)
+      expect(prisonApi.getActivities).toHaveBeenCalledWith(systemToken, expectedParameters)
     })
 
     describe('when there are no errors', () => {
@@ -403,7 +380,7 @@ describe('existing events', () => {
 
       await service.getExistingEventsForLocation({}, 'LEI', 123, '11/12/2019')
 
-      expect(prisonApi.getActivitiesAtLocation).toHaveBeenCalledWith({}, expectedParameters)
+      expect(prisonApi.getActivitiesAtLocation).toHaveBeenCalledWith(systemToken, expectedParameters)
       expect(prisonApi.getActivityList).toHaveBeenCalledWith({}, { ...expectedParameters, usage: 'VISIT' })
       expect(prisonApi.getActivityList).toHaveBeenCalledWith({}, { ...expectedParameters, usage: 'APP' })
     })

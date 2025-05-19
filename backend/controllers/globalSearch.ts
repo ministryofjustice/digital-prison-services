@@ -2,9 +2,7 @@ import moment from 'moment'
 import log from '../log'
 import { isPrisonerIdentifier, putLastNameFirst } from '../utils'
 import dobValidation from '../shared/dobValidation'
-import { app } from '../config'
-
-const { licencesUrl } = app
+import config, { app } from '../config'
 
 const trackEvent = (telemetry, prisonerResults, searchText, filters, username, activeCaseLoad) => {
   if (telemetry) {
@@ -27,6 +25,8 @@ const trackEvent = (telemetry, prisonerResults, searchText, filters, username, a
 }
 
 export default ({ paginationService, offenderSearchApi, oauthApi, telemetry }) => {
+  const { licencesUrl } = app
+
   const searchByOffender = (context, offenderNo, gender, location, dateOfBirth, pageLimit) =>
     offenderSearchApi.globalSearch(
       context,
@@ -141,9 +141,11 @@ export default ({ paginationService, offenderSearchApi, oauthApi, telemetry }) =
         ...prisoner,
         showUpdateLicenceLink:
           isLicencesUser && (prisoner.currentlyInPrison === 'Y' || isLicencesVaryUser) && prisonerBooked(prisoner),
+        prisonerProfileUrl: `${config.app.prisonerProfileRedirect.url}/prisoner/${prisoner.offenderNo}`,
         showProfileLink:
-          ((userCanViewInactive && prisoner.currentlyInPrison === 'N') || prisoner.currentlyInPrison === 'Y') &&
-          prisonerBooked(prisoner),
+          (activeCaseLoad &&
+            ((userCanViewInactive && prisoner.currentlyInPrison === 'N') || prisoner.currentlyInPrison === 'Y') &&
+            prisonerBooked(prisoner)) === true,
         updateLicenceLink: prisonerBooked(prisoner)
           ? `${licencesUrl}hdc/taskList/${prisoner.latestBookingId}`
           : undefined,

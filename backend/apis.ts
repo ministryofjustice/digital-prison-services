@@ -5,6 +5,7 @@ import config from './config'
 import { prisonApiFactory } from './api/prisonApi'
 import { oauthApiFactory } from './api/oauthApi'
 import { whereaboutsApiFactory } from './api/whereaboutsApi'
+import { locationsInsidePrisonApiFactory } from './api/locationsInsidePrisonApi'
 import { deliusIntegrationApiFactory } from './api/deliusIntegrationApi'
 import { dataComplianceApiFactory } from './api/dataComplianceApi'
 import { keyworkerApiFactory } from './api/keyworkerApi'
@@ -19,8 +20,10 @@ import { complexityApiFactory } from './api/complexityApi'
 import { incentivesApiFactory } from './api/incentivesApi'
 import { nonAssociationsApiFactory } from './api/nonAssociationsApi'
 import { hmppsManageUsersApiFactory } from './api/hmppsManageUsersApi'
-import { adjudicationsApiFactory } from './api/adjudicationsApi'
 import { feComponentsApiFactory } from './api/feComponents'
+import { bookAVideoLinkApiFactory } from './api/bookAVideoLinkApi'
+import { nomisMappingClientFactory } from './api/nomisMappingClient'
+import { prisonerAlertsApiFactory } from './api/prisonerAlertsApi'
 
 export const prisonApi = prisonApiFactory(
   clientFactory({
@@ -33,6 +36,27 @@ export const whereaboutsApi = whereaboutsApiFactory(
   clientFactory({
     baseUrl: config.apis.whereabouts.url,
     timeout: config.apis.whereabouts.timeoutSeconds * 1000,
+  })
+)
+
+export const bookAVideoLinkApi = bookAVideoLinkApiFactory(
+  clientFactory({
+    baseUrl: config.apis.bookAVideoLinkApi.url,
+    timeout: config.apis.bookAVideoLinkApi.timeoutSeconds * 1000,
+  })
+)
+
+export const locationsInsidePrisonApi = locationsInsidePrisonApiFactory(
+  clientFactory({
+    baseUrl: config.apis.locationsInsidePrisonApi.url,
+    timeout: config.apis.locationsInsidePrisonApi.timeoutSeconds * 1000,
+  })
+)
+
+export const nomisMapping = nomisMappingClientFactory(
+  clientFactory({
+    baseUrl: config.apis.nomisMapping.url,
+    timeout: config.apis.nomisMapping.timeoutSeconds * 1000,
   })
 )
 
@@ -83,6 +107,13 @@ export const caseNotesApi = caseNotesApiFactory(
   clientFactory({
     baseUrl: config.apis.caseNotes.url,
     timeout: config.apis.caseNotes.timeoutSeconds * 1000,
+  })
+)
+
+export const prisonerAlertsApi = prisonerAlertsApiFactory(
+  clientFactory({
+    baseUrl: config.apis.prisonerAlerts.url,
+    timeout: config.apis.prisonerAlerts.timeoutSeconds * 1000,
   })
 )
 
@@ -142,13 +173,6 @@ export const nonAssociationsApi = nonAssociationsApiFactory(
   })
 )
 
-export const adjudicationsApi = adjudicationsApiFactory(
-  clientFactory({
-    baseUrl: config.apis.adjudicationsApi.url,
-    timeout: config.apis.adjudicationsApi.timeoutSeconds * 1000,
-  })
-)
-
 export const curiousApi = CuriousApi.create(clientFactory({ baseUrl: config.apis.curious.url }))
 
 export const feComponentsApi = feComponentsApiFactory(
@@ -161,12 +185,15 @@ export const feComponentsApi = feComponentsApiFactory(
 export default {
   prisonApi,
   whereaboutsApi,
+  bookAVideoLinkApi,
+  locationsInsidePrisonApi,
   oauthApi,
   hmppsManageUsersApi,
   deliusIntegrationApi,
   dataComplianceApi,
   keyworkerApi,
   caseNotesApi,
+  prisonerAlertsApi,
   tokenVerificationApi,
   allocationManagerApi,
   pathfinderApi,
@@ -177,6 +204,6 @@ export default {
   incentivesApi,
   nonAssociationsApi,
   restrictedPatientApi,
-  adjudicationsApi,
   feComponentsApi,
+  nomisMapping,
 }

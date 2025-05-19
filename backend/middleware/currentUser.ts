@@ -1,4 +1,5 @@
 import jwtDecode from 'jwt-decode'
+import { NextFunction, Request, Response } from 'express'
 import { CaseLoad } from '../api/prisonApi'
 import logger from '../log'
 import { forenameToInitial } from '../utils'
@@ -8,7 +9,7 @@ export type User = {
   displayName: string
   activeCaseLoad?: CaseLoad
 }
-export default ({ prisonApi, hmppsManageUsersApi }) => {
+export default ({ prisonApi, hmppsManageUsersApi, getClientCredentialsTokens }) => {
   const getActiveCaseload = async (req, res) => {
     const { activeCaseLoadId, username } = req.session.userDetails
     const { allCaseloads: caseloads } = req.session
@@ -20,9 +21,10 @@ export default ({ prisonApi, hmppsManageUsersApi }) => {
 
     const potentialCaseLoad = caseloads.find((cl) => cl.caseLoadId !== '___')
     if (potentialCaseLoad) {
+      const systemContext = await getClientCredentialsTokens(username)
       const firstCaseLoadId = potentialCaseLoad.caseLoadId
       logger.warn(`No active caseload set for user: ${username}: setting to ${firstCaseLoadId}`)
-      await prisonApi.setActiveCaseload(res.locals, potentialCaseLoad)
+      await prisonApi.setActiveCaseload(systemContext, potentialCaseLoad)
 
       req.session.userDetails.activeCaseLoadId = firstCaseLoadId
 
@@ -46,7 +48,7 @@ export default ({ prisonApi, hmppsManageUsersApi }) => {
     return null
   }
 
-  return async (req, res, next) => {
+  return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     if (!req.xhr) {
       if (!req.session.userDetails) {
         const userDetails = await hmppsManageUsersApi.currentUser(res.locals)
@@ -59,7 +61,7 @@ export default ({ prisonApi, hmppsManageUsersApi }) => {
       const userRoles = await getUserRoles(req, res)
       const activeCaseLoad = await getActiveCaseload(req, res)
 
-      const user: User = {
+      res.locals.user = {
         ...res.locals.user,
         username: req.session.userDetails.username,
         userRoles,
@@ -68,8 +70,6 @@ export default ({ prisonApi, hmppsManageUsersApi }) => {
         activeCaseLoad,
         backLink: req.session.userBackLink,
       }
-
-      res.locals.user = user
     }
 
     next()

@@ -4,19 +4,17 @@ import prisonerProfileRedirect from '../controllers/prisonerProfile/prisonerProf
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi }) => {
-  const { index, post, areYouSure, confirm, recordIncentiveLevelInterruption } = caseNoteFactory({
+const controller = ({ prisonApi, oauthApi, systemOauthClient, restrictedPatientApi }) => {
+  const { recordIncentiveLevelInterruption } = caseNoteFactory({
     prisonApi,
-    caseNotesApi,
     oauthApi,
     systemOauthClient,
     restrictedPatientApi,
   })
 
-  router.get('/', prisonerProfileRedirect({ path: '/add-case-note', handler: index }))
-  router.post('/', post)
-  router.get('/confirm', areYouSure)
-  router.post('/confirm', confirm)
+  router.get('/', prisonerProfileRedirect({ path: '/add-case-note' }))
+
+  // This should be moved to the new profile and removed.
   router.get('/record-incentive-level', recordIncentiveLevelInterruption)
 
   return router

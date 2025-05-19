@@ -4,47 +4,43 @@ const caseNoteTypes = [
   {
     code: 'OBSERVE',
     description: 'Observations',
-    activeFlag: 'Y',
     source: 'OCNS',
     subCodes: [
       {
         code: 'test',
         description: 'Test',
-        activeFlag: 'Y',
+        active: true,
       },
     ],
   },
   {
     code: 'OMIC',
     description: 'OMiC',
-    activeFlag: 'Y',
     source: 'OCNS',
     subCodes: [
       {
         code: 'OPEN_COMM',
         description: 'Open Case Note',
-        activeFlag: 'Y',
+        active: true,
       },
       {
         code: 'COMM',
         description: 'OMiC Communication',
-        activeFlag: 'Y',
+        active: true,
       },
     ],
   },
   {
     code: 'POS',
     description: 'Positive Behaviour',
-    activeFlag: 'Y',
-    subCodes: [{ code: 'IEP_ENC', description: 'Incentive Encouragement', activeFlag: 'Y' }],
+    subCodes: [{ code: 'IEP_ENC', description: 'Incentive Encouragement', active: true }],
   },
   {
     code: 'NEG',
     description: 'Negative Behaviour',
-    activeFlag: 'Y',
     subCodes: [
-      { code: 'BEHAVEWARN', description: 'Behaviour Warning', activeFlag: 'Y' },
-      { code: 'IEP_WARN', description: 'Incentive Warning', activeFlag: 'Y' },
+      { code: 'BEHAVEWARN', description: 'Behaviour Warning', active: true },
+      { code: 'IEP_WARN', description: 'Incentive Warning', active: true },
     ],
   },
 ]
@@ -68,20 +64,6 @@ module.exports = {
       urlPath: '/casenotes/case-notes/A12345',
       body,
     }),
-  stubCreateCaseNote: (body) =>
-    stubFor({
-      request: {
-        method: 'POST',
-        urlPattern: '/casenotes/case-notes/.+?',
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: body,
-      },
-    }),
   stubDeleteCaseNote: () =>
     stubFor({
       request: {
@@ -104,12 +86,12 @@ module.exports = {
     }),
   stubCaseNoteTypes: (types) =>
     getFor({
-      urlPattern: '/casenotes/case-notes/types',
+      urlPattern: '/casenotes/case-notes/types.+?',
       body: types || caseNoteTypes,
     }),
   stubCaseNoteTypesForUser: (types) =>
     getFor({
-      urlPattern: '/casenotes/case-notes/types-for-user',
+      urlPattern: '/casenotes/case-notes/types.+?',
       body: types || caseNoteTypes,
     }),
   stubGetCaseNote: (response) =>
@@ -136,10 +118,5 @@ module.exports = {
     getMatchingRequests({
       method: 'PUT',
       urlPathPattern: '/casenotes/case-notes/A12345/1',
-    }).then((data) => data.body.requests),
-  verifySaveCaseNote: () =>
-    getMatchingRequests({
-      method: 'POST',
-      urlPattern: '/casenotes/case-notes/.+?',
     }).then((data) => data.body.requests),
 }
