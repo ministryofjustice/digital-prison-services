@@ -51,7 +51,8 @@
         "ts": "never",
         "tsx": "never"
       }
-    ]
+    ],
+    "camelcase": "off"
   },
   "plugins": ["prettier", "no-only-tests", "import"],
   "overrides": [
