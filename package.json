@@ -82,7 +82,6 @@
     "nunjucks": "^3.2.4",
     "passport": "^0.6.0",
     "passport-oauth2": "^1.7.0",
-    "path-to-regexp": "^6.3.0",
     "prop-types": "^15.8.1",
     "qs": "^6.11.2",
     "query-string": "^6.14.1",
