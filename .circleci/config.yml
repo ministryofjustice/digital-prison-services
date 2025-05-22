@@ -60,7 +60,7 @@ jobs:
   cypress_integration_tests:
     working_directory: ~/app
     docker:
-      - image: cimg/node:22.15.1-browsers
+      - image: cimg/node:22.16.0-browsers
       - image: bitnami/redis:8.0
         environment: ALLOW_EMPTY_PASSWORD=yes
     resource_class: xlarge
