@@ -21,7 +21,7 @@ export class Page extends Component {
     }
   }
 
-  componentWillUpdate(nextProps) {
+  UNSAFE_componentWillUpdate(nextProps) {
     this.renderTitleString(nextProps.title, nextProps.docTitle)
   }
 
