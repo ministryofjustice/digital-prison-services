@@ -42,7 +42,7 @@ import FooterContainer from './Components/FooterContainer'
 const axios = require('axios')
 
 class App extends React.Component {
-  async componentWillMount() {
+  async UNSAFE_componentWillMount() {
     const { configDispatch, setErrorDispatch } = this.props
 
     axios.interceptors.response.use(
