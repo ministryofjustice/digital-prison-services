@@ -1,4 +1,4 @@
-# Deployment Notes
+# Deployment Notes.
 
 ## Prerequisites
 
