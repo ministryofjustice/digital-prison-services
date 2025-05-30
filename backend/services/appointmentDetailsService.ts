@@ -175,7 +175,20 @@ export default ({
       }),
     }
 
-    const additionalDetails = {
+    // Used when BVLS feature toggle for public private notes is ON
+    // This will become the default when the toggle is removed in future
+    // The comments field remains so that all other non-BVLS appointments only show the appointment comments
+    const additionalDetailsWithPublicPrivateNotes = {
+      courtHearingLink: vlb && vlb.bookingType === 'COURT' ? vlb.videoLinkUrl || 'Not yet known' : undefined,
+      notesForStaff: vlb ? vlb?.notesForStaff || 'Not entered' : undefined,
+      notesForPrisoners: vlb ? vlb?.notesForPrisoners || 'Not entered' : undefined,
+      comments: vlb ? undefined : appointment.comment || 'Not entered',
+      addedBy: await getAddedBy(),
+    }
+
+    // Used when BVLS feature toggle for public private notes is OFF
+    // This section will be removed when the feature toggle is removed
+    const additionalDetailsWithComments = {
       courtHearingLink: vlb && vlb.bookingType === 'COURT' ? vlb.videoLinkUrl || 'Not yet known' : undefined,
       comments: vlb?.comments || appointment.comment || 'Not entered',
       addedBy: await getAddedBy(),
@@ -183,7 +196,9 @@ export default ({
 
     return {
       isRecurring: !!recurring,
-      additionalDetails,
+      additionalDetails: app.bvlsPublicPrivateNotes
+        ? additionalDetailsWithPublicPrivateNotes
+        : additionalDetailsWithComments,
       basicDetails,
       prepostData,
       recurringDetails,
