@@ -303,8 +303,8 @@ describe('appointment details', () => {
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
           courtHearingLink: 'Not yet known',
-          notesForStaff: 'Not entered',
-          notesForPrisoners: 'Not entered',
+          notesForStaff: 'None entered',
+          notesForPrisoners: 'None entered',
           addedBy: 'Court',
         },
         basicDetails: {

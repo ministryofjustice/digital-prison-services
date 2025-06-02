@@ -180,8 +180,8 @@ export default ({
     // The comments field remains so that all other non-BVLS appointments only show the appointment comments
     const additionalDetailsWithPublicPrivateNotes = {
       courtHearingLink: vlb && vlb.bookingType === 'COURT' ? vlb.videoLinkUrl || 'Not yet known' : undefined,
-      notesForStaff: vlb ? vlb?.notesForStaff || 'Not entered' : undefined,
-      notesForPrisoners: vlb ? vlb?.notesForPrisoners || 'Not entered' : undefined,
+      notesForStaff: vlb ? vlb?.notesForStaff || 'None entered' : undefined,
+      notesForPrisoners: vlb ? vlb?.notesForPrisoners || 'None entered' : undefined,
       comments: vlb ? undefined : appointment.comment || 'Not entered',
       addedBy: await getAddedBy(),
     }
