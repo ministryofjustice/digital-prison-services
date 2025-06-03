@@ -5,7 +5,6 @@ import './azure-appinsights'
 import express from 'express'
 import 'express-async-errors'
 
-import { csrfSync } from 'csrf-sync'
 import cookieParser from 'cookie-parser'
 
 import apis from './apis'
@@ -38,6 +37,7 @@ import requestLimiter from './middleware/requestLimiter'
 import homepageRedirect from './controllers/homepage/homepageRedirect'
 import getFrontendComponents, { feComponentsRoutes } from './middleware/getFeComponents'
 import setUpCsrf from './middleware/setUpCsrf'
+import multipartRouter from './routes/multipartRouter'
 
 // We do not want the server to exit, partly because any log information will be lost.
 // Instead, log the error so we can trace, diagnose and fix the problem.
@@ -96,6 +96,10 @@ app.use(
     prisonerAlertsApi: apis.prisonerAlertsApi,
   })
 )
+
+// Routes that use multer for multipart upload must be registered before csrf executes
+app.use(multipartRouter('/bulk-appointments/upload-file'))
+
 app.use(setUpCsrf())
 app.use(
   routes({
