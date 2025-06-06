@@ -40,7 +40,7 @@ export const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, 
   }
 
   const post = async (req, res) => {
-    const { file } = req.files
+    const { file } = req
     const { activeCaseLoadId } = req.session.userDetails
 
     try {
