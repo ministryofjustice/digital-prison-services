@@ -23,6 +23,7 @@ describe('appointment details', () => {
   }
 
   const prisonApi: Partial<ReturnType<typeof prisonApiFactory>> = {}
+
   const videoLinkBookingService: Partial<ReturnType<typeof VideoLinkBookingService>> & {
     getVideoLinkBookingFromAppointmentId: jest.Mock
     bookingIsAmendable: jest.Mock
@@ -30,16 +31,19 @@ describe('appointment details', () => {
     getVideoLinkBookingFromAppointmentId: jest.fn(),
     bookingIsAmendable: jest.fn(),
   }
+
   const locationsInsidePrisonApi: Partial<ReturnType<typeof locationsInsidePrisonApiFactory>> & {
     getLocationByKey: jest.Mock
   } = {
     getLocationByKey: jest.fn(),
   }
+
   const nomisMapping: Partial<ReturnType<typeof nomisMappingClientFactory>> & {
     getNomisLocationMappingByDpsLocationId: jest.Mock
   } = {
     getNomisLocationMappingByDpsLocationId: jest.fn(),
   }
+
   const getClientCredentialsTokens = jest.fn()
   const context = {}
 
@@ -47,6 +51,8 @@ describe('appointment details', () => {
   let service
 
   beforeEach(() => {
+    config.app.bvlsPublicPrivateNotes = false
+
     res = { locals: { user: { username: 'USER' } }, render: jest.fn() }
 
     prisonApi.getDetails = jest.fn().mockResolvedValue({
@@ -54,16 +60,19 @@ describe('appointment details', () => {
       lastName: 'SMITH',
       offenderNo: 'ABC123',
     })
+
     prisonApi.getAppointmentTypes = jest.fn().mockResolvedValue([
       { code: 'GYM', description: 'Gym' },
       { description: 'Video Link - Court Hearing', code: 'VLB' },
       { description: 'Video Link - Probation Meeting', code: 'VLPM' },
     ])
+
     prisonApi.getStaffDetails = jest
       .fn()
       .mockResolvedValue({ username: 'TEST_USER', firstName: 'TEST', lastName: 'USER' })
 
     locationsInsidePrisonApi.getLocationByKey.mockResolvedValue({ id: 'abc-123' })
+
     locationsInsidePrisonApi.getLocationByKey.mockImplementation((_, id) =>
       Promise.resolve(
         {
@@ -72,6 +81,7 @@ describe('appointment details', () => {
         }[id]
       )
     )
+
     locationsInsidePrisonApi.getLocationsByNonResidentialUsageType = jest.fn().mockResolvedValue([
       { key: 'ROOM1', localName: 'VCC Room 1', id: 'abc-123' },
       { key: 'ROOM2', localName: 'Gymnasium', id: 'cba-222' },
@@ -87,6 +97,7 @@ describe('appointment details', () => {
         }[id]
       )
     )
+
     getClientCredentialsTokens.mockResolvedValue(context)
 
     service = appointmentDetailsServiceFactory({
@@ -261,6 +272,39 @@ describe('appointment details', () => {
         additionalDetails: {
           courtHearingLink: 'Not yet known',
           comments: 'Test appointment comments',
+          addedBy: 'Court',
+        },
+        basicDetails: {
+          location: 'VCC Room 2',
+          type: 'Video Link - Court Hearing',
+          courtLocation: 'Aberystwyth Family',
+          hearingType: 'Application',
+        },
+        timeDetails: {
+          date: '20 May 2021',
+          startTime: '10:00',
+          endTime: '11:00',
+        },
+        prepostData: {
+          'pre-court hearing briefing': 'Gymnasium - 09:45 to 10:00',
+          'post-court hearing briefing': 'Gymnasium - 11:00 to 11:15',
+        },
+      })
+    })
+
+    it('should render with court details with public private notes instead of comments', async () => {
+      config.app.bvlsPublicPrivateNotes = true
+      videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
+        buildVideoLinkBooking('COURT', false)
+      )
+
+      const appointmentDetails = await service.getAppointmentViewModel(context, res, videoLinkBookingAppointment, 'MDI')
+
+      expect(appointmentDetails).toMatchObject({
+        additionalDetails: {
+          courtHearingLink: 'Not yet known',
+          notesForPrisonStaff: 'None entered',
+          notesForPrisoner: 'None entered',
           addedBy: 'Court',
         },
         basicDetails: {
