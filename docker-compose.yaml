@@ -30,7 +30,7 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
 
   prisonApi:
-    image: quay.io/hmpps/prison-api:latest
+    image: ghcr.io/ministryofjustice/prison-api:latest
     container_name: prisonApi_psf
     depends_on:
       - oauth
