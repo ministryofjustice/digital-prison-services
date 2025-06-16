@@ -263,6 +263,39 @@ context('A user can add a bulk appointment', () => {
     BulkAppointmentsAddedPage.verifyOnPage()
   })
 
+  it('A user can upload file over 100kb in size and be warned', () => {
+    const addBulkAppointmentsPage = AddBulkAppointmentsPage.verifyOnPage()
+    const form = addBulkAppointmentsPage.form()
+    addBulkAppointmentsPage.enterBasicAppointmentDetails(form)
+    form.sameTimeAppointmentsYes().click()
+    form.startTimeHours().select('10')
+    form.startTimeMinutes().select('10')
+    form.recurringNo().click()
+    form.comments().type('Test comment.')
+    form.submitButton().click()
+
+    const bulkAppointmentsUploadCSVPage = BulkAppointmentUploadCSVPage.verifyOnPage()
+    const uploadForm = bulkAppointmentsUploadCSVPage.form()
+    cy.get('#file').attachFile('resources/offenders-for-appointments-over100kb.csv')
+    uploadForm.submitButton().click()
+
+    BulkAppointmentUploadCSVPage.verifyOnPage()
+    BulkAppointmentUploadCSVPage.verifyFileTooLargeErrorOnPage()
+
+    cy.get('#file').attachFile('resources/offenders-for-appointments.csv')
+    uploadForm.submitButton().click()
+
+    const bulkAppointmentsConfirmPage = BulkAppointmentsConfirmPage.verifyOnPage()
+    bulkAppointmentsConfirmPage.appointmentType().contains('Activities')
+    bulkAppointmentsConfirmPage.appointmentLocation().contains('Adj')
+    bulkAppointmentsConfirmPage.appointmentStartDate().contains(moment().add(10, 'days').format('dddd D MMMM YYYY'))
+    bulkAppointmentsConfirmPage.appointmentStartTime().contains('10:10')
+    bulkAppointmentsConfirmPage.prisonersFound().contains('Doe John')
+    bulkAppointmentsConfirmPage.submitButton().click()
+
+    BulkAppointmentsAddedPage.verifyOnPage()
+  })
+
   it('A user can upload duplicate prisoner numbers and be warned', () => {
     const addBulkAppointmentsPage = AddBulkAppointmentsPage.verifyOnPage()
     const form = addBulkAppointmentsPage.form()
