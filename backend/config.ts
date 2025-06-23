@@ -40,6 +40,8 @@ export const app = {
   },
   bvlsPublicPrivateNotes: process.env.BVLS_PUBLIC_PRIVATE_NOTES_FEATURE_TOGGLE_ENABLED === 'true',
   bvlsMasteredAppointmentTypes: ['VLB', 'VLPM'].filter(Boolean),
+  bvlsHmctsLinkGuestPin: process.env.BVLS_HMCTS_LINK_GUEST_PIN_FEATURE_TOGGLE_ENABLED === 'true' || false,
+  bvlsDefaultCourtVideoUrl: process.env.BVLS_DEFAULT_COURT_VIDEO_URL || 'meet.video.justice.gov.uk',
   gitRef: process.env.GIT_REF || '',
   sunsetBannerEnabled: process.env.SUNSET_BANNER_ENABLED === 'true',
 }
