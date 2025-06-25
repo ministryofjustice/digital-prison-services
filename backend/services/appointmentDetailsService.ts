@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { endRecurringEndingDate, repeatTypes } from '../shared/appointmentConstants'
-import { formatName, getDate, getTime, getWith404AsNull } from '../utils'
+import { formatName, getDate, getTime, getWith404AsNull, toFullCourtLink } from '../utils'
 import { app } from '../config'
 import { prisonApiFactory } from '../api/prisonApi'
 import VideoLinkBookingService from './videoLinkBookingService'
@@ -40,6 +40,11 @@ export default ({
       mainAppointment,
       postAppointment,
     }
+  }
+
+  const getCourtHearingLink = (videoLinkUrl: string, hmctsNumber: string): string => {
+    const urlFromHmctsNumber = app.bvlsHmctsLinkGuestPin ? toFullCourtLink(hmctsNumber) : undefined
+    return urlFromHmctsNumber || videoLinkUrl
   }
 
   const getAppointmentViewModel = async (context, res, appointmentDetails, activeCaseLoadId) => {
@@ -177,9 +182,14 @@ export default ({
 
     // Used when BVLS feature toggle for public private notes is ON
     // This will become the default when the toggle is removed in future
-    // The comments field remains so that all other non-BVLS appointments only show the appointment comments
+    // The comments field remains so that all other non-BVLS appointments show the appointment comments
     const additionalDetailsWithPublicPrivateNotes = {
-      courtHearingLink: vlb && vlb.bookingType === 'COURT' ? vlb.videoLinkUrl || 'Not yet known' : undefined,
+      courtHearingLink:
+        vlb && vlb.bookingType === 'COURT'
+          ? getCourtHearingLink(vlb.videoLinkUrl, vlb.hmctsNumber) || 'None entered'
+          : undefined,
+      guestPin:
+        vlb && vlb.bookingType === 'COURT' && app.bvlsHmctsLinkGuestPin ? vlb.guestPin || 'Not required' : undefined,
       notesForPrisonStaff: vlb ? vlb?.notesForStaff || 'None entered' : undefined,
       notesForPrisoner: vlb ? vlb?.notesForPrisoners || 'None entered' : undefined,
       comments: vlb ? undefined : appointment.comment || 'Not entered',
@@ -189,7 +199,12 @@ export default ({
     // Used when BVLS feature toggle for public private notes is OFF
     // This section will be removed when the feature toggle is removed
     const additionalDetailsWithComments = {
-      courtHearingLink: vlb && vlb.bookingType === 'COURT' ? vlb.videoLinkUrl || 'Not yet known' : undefined,
+      courtHearingLink:
+        vlb && vlb.bookingType === 'COURT'
+          ? getCourtHearingLink(vlb.videoLinkUrl, vlb.hmctsNumber) || 'None entered'
+          : undefined,
+      guestPin:
+        vlb && vlb.bookingType === 'COURT' && app.bvlsHmctsLinkGuestPin ? vlb.guestPin || 'Not required' : undefined,
       comments: vlb?.comments || appointment.comment || 'Not entered',
       addedBy: await getAddedBy(),
     }

@@ -267,7 +267,7 @@ describe('appointment details', () => {
           expect.objectContaining({
             appointmentAmendLink: 'http://localhost:3000/prisoner/ABC123/edit-appointment/1', // Allowed to edit VLB appointments
             additionalDetails: {
-              courtHearingLink: 'Not yet known',
+              courtHearingLink: 'None entered',
               comments: 'VLB comments',
               addedBy: 'Court',
             },

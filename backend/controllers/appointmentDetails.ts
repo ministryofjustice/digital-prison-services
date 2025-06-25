@@ -1,5 +1,5 @@
 import { formatName } from '../utils'
-import config, { app } from '../config'
+import config from '../config'
 
 export default ({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService, systemOauthClient }) =>
   async (req, res) => {
