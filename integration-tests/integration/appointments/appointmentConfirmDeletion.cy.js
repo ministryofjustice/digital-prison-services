@@ -140,7 +140,7 @@ context('Confirm appointment deletion page', () => {
       cy.get('.qa-postCourtHearingBriefing-value').should('contain', 'VCC Room 1 - 14:00 to 14:15')
       cy.get('.qa-courtLocation-value').should('contain', 'Nottingham Justice Centre')
       cy.get('.qa-hearingType-value').should('contain', 'Appeal')
-      cy.get('.qa-courtHearingLink-value').should('contain', 'Not yet known')
+      cy.get('.qa-courtHearingLink-value').should('contain', 'None entered')
       cy.get('.qa-recurring-value').should('not.exist')
       cy.get('.qa-repeats-value').should('not.exist')
       cy.get('.qa-lastAppointment-value').should('not.exist')

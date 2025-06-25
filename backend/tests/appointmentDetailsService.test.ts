@@ -52,6 +52,7 @@ describe('appointment details', () => {
 
   beforeEach(() => {
     config.app.bvlsPublicPrivateNotes = false
+    config.app.bvlsHmctsLinkGuestPin = false
 
     res = { locals: { user: { username: 'USER' } }, render: jest.fn() }
 
@@ -201,7 +202,13 @@ describe('appointment details', () => {
   describe('video link appointment view model request', () => {
     let videoLinkBookingAppointment
 
-    const buildVideoLinkBooking = (bookingType, createdByPrison) => ({
+    const buildVideoLinkBooking = (
+      bookingType: string,
+      createdByPrison: boolean,
+      hmctsNumber: string = undefined,
+      videoLinkUrl: string = undefined,
+      guestPin: string = undefined
+    ) => ({
       bookingType,
       prisonAppointments:
         bookingType === 'COURT'
@@ -247,6 +254,9 @@ describe('appointment details', () => {
       probationMeetingTypeDescription: bookingType === 'PROBATION' ? 'Post sentence recall' : undefined,
       createdByPrison,
       createdBy: 'TEST_USER',
+      hmctsNumber,
+      videoLinkUrl,
+      guestPin,
     })
 
     beforeEach(() => {
@@ -270,7 +280,7 @@ describe('appointment details', () => {
 
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
-          courtHearingLink: 'Not yet known',
+          courtHearingLink: 'None entered',
           comments: 'Test appointment comments',
           addedBy: 'Court',
         },
@@ -294,6 +304,7 @@ describe('appointment details', () => {
 
     it('should render with court details with public private notes instead of comments', async () => {
       config.app.bvlsPublicPrivateNotes = true
+
       videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
         buildVideoLinkBooking('COURT', false)
       )
@@ -302,10 +313,118 @@ describe('appointment details', () => {
 
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
-          courtHearingLink: 'Not yet known',
+          courtHearingLink: 'None entered',
           notesForPrisonStaff: 'None entered',
           notesForPrisoner: 'None entered',
           addedBy: 'Court',
+        },
+        basicDetails: {
+          location: 'VCC Room 2',
+          type: 'Video Link - Court Hearing',
+          courtLocation: 'Aberystwyth Family',
+          hearingType: 'Application',
+        },
+        timeDetails: {
+          date: '20 May 2021',
+          startTime: '10:00',
+          endTime: '11:00',
+        },
+        prepostData: {
+          'pre-court hearing briefing': 'Gymnasium - 09:45 to 10:00',
+          'post-court hearing briefing': 'Gymnasium - 11:00 to 11:15',
+        },
+      })
+    })
+
+    it('should render court details with a HMCTS number link', async () => {
+      config.app.bvlsPublicPrivateNotes = true
+      config.app.bvlsHmctsLinkGuestPin = true
+
+      videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
+        buildVideoLinkBooking('COURT', false, '12345')
+      )
+
+      const appointmentDetails = await service.getAppointmentViewModel(context, res, videoLinkBookingAppointment, 'MDI')
+
+      expect(appointmentDetails).toMatchObject({
+        additionalDetails: {
+          courtHearingLink: 'HMCTS12345@meet.video.justice.gov.uk',
+          notesForPrisonStaff: 'None entered',
+          notesForPrisoner: 'None entered',
+          addedBy: 'Court',
+          guestPin: 'Not required',
+        },
+        basicDetails: {
+          location: 'VCC Room 2',
+          type: 'Video Link - Court Hearing',
+          courtLocation: 'Aberystwyth Family',
+          hearingType: 'Application',
+        },
+        timeDetails: {
+          date: '20 May 2021',
+          startTime: '10:00',
+          endTime: '11:00',
+        },
+        prepostData: {
+          'pre-court hearing briefing': 'Gymnasium - 09:45 to 10:00',
+          'post-court hearing briefing': 'Gymnasium - 11:00 to 11:15',
+        },
+      })
+    })
+
+    it('should render court details with a video URL link', async () => {
+      config.app.bvlsPublicPrivateNotes = true
+      config.app.bvlsHmctsLinkGuestPin = true
+
+      videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
+        buildVideoLinkBooking('COURT', false, undefined, 'https://testlink')
+      )
+
+      const appointmentDetails = await service.getAppointmentViewModel(context, res, videoLinkBookingAppointment, 'MDI')
+
+      expect(appointmentDetails).toMatchObject({
+        additionalDetails: {
+          courtHearingLink: 'https://testlink',
+          notesForPrisonStaff: 'None entered',
+          notesForPrisoner: 'None entered',
+          addedBy: 'Court',
+          guestPin: 'Not required',
+        },
+        basicDetails: {
+          location: 'VCC Room 2',
+          type: 'Video Link - Court Hearing',
+          courtLocation: 'Aberystwyth Family',
+          hearingType: 'Application',
+        },
+        timeDetails: {
+          date: '20 May 2021',
+          startTime: '10:00',
+          endTime: '11:00',
+        },
+        prepostData: {
+          'pre-court hearing briefing': 'Gymnasium - 09:45 to 10:00',
+          'post-court hearing briefing': 'Gymnasium - 11:00 to 11:15',
+        },
+      })
+    })
+
+    it('should render court details with a guest pin and HMCTS number', async () => {
+      config.app.bvlsPublicPrivateNotes = true
+      config.app.bvlsHmctsLinkGuestPin = true
+
+      videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
+        buildVideoLinkBooking('COURT', false, '1234', undefined, '5678')
+      )
+
+      const appointmentDetails = await service.getAppointmentViewModel(context, res, videoLinkBookingAppointment, 'MDI')
+
+      expect(appointmentDetails).toMatchObject({
+        additionalDetails: {
+          courtHearingLink: 'HMCTS1234@meet.video.justice.gov.uk',
+          notesForPrisonStaff: 'None entered',
+          notesForPrisoner: 'None entered',
+          addedBy: 'Court',
+          guestPin: '5678',
         },
         basicDetails: {
           location: 'VCC Room 2',

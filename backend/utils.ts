@@ -347,6 +347,18 @@ export const stringWithAbbreviationsProcessor = (string: string): string => {
 export const filterNot = (array: any[], key: string, neq: unknown[]) =>
   array.filter((object) => !neq.includes(object[key]))
 
+/**
+ * Converts a shorthand CVP address number to full video link meeting endpoint URL.
+ * Used for displaying BVLS court main appointment link type only.
+ * @param hmctsNumber string e.g. "3465"
+ */
+export const toFullCourtLink = (hmctsNumber: string): string => {
+  if (!hmctsNumber || hmctsNumber.length < 1) {
+    return undefined
+  }
+  return `HMCTS${hmctsNumber}@${config.app.bvlsDefaultCourtVideoUrl}`
+}
+
 export default {
   isBeforeToday,
   isToday,
@@ -398,4 +410,5 @@ export default {
   getWith404AsNull,
   stringWithAbbreviationsProcessor,
   filterNot,
+  toFullCourtLink,
 }
