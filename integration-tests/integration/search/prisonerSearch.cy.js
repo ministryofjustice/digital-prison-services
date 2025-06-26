@@ -43,6 +43,7 @@ context('Prisoner search', () => {
         dateTime: '2022-11-21T16:40:01',
         nextReviewDate: '2022-11-28',
       },
+      currentFacialImageId: 11111,
     }
 
     const inmate2 = {
@@ -62,6 +63,7 @@ context('Prisoner search', () => {
         dateTime: '2022-11-21T16:40:01',
         nextReviewDate: '2022-11-28',
       },
+      currentFacialImageId: 22222,
     }
 
     context('When there are no search values', () => {
@@ -271,6 +273,27 @@ context('Prisoner search', () => {
           expect(loc.search).to.eq(
             '?keywords=Saunders&location=MDI&feature=new&alerts%5B%5D=XA&sortFieldsWithOrder=assignedLivingUnitDesc%3AASC'
           )
+        })
+      })
+
+      it('should display the correct image url', () => {
+        cy.task('stubPSInmates', {
+          locationId: 'MDI',
+          count: 2,
+          data: [inmate1, inmate2],
+        })
+        cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA&feature=new`)
+        cy.get('[data-test="prisoner-image"]').then(($prisonerImages) => {
+          cy.get($prisonerImages).its('length').should('eq', 2)
+          cy.get($prisonerImages)
+            .first()
+            .invoke('attr', 'src')
+            .then((src) => expect(src).to.equal('/app/images/A1234BC/data?imageId=11111'))
+
+          cy.get($prisonerImages)
+            .last()
+            .invoke('attr', 'src')
+            .then((src) => expect(src).to.equal('/app/images/B4567CD/data?imageId=22222'))
         })
       })
     })
