@@ -139,7 +139,7 @@ context('Global search', () => {
       cy.get($prisonerImages)
         .first()
         .invoke('attr', 'src')
-        .then((src) => expect(src).to.equal('/app/images/A1234AC/data'))
+        .then((src) => expect(src).to.equal('/app/images/A1234AC/data?imageId=1111111'))
 
       cy.get($prisonerImages)
         .last()
