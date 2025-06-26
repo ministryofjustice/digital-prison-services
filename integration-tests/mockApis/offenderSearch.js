@@ -31,6 +31,7 @@ module.exports = {
             prisonId: 'LEI',
             locationDescription: 'Leeds HMP',
             status: 'ACTIVE',
+            currentFacialImageId: 1111111,
             bookingId: 1,
           },
           {
@@ -42,6 +43,7 @@ module.exports = {
             prisonId: 'MDI',
             locationDescription: 'Moorland HMP',
             status: 'INACTIVE',
+            currentFacialImageId: 2222222,
             bookingId: 2,
           },
         ],

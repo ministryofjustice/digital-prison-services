@@ -20,6 +20,7 @@ export type PrisonerSearchResult = {
       description: string
     }
   }
+  currentFacialImageId: number
 }
 
 // other fields are present but only these are used
@@ -39,7 +40,17 @@ export const offenderSearchApiFactory = (client) => {
 
   const changeFieldNames = () => (data) =>
     data.map(
-      ({ prisonerNumber, bookingId, firstName, lastName, dateOfBirth, prisonId, locationDescription, status }) => ({
+      ({
+        prisonerNumber,
+        bookingId,
+        firstName,
+        lastName,
+        dateOfBirth,
+        prisonId,
+        locationDescription,
+        status,
+        currentFacialImageId,
+      }) => ({
         offenderNo: prisonerNumber,
         firstName,
         lastName,
@@ -50,6 +61,7 @@ export const offenderSearchApiFactory = (client) => {
         currentlyInPrison: status && status.startsWith('ACTIVE') ? 'Y' : 'N',
         currentWorkingFirstName: firstName,
         currentWorkingLastName: lastName,
+        currentFacialImageId,
       })
     )
 
