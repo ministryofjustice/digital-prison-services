@@ -130,7 +130,6 @@ context('Appointment details page', () => {
             appointmentTypeCode: 'VLB',
             startTime: '2021-05-20T13:00:00',
             endTime: '2021-05-20T14:00:00',
-            comment: 'Test appointment comments',
           },
         },
       })
@@ -165,7 +164,8 @@ context('Appointment details page', () => {
       cy.get('.qa-recurring-value').should('not.exist')
       cy.get('.qa-repeats-value').should('not.exist')
       cy.get('.qa-lastAppointment-value').should('not.exist')
-      cy.get('.qa-comments-value').should('contain', 'Test appointment comments')
+      cy.get('.qa-notesForPrisonStaff-value').should('contain', 'None entered')
+      cy.get('.qa-notesForPrisoner-value').should('contain', 'None entered')
       cy.get('.qa-addedBy-value').should('contain', 'Court')
       cy.get('[data-test="return-link"]').should('have.attr', 'href').should('include', '/view-all-appointments')
     })

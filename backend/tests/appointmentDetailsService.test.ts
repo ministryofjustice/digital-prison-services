@@ -51,7 +51,6 @@ describe('appointment details', () => {
   let service
 
   beforeEach(() => {
-    config.app.bvlsPublicPrivateNotes = false
     config.app.bvlsHmctsLinkGuestPin = false
 
     res = { locals: { user: { username: 'USER' } }, render: jest.fn() }
@@ -281,7 +280,6 @@ describe('appointment details', () => {
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
           courtHearingLink: 'None entered',
-          comments: 'Test appointment comments',
           addedBy: 'Court',
         },
         basicDetails: {
@@ -303,8 +301,6 @@ describe('appointment details', () => {
     })
 
     it('should render with court details with public private notes instead of comments', async () => {
-      config.app.bvlsPublicPrivateNotes = true
-
       videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
         buildVideoLinkBooking('COURT', false)
       )
@@ -337,7 +333,6 @@ describe('appointment details', () => {
     })
 
     it('should render court details with a HMCTS number link', async () => {
-      config.app.bvlsPublicPrivateNotes = true
       config.app.bvlsHmctsLinkGuestPin = true
 
       videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
@@ -373,7 +368,6 @@ describe('appointment details', () => {
     })
 
     it('should render court details with a video URL link', async () => {
-      config.app.bvlsPublicPrivateNotes = true
       config.app.bvlsHmctsLinkGuestPin = true
 
       videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
@@ -409,7 +403,6 @@ describe('appointment details', () => {
     })
 
     it('should render court details with a guest pin and HMCTS number', async () => {
-      config.app.bvlsPublicPrivateNotes = true
       config.app.bvlsHmctsLinkGuestPin = true
 
       videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
@@ -500,7 +493,6 @@ describe('appointment details', () => {
 
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
-          comments: 'Test appointment comments',
           addedBy: 'Test User',
         },
         basicDetails: {
