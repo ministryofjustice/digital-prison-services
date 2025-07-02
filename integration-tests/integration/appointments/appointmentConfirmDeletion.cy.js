@@ -108,7 +108,6 @@ context('Confirm appointment deletion page', () => {
             appointmentTypeCode: 'VLB',
             startTime: '2021-05-20T13:00:00',
             endTime: '2021-05-20T14:00:00',
-            comment: 'Test appointment comments',
           },
         },
       })
@@ -144,7 +143,8 @@ context('Confirm appointment deletion page', () => {
       cy.get('.qa-recurring-value').should('not.exist')
       cy.get('.qa-repeats-value').should('not.exist')
       cy.get('.qa-lastAppointment-value').should('not.exist')
-      cy.get('.qa-comments-value').should('contain', 'Test appointment comments')
+      cy.get('.qa-notesForPrisonStaff-value').should('contain', 'None entered')
+      cy.get('.qa-notesForPrisoner-value').should('contain', 'None entered')
     })
   })
 

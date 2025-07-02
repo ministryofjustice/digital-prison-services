@@ -251,7 +251,6 @@ describe('appointment details', () => {
           prisonAppointments: [
             { appointmentType: 'VLB_COURT_MAIN', prisonLocKey: 'LOCATION_1', startTime: '13:00', endTime: '14:00' },
           ],
-          comments: 'VLB comments',
         }
 
         whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(videoLinkBookingAppointment)
@@ -268,8 +267,11 @@ describe('appointment details', () => {
             appointmentAmendLink: 'http://localhost:3000/prisoner/ABC123/edit-appointment/1', // Allowed to edit VLB appointments
             additionalDetails: {
               courtHearingLink: 'None entered',
-              comments: 'VLB comments',
+              comments: undefined,
               addedBy: 'Court',
+              guestPin: undefined,
+              notesForPrisonStaff: 'None entered',
+              notesForPrisoner: 'None entered',
             },
             basicDetails: {
               location: 'VCC Room 1',

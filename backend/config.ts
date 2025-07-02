@@ -38,7 +38,6 @@ export const app = {
     scheduleRedirectForPrisons: process.env.HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS || '',
     exemptions: process.env.HOMEPAGE_REDIRECT_EXEMPTIONS || '',
   },
-  bvlsPublicPrivateNotes: process.env.BVLS_PUBLIC_PRIVATE_NOTES_FEATURE_TOGGLE_ENABLED === 'true',
   bvlsMasteredAppointmentTypes: ['VLB', 'VLPM'].filter(Boolean),
   bvlsHmctsLinkGuestPin: process.env.BVLS_HMCTS_LINK_GUEST_PIN_FEATURE_TOGGLE_ENABLED === 'true' || false,
   bvlsDefaultCourtVideoUrl: process.env.BVLS_DEFAULT_COURT_VIDEO_URL || 'meet.video.justice.gov.uk',
