@@ -157,9 +157,6 @@ export const prisonApiFactory = (client) => {
     post(context, `/api/schedules/${agencyId}/externalTransfers?date=${date}`, offenderNumbers)
   // TODO can refactor these alerts calls later to just use the system one once the client id is established in env
 
-  const getAlertsSystem = (context, offenderNumbers) =>
-    post(context, '/api/bookings/offenderNo/alerts', offenderNumbers)
-
   const getAssessments = (context, { code, offenderNumbers }) =>
     post(context, `/api/offender-assessments/${code}`, offenderNumbers)
 
@@ -171,12 +168,6 @@ export const prisonApiFactory = (client) => {
 
   const getCsraReviewForBooking = (context, bookingId, assessmentSeq) =>
     get(context, `/api/offender-assessments/csra/${bookingId}/assessment/${assessmentSeq}`)
-
-  const getEstablishmentRollBlocksCount = (context, agencyId, unassigned) =>
-    get(context, `/api/movements/rollcount/${agencyId}?unassigned=${unassigned}`)
-
-  const getEstablishmentRollMovementsCount = (context, agencyId) =>
-    get(context, `/api/movements/rollcount/${agencyId}/movements`)
 
   const searchActivityLocations = (context, agencyId, bookedOnDay, timeSlot) =>
     get(context, `/api/agencies/${agencyId}/eventLocationsBooked?bookedOnDay=${bookedOnDay}&timeSlot=${timeSlot}`)
@@ -203,37 +194,13 @@ export const prisonApiFactory = (client) => {
   }
   const getLastPrison = (context, body) => post(context, `/api/movements/offenders`, body)
 
-  const getRecentMovements = (context, body, movementTypes) =>
-    post(
-      context,
-      `/api/movements/offenders${movementTypes && `?${arrayToQueryString(movementTypes, 'movementTypes')}`}`,
-      body
-    )
-
-  const getMovementsIn = (context, agencyId, movementDate) =>
-    get(context, `/api/movements/${agencyId}/in/${movementDate}`)
-
   const getMovementsInBetween = (context, agencyId, params) =>
     get(context, `/api/movements/${agencyId}/in?${mapToQueryString(params)}`)
-
-  const getMovementsOut = (context, agencyId, movementDate) =>
-    get(context, `/api/movements/${agencyId}/out/${movementDate}`)
-
-  const getOffendersInReception = (context, agencyId) =>
-    get(context, `/api/movements/rollcount/${agencyId}/in-reception`)
 
   const getDetails = (context, offenderNo, fullInfo = false) =>
     get(context, `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}&csraSummary=${fullInfo}`)
 
-  const getOffendersCurrentlyOutOfLivingUnit = (context, livingUnitId) =>
-    get(context, `/api/movements/livingUnit/${livingUnitId}/currently-out`)
-
-  const getOffendersCurrentlyOutOfAgency = (context, agencyId) =>
-    get(context, `/api/movements/agency/${agencyId}/currently-out`)
-
   const getLocation = (context, livingUnitId) => get(context, `/api/locations/${livingUnitId}`)
-
-  const getOffendersEnRoute = (context, agencyId) => get(context, `/api/movements/${agencyId}/enroute`)
 
   const getBasicInmateDetailsForOffenders = (context, offenders) => post(context, `/api/bookings/offenders`, offenders)
 
@@ -337,27 +304,6 @@ export const prisonApiFactory = (client) => {
   const getScheduledEventsForNextWeek = (context, bookingId) =>
     get(context, `/api/bookings/${bookingId}/events/nextWeek`)
 
-  const getCellsWithCapacity = (context, agencyId, attribute) =>
-    getWithCustomTimeout(
-      context,
-      attribute
-        ? `/api/agencies/${agencyId}/cellsWithCapacity?attribute=${attribute}`
-        : `/api/agencies/${agencyId}/cellsWithCapacity`,
-      {
-        customTimeout: 30000,
-      }
-    )
-  const getReceptionsWithCapacity = (context, agencyId, attribute) =>
-    getWithCustomTimeout(
-      context,
-      attribute
-        ? `/api/agencies/${agencyId}/receptionsWithCapacity?attribute=${attribute}`
-        : `/api/agencies/${agencyId}/receptionsWithCapacity`,
-      {
-        customTimeout: 30000,
-      }
-    )
-
   const getAttributesForLocation = (context, locationId) => get(context, `/api/cell/${locationId}/attributes`)
 
   const getHistoryForLocation = (context, { locationId, fromDate, toDate }) =>
@@ -410,23 +356,13 @@ export const prisonApiFactory = (client) => {
     getSentenceData,
     globalSearch,
     getExternalTransfers,
-    getAlertsSystem,
     getAssessments,
-    getEstablishmentRollBlocksCount,
-    getEstablishmentRollMovementsCount,
     getInmates,
     getPrisonerImage,
     getLastPrison,
-    getMovementsIn,
     getMovementsInBetween,
-    getMovementsOut,
-    getOffendersInReception,
-    getRecentMovements,
     getDetails,
-    getOffendersCurrentlyOutOfLivingUnit,
-    getOffendersCurrentlyOutOfAgency,
     getLocation,
-    getOffendersEnRoute,
     getBasicInmateDetailsForOffenders,
     getAppointmentTypes,
     getAdjudicationFindingTypes,
@@ -459,8 +395,6 @@ export const prisonApiFactory = (client) => {
     getScheduledEventsForNextWeek,
     getCellAttributes,
     getCellMoveReasonTypes,
-    getCellsWithCapacity,
-    getReceptionsWithCapacity,
     getCsraAssessments,
     getCsraAssessmentsForPrisoner,
     getCsraReviewForBooking,

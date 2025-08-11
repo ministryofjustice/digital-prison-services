@@ -1409,21 +1409,6 @@ module.exports = {
       },
     }),
 
-  stubOffendersInReception: (agencyId, inReception) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPathPattern: `/api/movements/rollcount/${agencyId}/in-reception`,
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: inReception || {},
-      },
-    }),
-
   stubInmatesAtLocation: (inmates) =>
     stubFor({
       request: {
