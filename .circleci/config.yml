@@ -61,7 +61,7 @@ jobs:
     working_directory: ~/app
     docker:
       - image: cimg/node:22.18.0-browsers
-      - image: bitnami/redis:8.0
+      - image: bitnami/redis:8.2
         environment: ALLOW_EMPTY_PASSWORD=yes
     resource_class: xlarge
     steps:
