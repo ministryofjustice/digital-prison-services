@@ -170,7 +170,7 @@
     "sass-loader": "^12.6.0",
     "set-cookie-parser": "^2.7.1",
     "style-loader": "^2.0.0",
-    "supertest": "^3.1.0",
+    "supertest": "^7.1.4",
     "ts-jest": "^29.4.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2",
