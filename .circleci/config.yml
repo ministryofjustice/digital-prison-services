@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   hmpps: ministryofjustice/hmpps@11.2.0
-  slack: circleci/slack@5.2.0
+  slack: circleci/slack@5.2.1
 
 parameters:
   alerts-slack-channel:
@@ -60,8 +60,8 @@ jobs:
   cypress_integration_tests:
     working_directory: ~/app
     docker:
-      - image: cimg/node:22.17.1-browsers
-      - image: bitnami/redis:8.0
+      - image: cimg/node:22.18.0-browsers
+      - image: bitnami/redis:8.2
         environment: ALLOW_EMPTY_PASSWORD=yes
     resource_class: xlarge
     steps:

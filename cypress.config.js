@@ -440,8 +440,6 @@ module.exports = defineConfig({
         stubGetOffenderRetentionReasons: dataComplianceApi.stubGetOffenderRetentionReasons,
         stubCreateRecord: ({ offenderNo }) => dataComplianceApi.stubCreateRecord(offenderNo),
         stubCellsWithCapacity: ({ cells }) => prisonApi.stubCellsWithCapacity(cells),
-        stubOffendersInReception: ({ agencyId, inReception }) =>
-          prisonApi.stubOffendersInReception(agencyId, inReception),
         stubReceptionWithCapacity: ({ agencyId, reception }) =>
           prisonApi.stubReceptionWithCapacity(agencyId, reception),
         stubCellsWithCapacityByGroupName: ({ agencyId, groupName, response }) =>
