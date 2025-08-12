@@ -225,6 +225,7 @@ class ResultsActivity extends Component {
 
     const { attendingAll, notRequiringAll } = this.state
 
+    /* eslint-disable react/no-this-in-sfc */
     const BatchControls = () => {
       const totalMarked = totalAttended + totalAbsent
       const anyRemaining = totalMarked % this.totalOffenders.size > 0 ? ' remaining ' : ' '
