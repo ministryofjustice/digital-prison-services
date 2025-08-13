@@ -115,8 +115,10 @@
     "@babel/eslint-parser": "^7.18.2",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/plugin-proposal-decorators": "^7.18.6",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/plugin-proposal-throw-expressions": "^7.18.6",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-transform-private-methods": "^7.27.1",
     "@babel/preset-env": "^7.18.6",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
@@ -131,6 +133,7 @@
     "axios-mock-adapter": "^1.22.0",
     "babel-jest": "^29.7.0",
     "babel-loader": "^8.3.0",
+    "cheerio": "^1.0.0-rc.10",
     "copy-webpack-plugin": "^7.0.0",
     "css-loader": "^6.11.0",
     "cypress": "^13.17.0",
@@ -232,7 +235,7 @@
       "^(?!.*\\.(js|jsx|mjs|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
     "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\](?!(spin.js)/).+\\.(js|jsx|mjs)$"
+      "/node_modules/(?!(spin.js|cheerio|react-datetime)/)"
     ],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"

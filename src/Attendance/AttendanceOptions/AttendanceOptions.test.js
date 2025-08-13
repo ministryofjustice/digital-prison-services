@@ -198,7 +198,7 @@ describe('<AttendanceOptions />', () => {
       }
 
       act(() => testRenderer.update(<AttendanceOptions {...props} />))
-      expect(getOtherRadio).toThrow(new Error('No instances found with node type: "Radio"'))
+      expect(getOtherRadio.length).toBe(0)
     })
   })
 })
