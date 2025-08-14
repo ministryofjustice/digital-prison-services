@@ -52,7 +52,7 @@ const ModalContainer = ({ isOpen, showModal, ...props }) => {
 }
 
 ModalContainer.propTypes = {
-  isOpen: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
   showModal: PropTypes.func.isRequired,
 }
 
