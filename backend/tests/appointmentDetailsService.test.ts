@@ -51,8 +51,6 @@ describe('appointment details', () => {
   let service
 
   beforeEach(() => {
-    config.app.bvlsHmctsLinkGuestPin = false
-
     res = { locals: { user: { username: 'USER' } }, render: jest.fn() }
 
     prisonApi.getDetails = jest.fn().mockResolvedValue({
@@ -333,8 +331,6 @@ describe('appointment details', () => {
     })
 
     it('should render court details with a HMCTS number link', async () => {
-      config.app.bvlsHmctsLinkGuestPin = true
-
       videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
         buildVideoLinkBooking('COURT', false, '12345')
       )
@@ -368,8 +364,6 @@ describe('appointment details', () => {
     })
 
     it('should render court details with a video URL link', async () => {
-      config.app.bvlsHmctsLinkGuestPin = true
-
       videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
         buildVideoLinkBooking('COURT', false, undefined, 'https://testlink')
       )
@@ -403,8 +397,6 @@ describe('appointment details', () => {
     })
 
     it('should render court details with a guest pin and HMCTS number', async () => {
-      config.app.bvlsHmctsLinkGuestPin = true
-
       videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
         buildVideoLinkBooking('COURT', false, '1234', undefined, '5678')
       )

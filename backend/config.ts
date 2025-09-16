@@ -39,7 +39,6 @@ export const app = {
     exemptions: process.env.HOMEPAGE_REDIRECT_EXEMPTIONS || '',
   },
   bvlsMasteredAppointmentTypes: ['VLB', 'VLPM'].filter(Boolean),
-  bvlsHmctsLinkGuestPin: process.env.BVLS_HMCTS_LINK_GUEST_PIN_FEATURE_TOGGLE_ENABLED === 'true' || false,
   bvlsDefaultCourtVideoUrl: process.env.BVLS_DEFAULT_COURT_VIDEO_URL || 'meet.video.justice.gov.uk',
   gitRef: process.env.GIT_REF || '',
   sunsetBannerEnabled: process.env.SUNSET_BANNER_ENABLED === 'true',
