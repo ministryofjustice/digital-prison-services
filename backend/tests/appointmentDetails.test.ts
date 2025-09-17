@@ -269,7 +269,7 @@ describe('appointment details', () => {
               courtHearingLink: 'None entered',
               comments: undefined,
               addedBy: 'Court',
-              guestPin: undefined,
+              guestPin: 'Not required',
               notesForPrisonStaff: 'None entered',
               notesForPrisoner: 'None entered',
             },
