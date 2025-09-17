@@ -43,7 +43,7 @@ export default ({
   }
 
   const getCourtHearingLink = (videoLinkUrl: string, hmctsNumber: string): string => {
-    const urlFromHmctsNumber = app.bvlsHmctsLinkGuestPin ? toFullCourtLink(hmctsNumber) : undefined
+    const urlFromHmctsNumber = toFullCourtLink(hmctsNumber)
     return urlFromHmctsNumber || videoLinkUrl
   }
 
@@ -185,8 +185,7 @@ export default ({
         vlb && vlb.bookingType === 'COURT'
           ? getCourtHearingLink(vlb.videoLinkUrl, vlb.hmctsNumber) || 'None entered'
           : undefined,
-      guestPin:
-        vlb && vlb.bookingType === 'COURT' && app.bvlsHmctsLinkGuestPin ? vlb.guestPin || 'Not required' : undefined,
+      guestPin: vlb && vlb.bookingType === 'COURT' ? vlb.guestPin || 'Not required' : undefined,
       notesForPrisonStaff: vlb ? vlb?.notesForStaff || 'None entered' : undefined,
       notesForPrisoner: vlb ? vlb?.notesForPrisoners || 'None entered' : undefined,
       comments: vlb ? undefined : appointment.comment || 'Not entered',
