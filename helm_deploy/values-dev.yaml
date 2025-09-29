@@ -96,4 +96,4 @@ generic-service:
    ALERTS_API_URL: "https://alerts-api-dev.hmpps.service.justice.gov.uk"
 
 generic-prometheus-alerts:
- alertSeverity: digital-prison-service-dev
+ alertSeverity: hmpps-activities-management-dev
