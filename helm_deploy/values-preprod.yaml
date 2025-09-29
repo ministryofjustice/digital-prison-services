@@ -100,4 +100,4 @@ generic-service:
       - private_prisons
 
 generic-prometheus-alerts:
-  alertSeverity: digital-prison-service-dev
+  alertSeverity: hmpps-activities-management-preprod
