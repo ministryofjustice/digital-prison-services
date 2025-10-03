@@ -67,6 +67,9 @@ COPY --from=build --chown=appuser:appgroup \
 COPY --from=build --chown=appuser:appgroup \
         /app/node_modules ./node_modules
 
+# Directory required for multer (see setUpMultipartFormDataParsing.ts)
+RUN mkdir /app/uploads
+
 ENV PORT=3000
 ENV DISABLE_WEBPACK=true
 
