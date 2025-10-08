@@ -111,8 +111,9 @@
 {# Run JavaScript at end of the
 <body>, to avoid blocking the initial render. #}
 <script src="/static/js/modal-dialog.js"></script>
+<script src="/assets/govuk/all.js"></script>
 <script src="/static/js/main.js"></script>
-<script type="module" src="/static/js/govukFrontendInit.js"></script>
+<script>window.GOVUKFrontend.initAll();</script>
 <script>var MOJFrontend = {};</script>
     {# Javascript block for individual pages #}
     {% block pageScripts %}
