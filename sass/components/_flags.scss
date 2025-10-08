@@ -17,10 +17,6 @@
 .alerts-list-no-flex {
   @extend %govuk-list;
   margin-bottom: 0;
-
-  li {
-    padding: 13px 10px !important;
-  }
 }
 
 .cat-a-status {
