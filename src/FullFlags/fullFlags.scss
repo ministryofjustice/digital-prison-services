@@ -1,0 +1,154 @@
+.full-flags {
+  /* stylelint-disable property-no-vendor-prefix */
+  %status-style {
+    border: 3px solid;
+    padding: .4em 0.8em 0;
+    margin-left: 0;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1;
+    display: inline-block;
+    min-width: 7em;
+    height: 29px;
+
+    // disable text selection in the alert flags.
+    // From https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+  }
+
+  %alert-status-style {
+    @extend %status-style;
+  }
+
+  .acct-status {
+    @extend %alert-status-style;
+    color: #D34700;
+    border-color: #D34700;
+  }
+
+  .assault-status {
+    @extend %alert-status-style;
+    color: #4C2C92;
+    border-color: #4C2C92;
+  }
+
+  .disability-status {
+    @extend %alert-status-style;
+    padding-top: 0.32em;
+    color: #2B88C8;
+    border-color: #2B88C8;
+  }
+
+  .arsonist-status {
+    @extend %alert-status-style;
+    padding-top: 0.32em;
+    color: #DF3034;
+    border-color: #DF3034;
+  }
+
+  .elist-status {
+    @extend %alert-status-style;
+    color: #28A197;
+    border-color: #28A197;
+  }
+
+  .risk-females-status {
+    @extend %alert-status-style;
+    color: #6F71AF;
+    border-color: #6F71AF;
+  }
+
+  .tact-status {
+    @extend %alert-status-style;
+    color: #D53880;
+    border-color: #D53880;
+  }
+
+  .cata-status {
+    @extend %status-style;
+    color: #00437B;
+    border-color: #00437B;
+  }
+
+  .cata-high-status {
+    @extend %status-style;
+    background-color: #00437B;
+    color: white;
+    border-color: #00437B;
+  }
+
+  .cata-prov-status {
+    @extend %status-style;
+    border: 3px dashed;
+    color: #00437B;
+    border-color: #00437B;
+  }
+
+  .conflict-status {
+    @extend %status-style;
+    color: #800000;
+    border-color: #800000;
+  }
+  
+  .no-one-to-one-status {
+    @extend %status-style;
+    color: #903;
+    border-color: #903;
+  }
+
+  .quarantined-status {
+    @extend %status-style;
+    color: #FFF;
+    border-color: #330;
+    background-color: #330;
+  }
+
+  .reverse-cohorting-unit-status {
+    @extend %status-style;
+    color: #FFF;
+    border-color: mix(white, #00703C, 20%);
+    background-color: mix(white, #00703C, 20%);
+    padding-bottom: 30px;
+  }
+  
+  .protective-isolation-unit-status {
+    @extend %status-style;
+    color: #FFF;
+    border-color: #006637;
+    background-color: #006637;
+    padding-bottom: 30px;
+  }
+  
+  .shielding-unit-status {
+    @extend %status-style;
+    color: #FFF;
+    border-color: #004424;
+    background-color: #004424;
+  }
+  
+  .refusing-to-shield-status {
+    @extend %status-style;
+    color: #FFF;
+    border-color: #B58840;
+    background-color: #B58840;
+    padding-bottom: 30px;
+  }
+
+  @media (min-width: 481px) {
+    .inline-header-large {
+      display: inline-block;
+    }
+
+    .align-alerts {
+      vertical-align: 8px;
+    }
+  }
+}
