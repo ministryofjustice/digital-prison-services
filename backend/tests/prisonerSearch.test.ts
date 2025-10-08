@@ -371,12 +371,12 @@ describe('Prisoner search', () => {
                 alerts: [
                   {
                     alertCodes: ['XA'],
-                    classes: 'dps-alert-status dps-alert-status--security',
+                    classes: 'alert-status alert-status--security',
                     label: 'Arsonist',
                   },
                   {
                     alertCodes: ['XVL'],
-                    classes: 'dps-alert-status dps-alert-status--security',
+                    classes: 'alert-status alert-status--security',
                     label: 'Violent',
                   },
                 ],

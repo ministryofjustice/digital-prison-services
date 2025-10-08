@@ -916,30 +916,27 @@ describe('Scheduled moves controller', () => {
 
         expectCourtEventsToContain(res, {
           relevantAlertFlagLabels: [
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--self-harm',
+            {
+              classes: 'alert-status alert-status--self-harm',
               label: 'ACCT open',
-            }),
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--self-harm',
+            },
+            {
+              classes: 'alert-status alert-status--self-harm',
               label: 'ACCT post closure',
-            }),
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--security',
+            },
+            {
+              classes: 'alert-status alert-status--security',
               label: 'Controlled unlock',
-            }),
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--security',
+            },
+            {
+              classes: 'alert-status alert-status--security',
               label: 'Hostage taker',
-            }),
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--medical',
+            },
+            {
+              classes: 'alert-status alert-status--medical',
               label: 'PEEP',
-            }),
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--security',
-              label: 'Risk to females',
-            }),
+            },
+            { classes: 'alert-status alert-status--security', label: 'Risk to females' },
           ],
         })
       })
@@ -1264,30 +1261,27 @@ describe('Scheduled moves controller', () => {
 
         expectReleaseEventsToContain(res, {
           relevantAlertFlagLabels: [
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--self-harm',
+            {
+              classes: 'alert-status alert-status--self-harm',
               label: 'ACCT open',
-            }),
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--self-harm',
+            },
+            {
+              classes: 'alert-status alert-status--self-harm',
               label: 'ACCT post closure',
-            }),
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--security',
+            },
+            {
+              classes: 'alert-status alert-status--security',
               label: 'Controlled unlock',
-            }),
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--security',
+            },
+            {
+              classes: 'alert-status alert-status--security',
               label: 'Hostage taker',
-            }),
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--medical',
+            },
+            {
+              classes: 'alert-status alert-status--medical',
               label: 'PEEP',
-            }),
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--security',
-              label: 'Risk to females',
-            }),
+            },
+            { classes: 'alert-status alert-status--security', label: 'Risk to females' },
           ],
         })
       })
@@ -1572,30 +1566,27 @@ describe('Scheduled moves controller', () => {
 
         expectTransferEventsToContain(res, {
           relevantAlertFlagLabels: [
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--self-harm',
+            {
+              classes: 'alert-status alert-status--self-harm',
               label: 'ACCT open',
-            }),
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--self-harm',
+            },
+            {
+              classes: 'alert-status alert-status--self-harm',
               label: 'ACCT post closure',
-            }),
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--security',
+            },
+            {
+              classes: 'alert-status alert-status--security',
               label: 'Controlled unlock',
-            }),
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--security',
+            },
+            {
+              classes: 'alert-status alert-status--security',
               label: 'Hostage taker',
-            }),
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--medical',
+            },
+            {
+              classes: 'alert-status alert-status--medical',
               label: 'PEEP',
-            }),
-            expect.objectContaining({
-              classes: 'dps-alert-status dps-alert-status--security',
-              label: 'Risk to females',
-            }),
+            },
+            { classes: 'alert-status alert-status--security', label: 'Risk to females' },
           ],
         })
       })

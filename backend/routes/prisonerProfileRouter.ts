@@ -10,6 +10,7 @@ import prisonerDamageObligations from '../controllers/prisonerProfile/prisonerFi
 import prisonerPrivateCash from '../controllers/prisonerProfile/prisonerFinances/prisonerPrivateCash'
 import prisonerSpends from '../controllers/prisonerProfile/prisonerFinances/prisonerSpends'
 import prisonerSavings from '../controllers/prisonerProfile/prisonerFinances/prisonerSavings'
+import prisonerProfileServiceFactory from '../services/prisonerProfileService'
 import prisonerFinanceServiceFactory from '../services/prisonerFinanceService'
 import personServiceFactory from '../services/personService'
 import paginationService from '../services/paginationService'
@@ -42,6 +43,21 @@ const controller = ({
   restrictedPatientApi,
   nonAssociationsApi,
 }) => {
+  const prisonerProfileService = prisonerProfileServiceFactory({
+    prisonApi,
+    keyworkerApi,
+    oauthApi,
+    hmppsManageUsersApi,
+    dataComplianceApi,
+    pathfinderApi,
+    systemOauthClient,
+    socApi,
+    allocationManagerApi,
+    complexityApi,
+    incentivesApi,
+    curiousApi,
+    offenderSearchApi,
+  })
   const personService = personServiceFactory(prisonApi)
   const prisonerFinanceService = prisonerFinanceServiceFactory(prisonApi)
   const esweService = EsweService.create(curiousApi, systemOauthClient, prisonApi, whereaboutsApi)
