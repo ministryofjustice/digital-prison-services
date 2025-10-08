@@ -1,7 +1,10 @@
 import moment from 'moment'
-import { BasicAlert } from '@ministryofjustice/hmpps-connect-dps-shared-items'
 import contextProperties from '../contextProperties'
 import { mapToQueryString } from '../utils'
+
+export type Alert = {
+  alertCode: string
+}
 
 export type PrisonerSearchResult = {
   firstName: string
@@ -10,7 +13,7 @@ export type PrisonerSearchResult = {
   prisonerNumber: string
   cellLocation: string
   status: string
-  alerts: Array<BasicAlert>
+  alerts: Array<Alert>
   category: string
   currentIncentive?: {
     level: {
