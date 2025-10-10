@@ -1,8 +1,8 @@
 import qs from 'querystring'
-import { alertFlagLabels } from '@ministryofjustice/hmpps-connect-dps-shared-items'
 import { PrisonerInPrisonSearchResult } from '../../api/offenderSearchApi'
 import { serviceUnavailableMessage } from '../../common-messages'
 import { User } from '../../middleware/currentUser'
+import { alertFlagLabels, profileAlertCodes } from '../../shared/alertFlagValues'
 import { putLastNameFirst, hasLength, formatLocation } from '../../utils'
 import type apis from '../../apis'
 import { Location } from '../../api/prisonApi'
@@ -127,7 +127,10 @@ export default ({
           assignedLivingUnitDesc: formatLocation(prisoner.assignedLivingUnitDesc),
           name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
           alerts: alertFlagLabels.filter((alertFlag) =>
-            alertFlag.alertCodes.some((alert) => prisoner.alertsDetails && prisoner.alertsDetails.includes(alert))
+            alertFlag.alertCodes.some(
+              (alert) =>
+                prisoner.alertsDetails && prisoner.alertsDetails.includes(alert) && profileAlertCodes.includes(alert)
+            )
           ),
         }))
 
@@ -139,12 +142,15 @@ export default ({
 
       return res.render('prisonerSearch/prisonerSearch.njk', {
         prisonerProfileBaseUrl: config.app.prisonerProfileRedirect.url,
-        alertOptions: alertFlagLabels.map(({ alertCodes, label }) => ({
-          value: alertCodes,
-          text: label,
-          checked: Boolean(selectedAlerts) && selectedAlerts.some((alert: string) => alertCodes.includes(alert)),
-        })),
-        formValues: { ...req.query, alerts: hasLength(alerts) && alerts.filter((alert: string) => alert.length) },
+        alertOptions: alertFlagLabels
+          // @ts-expect-error ts-migrate(2556) FIXME: Expected 1-2 arguments, but got 0 or more.
+          .filter(({ alertCodes }) => profileAlertCodes.includes(...alertCodes))
+          .map(({ alertCodes, label }) => ({
+            value: alertCodes,
+            text: label,
+            checked: Boolean(selectedAlerts) && selectedAlerts.some((alert) => alertCodes.includes(alert)),
+          })),
+        formValues: { ...req.query, alerts: hasLength(alerts) && alerts.filter((alert) => alert.length) },
         links: {
           allResults: `${req.baseUrl}?${qs.stringify({
             ...searchQueries,
@@ -160,7 +166,11 @@ export default ({
         printedValues: {
           location: locationOptions.find((loc) => loc.value === req.query.location),
           alerts: alertFlagLabels
-            .filter(({ alertCodes }) => selectedAlerts?.find((alert: string) => alertCodes.includes(alert)))
+            .filter(
+              ({ alertCodes }) =>
+                Boolean(selectedAlerts) &&
+                selectedAlerts.find((alert) => alertCodes.includes(alert) && profileAlertCodes.includes(alert))
+            )
             .map(({ label }) => label),
         },
         results,
