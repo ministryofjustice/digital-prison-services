@@ -22,7 +22,7 @@ context('Unacceptable absences details page', () => {
     // eslint-disable-next-line no-plusplus
     for (let i = page * 20; i < (page + 1) * 20; i++) {
       data.push({
-        eventDate: eventDate.subtract(1, 'days').format('YYYY-MM-DD'),
+        eventDate: eventDate.add(1, 'days').format('YYYY-MM-DD'),
         activity: `Program ${i + 1}`,
         activityDescription: `Activity ${i + 1}`,
         location: 'BXI',
@@ -187,17 +187,17 @@ context('Unacceptable absences details page', () => {
         .then(($tRows) => {
           const job = Array.from($tRows).map(($row) => tableData($row.cells))
 
-          expect(job[0].eventDate).to.contain('Fri 16 Jul 2021')
-          expect(job[0].activity).to.contain('Name 2')
-          expect(job[0].activityDescription).to.contain('Description 2')
-          expect(job[0].location).to.contain('Wandsworth (HMP)')
-          expect(job[0].comments).to.contain('Test comment 2')
+          expect(job[0].eventDate).to.contain('Wed 14 Jul 2021')
+          expect(job[0].activity).to.contain('Name 1')
+          expect(job[0].activityDescription).to.contain('Description 1')
+          expect(job[0].location).to.contain('Ranby (HMP)')
+          expect(job[0].comments).to.contain('Test comment 1')
 
-          expect(job[1].eventDate).to.contain('Wed 14 Jul 2021')
-          expect(job[1].activity).to.contain('Name 1')
-          expect(job[1].activityDescription).to.contain('Description 1')
-          expect(job[1].location).to.contain('Ranby (HMP)')
-          expect(job[1].comments).to.contain('Test comment 1')
+          expect(job[1].eventDate).to.contain('Fri 16 Jul 2021')
+          expect(job[1].activity).to.contain('Name 2')
+          expect(job[1].activityDescription).to.contain('Description 2')
+          expect(job[1].location).to.contain('Wandsworth (HMP)')
+          expect(job[1].comments).to.contain('Test comment 2')
 
           cy.get($tRows).its('length').should('eq', 2)
         })

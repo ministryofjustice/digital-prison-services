@@ -1,0 +1,164 @@
+%status-style {
+  @media screen {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid;
+    padding: 5px 10px;
+    margin-left: 0;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    text-align: center;
+    line-height: 1;
+    user-select: none;
+    border-radius: 5px;
+  }
+
+  @media print {
+    margin-bottom: 0px !important;
+    font-size: 12px;
+    color: black !important;
+    border: none !important;
+    background: none !important;
+    min-width: auto;
+  }
+}
+
+.alerts-list {
+  @extend %govuk-list;
+  margin-bottom: 0;
+
+  @media screen {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+}
+
+.alerts-list-no-flex {
+  @extend %govuk-list;
+  margin-bottom: 0;
+}
+
+.alert-status {
+  @extend %status-style;
+
+  @media screen {
+    min-height: 30px;
+  }
+
+  img {
+    height: 14px;
+    margin-right: 3px;
+
+    @media print {
+      display: none;
+    }
+  }
+
+  &--elist {
+    border-color: #28a197;
+  }
+
+  &--quarantined {
+    border-color: #330;
+  }
+
+  &--reverse-cohorting-unit {
+    border-color: mix(white, #00703c, 20%);
+  }
+
+  &--protective-isolation-unit {
+    border-color: #006637;
+  }
+
+  &--shielding-unit {
+    border-color: #004424;
+  }
+
+  &--refusing-to-shield {
+    border-color: #b58840;
+  }
+
+  &--risk-to-known-adults {
+    border-color: #003078;
+  }
+
+  &--isolated-prisoner {
+    border-color: #00753F;
+  }
+
+  &--visor {
+    border-color: #003078;
+  }
+
+  &--security {
+    border-color: #003078;
+  }
+
+  &--risk {
+    border-color: #d4351c;
+  }
+
+  &--self-harm {
+    border-color: #f47738;
+  }
+
+  &--medical {
+    border-color: #5694ca;
+  }
+
+  &--other {
+    border-color: #d53880;
+  }
+
+  &--ex-armed-forces {
+    border-color: #85994b;
+  }
+
+  &--care-leaver {
+    border-color: #00703c;
+  }
+}
+
+.alert-status--multicase {
+  @media screen {
+    text-transform: none;
+    min-height: 30px;
+  }
+}
+
+.cat-a-status {
+  @extend %status-style;
+
+  &--a,
+  &--e {
+    color: #00437b;
+    border-color: #00437b;
+  }
+
+  &--h {
+    background-color: #00437b;
+    color: white;
+    border-color: #00437b;
+  }
+
+  &--p {
+    border: 3px dashed;
+    color: #00437b;
+    border-color: #00437b;
+  }
+}
+
+.non-association {
+  @extend %status-style;
+
+  background: lighten(#D4351C,40);
+  border-color: lighten(#D4351C,40);
+  font-weight: bold;
+  color: #D4351C;
+}
