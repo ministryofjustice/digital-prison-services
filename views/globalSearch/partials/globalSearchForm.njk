@@ -102,8 +102,15 @@
       name: "searchText",
       value: formValues.searchText,
       errorMessage: errors | findError('searchText'),
+      formGroup: {
+        classes: 'govuk-!-width-one-third'
+      },
       label: {
-          text: "Enter prisoner name or ID"
+          text: "Enter name or prison number",
+          classes: "govuk-!-font-weight-bold"
+      },
+      hint: {
+        text: "If searching by name, enter last name and then first name. For example, Smith John."
       },
       classes: 'govuk-!-width-full',
       attributes: {

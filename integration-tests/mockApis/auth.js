@@ -14,8 +14,7 @@ const createToken = (roles) => {
     client_id: 'dev',
   }
 
-  const token = jwt.sign(payload, 'secret', { expiresIn: '1h' })
-  return token
+  return jwt.sign(payload, 'secret', { expiresIn: '1h' })
 }
 
 const getSignInUrl = () =>

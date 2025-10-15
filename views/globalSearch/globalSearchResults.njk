@@ -44,6 +44,13 @@
 
     {{ mojPagination(pagination) }}
   {% else %}
-    <p class="govuk-body">No records found matching search criteria.</p>
+    <div class="govuk-body govuk-!-width-one-half govuk-!-padding-left-3" data-qa="no-results-found">
+      <p><strong>No results found matching the name or prison number</strong></p>
+      <p>You may need to:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>check that the spelling or prison number is correct</li>
+        <li>check you've entered the person's last name and then first name, if you're searching by name</li>
+      </ul>
+    </div>
   {% endif %}
 {% endblock %}
