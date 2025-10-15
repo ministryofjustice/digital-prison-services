@@ -1,10 +1,10 @@
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
-import { alertFlagLabels, AlertLabelFlag } from '../../shared/alertFlagValues'
+import { AlertFlagLabel, alertFlagLabels, BasicAlert } from '@ministryofjustice/hmpps-connect-dps-shared-items'
 import { isoDateTimeEndOfDay, isoDateTimeStartOfDay } from '../../../common/dateHelpers'
 import { formatName, properCaseName } from '../../utils'
 import { SelectValue } from '../../shared/commonTypes'
-import { Alert, PrisonerSearchResult } from '../../api/offenderSearchApi'
+import { PrisonerSearchResult } from '../../api/offenderSearchApi'
 import { PrisonerPersonalProperty } from '../../api/prisonApi'
 import config from '../../config'
 
@@ -38,7 +38,7 @@ type ScheduledMovementDetails = {
   prisonerNumber: string
   name: string
   cellLocation: string
-  relevantAlertFlagLabels: Array<AlertLabelFlag>
+  relevantAlertFlagLabels: Array<AlertFlagLabel>
   personalProperty: Array<PersonalProperty>
 }
 type Event = {
@@ -84,17 +84,14 @@ export default ({ prisonApi, prisonerAlertsApi, offenderSearchApi, systemOauthCl
       showTransfers: !scheduledType || scheduledType === 'Transfers',
     })
 
-  const getRelevantAlertFlagLabels = (alerts: Array<Alert>): Array<AlertLabelFlag> => {
+  const getRelevantAlertFlagLabels = (alerts: Array<BasicAlert>): Array<AlertFlagLabel> => {
     const relevantAlertCodesForScheduledMoves: Array<string> = alerts
       .map((alert) => alert.alertCode)
       .filter((alert) => relevantAlertsForTransfer.includes(alert))
 
-    return alertFlagLabels
-      .filter((flag) => flag.alertCodes.some((code) => relevantAlertCodesForScheduledMoves.includes(code)))
-      .map((alert) => ({
-        label: alert.label,
-        classes: alert.classes,
-      }))
+    return alertFlagLabels.filter((flag) =>
+      flag.alertCodes.some((code) => relevantAlertCodesForScheduledMoves.includes(code))
+    )
   }
 
   const getHoldAgainstTransferAlertDetails = async (
