@@ -20,33 +20,35 @@
 {% endfor %}
 
 <div class="prisoner-search__results-list">
+
+  {% set nameSort = "none" %}
+  {% set nameSort = "ascending" if formValues.sortFieldsWithOrder == "lastName,firstName:ASC"
+    else ("descending" if formValues.sortFieldsWithOrder == "lastName,firstName:DESC" else "none") %}
+  {% set locationSort = "ascending" if formValues.sortFieldsWithOrder == "assignedLivingUnitDesc:ASC"
+    else ("descending" if formValues.sortFieldsWithOrder == "assignedLivingUnitDesc:DESC" else "none") %}
+  {% set incentiveLevelSort = "none" %}
+  {% set ageSort = "ascending" if formValues.sortFieldsWithOrder == "dateOfBirth:DESC"
+    else ("descending" if formValues.sortFieldsWithOrder == "dateOfBirth:ASC" else "none") %}
+
   {{ govukTable({
     head: [
       { html: '<span class="govuk-visually-hidden">Picture</span>' },
       {
         text: "Name",
-        attributes: {
-          "aria-sort": "ascending"
-        }
+        attributes: { "aria-sort": nameSort }
       },
       { text: "Prison number" },
       {
         text: "Location",
-        attributes: {
-          "aria-sort": "ascending"
-        }
+        attributes: { "aria-sort": locationSort }
       },
       {
         text: "Incentive level",
-        attributes: {
-          "aria-sort": "ascending"
-        }
+        attributes: { "aria-sort": incentiveLevelSort }
       },
       {
         text: "Age",
-        attributes: {
-          "aria-sort": "ascending"
-        }
+        attributes: { "aria-sort": ageSort }
       },
       {
         text: "Relevant alerts",

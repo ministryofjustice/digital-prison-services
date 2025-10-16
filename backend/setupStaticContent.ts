@@ -17,8 +17,8 @@ export default () => {
   router.use('/images', express.static(path.join(__dirname, '../build/images'), cacheControl))
 
   const assetPaths = [
-    'node_modules/govuk-frontend/govuk/assets',
-    'node_modules/govuk-frontend',
+    'node_modules/govuk-frontend/dist/govuk/assets',
+    'node_modules/govuk-frontend/dist',
     'node_modules/@ministryofjustice/frontend',
   ]
   assetPaths.forEach((dir) => {
