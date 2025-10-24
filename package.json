@@ -39,7 +39,7 @@
     "@govuk-react/text-area": "^0.9.1",
     "@govuk-react/visually-hidden": "^0.9.1",
     "@ministryofjustice/frontend": "^3.7.2",
-    "@ministryofjustice/hmpps-connect-dps-shared-items": "^2.2.0",
+    "@ministryofjustice/hmpps-connect-dps-shared-items": "^2.3.0",
     "@types/superagent": "^4.1.24",
     "agentkeepalive": "^4.2.1",
     "applicationinsights": "^2.9.7",
