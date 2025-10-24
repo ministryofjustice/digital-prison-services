@@ -212,7 +212,9 @@ describe('Prisoner search', () => {
             { checked: false, text: 'Involved in 2024 civil disorder', value: ['XCDO'] },
             { checked: false, text: 'Isolated', value: ['VIP'] },
             { checked: false, text: 'No one-to-one', value: ['RNO121'] },
+            { checked: false, text: 'OCG Nominal (do not share)', value: ['DOCGM'] },
             { checked: false, text: 'PEEP', value: ['PEEP'] },
+            { checked: false, text: 'Potential corruptor', value: ['XCOP'] },
             { checked: false, text: 'Protective Isolation Unit', value: ['UPIU'] },
             { checked: false, text: 'Quarantined', value: ['RCDR'] },
             { checked: false, text: 'Racist', value: ['XR'] },
@@ -221,6 +223,7 @@ describe('Prisoner search', () => {
             { checked: false, text: 'Risk to females', value: ['XRF'] },
             { checked: false, text: 'Risk to known adults', value: ['RKS'] },
             { checked: false, text: 'Risk to LGBT', value: ['RTP', 'RLG'] },
+            { checked: false, text: 'Risk to staff', value: ['RSS'] },
             { checked: false, text: 'Shielding Unit', value: ['USU'] },
             { checked: false, text: 'Staff assaulter', value: ['XSA', 'SA'] },
             { checked: false, text: 'TACT', value: ['XTACT'] },
@@ -395,7 +398,13 @@ describe('Prisoner search', () => {
               expect.objectContaining({
                 age: 30,
                 agencyId: 'MDI',
-                alerts: [],
+                alerts: [
+                  {
+                    alertCodes: ['RSS'],
+                    classes: 'dps-alert-status dps-alert-status--risk',
+                    label: 'Risk to staff',
+                  },
+                ],
                 alertsDetails: ['RSS', 'XC'],
                 assignedLivingUnitDesc: 'No cell allocated',
                 assignedLivingUnitId: 2,
