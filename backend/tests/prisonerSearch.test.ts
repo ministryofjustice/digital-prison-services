@@ -212,7 +212,7 @@ describe('Prisoner search', () => {
             { checked: false, text: 'Involved in 2024 civil disorder', value: ['XCDO'] },
             { checked: false, text: 'Isolated', value: ['VIP'] },
             { checked: false, text: 'No one-to-one', value: ['RNO121'] },
-            { checked: false, text: 'OCG Nominal (do not share)', value: ['DOCGM'] },
+            { checked: false, text: 'OCG nominal (do not share)', value: ['DOCGM'] },
             { checked: false, text: 'PEEP', value: ['PEEP'] },
             { checked: false, text: 'Potential corruptor', value: ['XCOP'] },
             { checked: false, text: 'Protective Isolation Unit', value: ['UPIU'] },
