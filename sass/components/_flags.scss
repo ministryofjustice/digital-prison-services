@@ -10,17 +10,12 @@
   li {
     margin-bottom: 10px;
     margin-right: 10px;
-    padding: 13px 10px !important;
   }
 }
 
 .alerts-list-no-flex {
   @extend %govuk-list;
   margin-bottom: 0;
-
-  li {
-    padding: 13px 10px !important;
-  }
 }
 
 .cat-a-status {
