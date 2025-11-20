@@ -25,7 +25,6 @@ import covidRouter from './routes/covidRouter'
 import prisonerSearchRouter from './routes/prisonerSearchRouter'
 import establishmentRollRouter from './routes/establishmentRollRouter'
 import globalSearchRouter from './routes/globalSearchRouter'
-import amendCaseNoteRouter from './routes/caseNoteAmendmentRouter'
 import createCaseNoteRouter from './routes/caseNoteCreationRouter'
 import deleteCaseNoteRouter from './routes/caseNoteDeletionRouter'
 import selectActivityLocation from './controllers/selectActivityLocation'
@@ -376,11 +375,6 @@ const setup = ({
   router.use(
     '/prisoner-search',
     prisonerSearchRouter({ prisonApi, offenderSearchApi, incentivesApi, logError, systemOauthClient })
-  )
-
-  router.use(
-    '/prisoner/:offenderNo/case-notes/amend-case-note/:caseNoteId',
-    amendCaseNoteRouter({ prisonApi, caseNotesApi, logError, systemOauthClient })
   )
 
   router.use(
