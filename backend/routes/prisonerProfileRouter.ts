@@ -2,8 +2,6 @@ import express from 'express'
 import EsweService from '../services/esweService'
 import prisonerSchedule from '../controllers/prisonerProfile/prisonerSchedule'
 import prisonerProfessionalContacts from '../controllers/prisonerProfile/prisonerProfessionalContacts'
-import prisonerSpends from '../controllers/prisonerProfile/prisonerFinances/prisonerSpends'
-import prisonerFinanceServiceFactory from '../services/prisonerFinanceService'
 import personServiceFactory from '../services/personService'
 import paginationService from '../services/paginationService'
 import learnerEmployabilitySkills from '../controllers/prisonerProfile/learnerEmployabilitySkillsDetails'
@@ -34,7 +32,6 @@ const controller = ({
   nonAssociationsApi,
 }) => {
   const personService = personServiceFactory(prisonApi)
-  const prisonerFinanceService = prisonerFinanceServiceFactory(prisonApi)
   const esweService = EsweService.create(curiousApi, systemOauthClient, prisonApi, whereaboutsApi)
 
   router.get('/', prisonerProfileRedirect({ path: '/' }))
@@ -56,8 +53,6 @@ const controller = ({
   )
 
   router.get('/cell-history', prisonerProfileRedirect({ path: '/location-details' }))
-
-  router.get('/prisoner-finance-details/spends', prisonerSpends({ prisonApi, prisonerFinanceService }))
 
   return router
 }

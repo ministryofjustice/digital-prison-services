@@ -232,8 +232,6 @@ export const prisonApiFactory = (client) => {
     }
   }
 
-  const getPrisonerBalances = (context, bookingId) => get(context, `/api/bookings/${bookingId}/balances`)
-
   const getPrisonerDetails = (context, offenderNo) => get(context, `/api/prisoners/${offenderNo}`)
 
   const getPhysicalAttributes = (context, bookingId) => get(context, `/api/bookings/${bookingId}/physicalAttributes`)
@@ -284,9 +282,6 @@ export const prisonApiFactory = (client) => {
     get(context, `/api/cell/${agencyId}/history/${assignmentDate}`)
 
   const moveToCellSwap = (context, { bookingId }) => put(context, `/api/bookings/${bookingId}/move-to-cell-swap`, {})
-
-  const getTransactionHistory = (context, offenderNo, params) =>
-    get(context, `/api/offenders/${offenderNo}/transaction-history?${mapToQueryString(params)}`)
 
   const getPrisoners = (context, searchCriteria) => post(context, `/api/prisoners`, searchCriteria)
 
@@ -342,7 +337,6 @@ export const prisonApiFactory = (client) => {
     addSingleAppointment,
     getCaseNoteSummaryByTypes,
     getStaffRoles,
-    getPrisonerBalances,
     getPrisonerDetails,
     getScheduledActivities,
     getPhysicalAttributes,
@@ -362,7 +356,6 @@ export const prisonApiFactory = (client) => {
     getInmatesAtLocation,
     getInmatesAtLocationPrefix,
     moveToCellSwap,
-    getTransactionHistory,
     getPrisoners,
     getUserDetailsList,
     getHistoryByDate,
