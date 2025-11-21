@@ -283,20 +283,11 @@ export const prisonApiFactory = (client) => {
 
   const getProfileInformation = (context, bookingId) => get(context, `/api/bookings/${bookingId}/profileInformation`)
 
-  const getCellAttributes = (context) => get(context, '/api/reference-domains/domains/HOU_UNIT_ATT', 1000)
-
-  const getCellMoveReasonTypes = (context) => get(context, '/api/reference-domains/domains/CHG_HOUS_RSN', 1000)
-
   const getScheduledEventsForThisWeek = (context, bookingId) =>
     get(context, `/api/bookings/${bookingId}/events/thisWeek`)
 
   const getScheduledEventsForNextWeek = (context, bookingId) =>
     get(context, `/api/bookings/${bookingId}/events/nextWeek`)
-
-  const getAttributesForLocation = (context, locationId) => get(context, `/api/cell/${locationId}/attributes`)
-
-  const getHistoryForLocation = (context, { locationId, fromDate, toDate }) =>
-    get(context, `/api/cell/${locationId}/history?fromDate=${fromDate}&toDate=${toDate}`)
 
   const getHistoryByDate = (context, { assignmentDate, agencyId }) =>
     get(context, `/api/cell/${agencyId}/history/${assignmentDate}`)
@@ -379,13 +370,9 @@ export const prisonApiFactory = (client) => {
     getProfileInformation,
     getScheduledEventsForThisWeek,
     getScheduledEventsForNextWeek,
-    getCellAttributes,
-    getCellMoveReasonTypes,
     getCsraAssessments,
     getCsraAssessmentsForPrisoner,
     getCsraReviewForBooking,
-    getAttributesForLocation,
-    getHistoryForLocation,
     getLocationDetails,
     getInmatesAtLocation,
     getInmatesAtLocationPrefix,
