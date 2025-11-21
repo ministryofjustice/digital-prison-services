@@ -4,7 +4,6 @@ import prisonerSchedule from '../controllers/prisonerProfile/prisonerSchedule'
 import prisonerProfessionalContacts from '../controllers/prisonerProfile/prisonerProfessionalContacts'
 import personServiceFactory from '../services/personService'
 import paginationService from '../services/paginationService'
-import learnerEmployabilitySkills from '../controllers/prisonerProfile/learnerEmployabilitySkillsDetails'
 import workInsidePrison from '../controllers/prisonerProfile/prisonerWorkInsidePrisonDetails'
 import prisonerProfileRedirect from '../controllers/prisonerProfile/prisonerProfileRedirect'
 
@@ -43,7 +42,6 @@ const controller = ({
   router.get('/case-notes', prisonerProfileRedirect({ path: '/case-notes' }))
   router.get('/sentence-and-release', prisonerProfileRedirect({ path: '/offences' }))
   router.get('/work-and-skills', prisonerProfileRedirect({ path: '/work-and-skills' }))
-  router.get('/skills', learnerEmployabilitySkills({ paginationService, prisonApi, esweService }))
   router.get('/work-activities', workInsidePrison({ paginationService, prisonApi, esweService }))
   router.get('/schedule', prisonerSchedule({ prisonApi, logError }))
   router.get(
