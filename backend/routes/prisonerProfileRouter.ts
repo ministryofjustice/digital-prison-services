@@ -2,7 +2,6 @@ import express from 'express'
 import EsweService from '../services/esweService'
 import prisonerSchedule from '../controllers/prisonerProfile/prisonerSchedule'
 import prisonerProfessionalContacts from '../controllers/prisonerProfile/prisonerProfessionalContacts'
-import prisonerDamageObligations from '../controllers/prisonerProfile/prisonerFinances/prisonerDamageObligations'
 import prisonerPrivateCash from '../controllers/prisonerProfile/prisonerFinances/prisonerPrivateCash'
 import prisonerSpends from '../controllers/prisonerProfile/prisonerFinances/prisonerSpends'
 import prisonerSavings from '../controllers/prisonerProfile/prisonerFinances/prisonerSavings'
@@ -60,7 +59,6 @@ const controller = ({
 
   router.get('/cell-history', prisonerProfileRedirect({ path: '/location-details' }))
 
-  router.get('/prisoner-finance-details/damage-obligations', prisonerDamageObligations({ prisonApi }))
   router.get('/prisoner-finance-details/private-cash', prisonerPrivateCash({ prisonApi, prisonerFinanceService }))
   router.get('/prisoner-finance-details/spends', prisonerSpends({ prisonApi, prisonerFinanceService }))
   router.get('/prisoner-finance-details/savings', prisonerSavings({ prisonApi, prisonerFinanceService }))

@@ -285,9 +285,6 @@ export const prisonApiFactory = (client) => {
 
   const moveToCellSwap = (context, { bookingId }) => put(context, `/api/bookings/${bookingId}/move-to-cell-swap`, {})
 
-  const getOffenderDamageObligations = (context, offenderNo) =>
-    get(context, `/api/offenders/${offenderNo}/damage-obligations`)
-
   const getTransactionHistory = (context, offenderNo, params) =>
     get(context, `/api/offenders/${offenderNo}/transaction-history?${mapToQueryString(params)}`)
 
@@ -365,7 +362,6 @@ export const prisonApiFactory = (client) => {
     getInmatesAtLocation,
     getInmatesAtLocationPrefix,
     moveToCellSwap,
-    getOffenderDamageObligations,
     getTransactionHistory,
     getPrisoners,
     getUserDetailsList,
