@@ -16,7 +16,6 @@ import paginationService from '../services/paginationService'
 import coursesQualifications from '../controllers/prisonerProfile/prisonerCoursesQualificationsDetails'
 import learnerEmployabilitySkills from '../controllers/prisonerProfile/learnerEmployabilitySkillsDetails'
 import workInsidePrison from '../controllers/prisonerProfile/prisonerWorkInsidePrisonDetails'
-import unacceptableAbsencesDetails from '../controllers/prisonerProfile/unacceptableAbsencesDetails'
 import prisonerProfileRedirect from '../controllers/prisonerProfile/prisonerProfileRedirect'
 
 const router = express.Router({ mergeParams: true })
@@ -55,7 +54,6 @@ const controller = ({
   router.get('/case-notes', prisonerProfileRedirect({ path: '/case-notes' }))
   router.get('/sentence-and-release', prisonerProfileRedirect({ path: '/offences' }))
   router.get('/work-and-skills', prisonerProfileRedirect({ path: '/work-and-skills' }))
-  router.get('/unacceptable-absences', unacceptableAbsencesDetails({ paginationService, prisonApi, esweService }))
   router.get('/courses-qualifications', coursesQualifications({ paginationService, prisonApi, esweService }))
   router.get('/skills', learnerEmployabilitySkills({ paginationService, prisonApi, esweService }))
   router.get('/work-activities', workInsidePrison({ paginationService, prisonApi, esweService }))
