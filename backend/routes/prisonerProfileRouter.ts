@@ -1,6 +1,5 @@
 import express from 'express'
 import EsweService from '../services/esweService'
-import prisonerVisits from '../controllers/prisonerProfile/prisonerVisits'
 import prisonerSchedule from '../controllers/prisonerProfile/prisonerSchedule'
 import prisonerProfessionalContacts from '../controllers/prisonerProfile/prisonerProfessionalContacts'
 import prisonerLocationHistory from '../controllers/prisonerProfile/prisonerLocationHistory'
@@ -55,8 +54,6 @@ const controller = ({
   router.get('/work-and-skills', prisonerProfileRedirect({ path: '/work-and-skills' }))
   router.get('/skills', learnerEmployabilitySkills({ paginationService, prisonApi, esweService }))
   router.get('/work-activities', workInsidePrison({ paginationService, prisonApi, esweService }))
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
-  router.get('/visits-details', prisonerVisits({ prisonApi, logError }))
   router.get('/schedule', prisonerSchedule({ prisonApi, logError }))
   router.get(
     '/professional-contacts',

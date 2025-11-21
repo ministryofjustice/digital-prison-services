@@ -125,11 +125,6 @@ export const prisonApiFactory = (client) => {
       offenderNumbers
     )
 
-  const getVisitsForBookingWithVisitors = (context, bookingId, params) =>
-    get(context, `/api/bookings/${bookingId}/visits-with-visitors?${mapToQueryString(params)}`)
-
-  const getVisitsPrisons = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits/prisons`)
-
   const getAppointments = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
     post(
       context,
@@ -250,9 +245,6 @@ export const prisonApiFactory = (client) => {
 
   const getPrisonerDetails = (context, offenderNo) => get(context, `/api/prisoners/${offenderNo}`)
 
-  const getPrisonerVisitBalances = (context, offenderNo) =>
-    get(context, `/api/bookings/offenderNo/${offenderNo}/visit/balances?allowNoContent=true`)
-
   const getPhysicalAttributes = (context, bookingId) => get(context, `/api/bookings/${bookingId}/physicalAttributes`)
 
   const getPhysicalCharacteristics = (context, bookingId) =>
@@ -294,9 +286,6 @@ export const prisonApiFactory = (client) => {
   const getCellAttributes = (context) => get(context, '/api/reference-domains/domains/HOU_UNIT_ATT', 1000)
 
   const getCellMoveReasonTypes = (context) => get(context, '/api/reference-domains/domains/CHG_HOUS_RSN', 1000)
-
-  const getVisitCompletionReasons = (context) => get(context, '/api/reference-domains/domains/VIS_COMPLETE', 1000)
-  const getVisitCancellationReasons = (context) => get(context, '/api/reference-domains/domains/MOVE_CANC_RS', 1000)
 
   const getScheduledEventsForThisWeek = (context, bookingId) =>
     get(context, `/api/bookings/${bookingId}/events/thisWeek`)
@@ -345,8 +334,6 @@ export const prisonApiFactory = (client) => {
     getActivityList,
     searchActivityLocations,
     getVisits,
-    getVisitsForBookingWithVisitors,
-    getVisitsPrisons,
     getAppointments,
     getActivities,
     getPrisons,
@@ -378,7 +365,6 @@ export const prisonApiFactory = (client) => {
     getStaffRoles,
     getPrisonerBalances,
     getPrisonerDetails,
-    getPrisonerVisitBalances,
     getScheduledActivities,
     getPhysicalAttributes,
     getPhysicalCharacteristics,
@@ -412,8 +398,6 @@ export const prisonApiFactory = (client) => {
     getOffenderActivitiesHistory,
     getMovementReasons,
     getTransfers,
-    getVisitCompletionReasons,
-    getVisitCancellationReasons,
   }
 }
 
