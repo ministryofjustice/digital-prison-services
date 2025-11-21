@@ -22,7 +22,6 @@ const {
   externalTransfersResponse,
 } = require('./integration-tests/mockApis/responses/houseBlockResponse')
 const alertsResponse = require('./integration-tests/mockApis/responses/alertsResponse.json')
-const allocationManager = require('./integration-tests/mockApis/allocationManager')
 const delius = require('./integration-tests/mockApis/delius')
 const pathfinder = require('./integration-tests/mockApis/pathfinder')
 const socApi = require('./integration-tests/mockApis/soc')
@@ -76,7 +75,6 @@ module.exports = defineConfig({
             whereabouts.stubHealth(),
             locationsInsidePrisonApi.stubHealth(),
             keyworker.stubHealth(),
-            allocationManager.stubHealth(),
             caseNotes.stubHealth(),
             tokenverification.stubHealth(),
             delius.stubHealth(),
@@ -176,7 +174,6 @@ module.exports = defineConfig({
             prisonApi.stubOffenderImage(),
             keyworker.stubKeyworkerByCaseloadAndOffenderNo(keyworkerDetails),
             dataComplianceApi.stubRetentionRecord(offenderNo, retentionRecord),
-            allocationManager.stubGetPomForOffender({ primary_pom: { name: 'SMITH, JANE' } }),
             complexity.stubGetComplexOffenders(complexOffenders),
             offenderSearch.stubPrisonerDetails(offenderSearchDetails),
           ]),
@@ -303,7 +300,6 @@ module.exports = defineConfig({
             prisonApi.stubHealthTypes(healthTypes),
             prisonApi.stubPersonalCareNeeds(careNeeds),
             prisonApi.stubReasonableAdjustments(reasonableAdjustments),
-            allocationManager.stubGetPomForOffender(prisonOffenderManagers),
             curiousApi.stubLearnerProfiles(neurodiversities),
             curiousApi.stubLearnerNeurodiversity(neurodivergence),
           ]),
@@ -424,7 +420,6 @@ module.exports = defineConfig({
             prisonApi.stubPersonAddresses(personAddresses),
             prisonApi.stubPersonEmails(personEmails),
             prisonApi.stubPersonPhones(personPhones),
-            allocationManager.stubGetPomForOffender(prisonOffenderManagers),
           ]),
         stubUserCaseLoads: (caseloads) => prisonApi.stubUserCaseloads(caseloads),
         stubUpdateCaseload: prisonApi.stubUpdateCaseload,

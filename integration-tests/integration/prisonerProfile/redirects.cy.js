@@ -1,7 +1,7 @@
 const noCaseloadPage = require('../../pages/prisonerProfile/noCaseloads')
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
-const { businessPrimary, businessNonPrimary, otherContacts } = require('./prisonerProfessionalContacts.cy')
+const { businessPrimary, businessNonPrimary, otherContacts } = require('./prisonerProfessionalContacts')
 
 context('Current prisoner profile should redirect to the new prisoner profile', () => {
   context('When the case load IS Leeds', () => {
