@@ -13,7 +13,6 @@ import prisonerSavings from '../controllers/prisonerProfile/prisonerFinances/pri
 import prisonerFinanceServiceFactory from '../services/prisonerFinanceService'
 import personServiceFactory from '../services/personService'
 import paginationService from '../services/paginationService'
-import coursesQualifications from '../controllers/prisonerProfile/prisonerCoursesQualificationsDetails'
 import learnerEmployabilitySkills from '../controllers/prisonerProfile/learnerEmployabilitySkillsDetails'
 import workInsidePrison from '../controllers/prisonerProfile/prisonerWorkInsidePrisonDetails'
 import prisonerProfileRedirect from '../controllers/prisonerProfile/prisonerProfileRedirect'
@@ -54,7 +53,6 @@ const controller = ({
   router.get('/case-notes', prisonerProfileRedirect({ path: '/case-notes' }))
   router.get('/sentence-and-release', prisonerProfileRedirect({ path: '/offences' }))
   router.get('/work-and-skills', prisonerProfileRedirect({ path: '/work-and-skills' }))
-  router.get('/courses-qualifications', coursesQualifications({ paginationService, prisonApi, esweService }))
   router.get('/skills', learnerEmployabilitySkills({ paginationService, prisonApi, esweService }))
   router.get('/work-activities', workInsidePrison({ paginationService, prisonApi, esweService }))
   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
