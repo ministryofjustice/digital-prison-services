@@ -4,7 +4,6 @@ import prisonerSchedule from '../controllers/prisonerProfile/prisonerSchedule'
 import prisonerProfessionalContacts from '../controllers/prisonerProfile/prisonerProfessionalContacts'
 import prisonerPrivateCash from '../controllers/prisonerProfile/prisonerFinances/prisonerPrivateCash'
 import prisonerSpends from '../controllers/prisonerProfile/prisonerFinances/prisonerSpends'
-import prisonerSavings from '../controllers/prisonerProfile/prisonerFinances/prisonerSavings'
 import prisonerFinanceServiceFactory from '../services/prisonerFinanceService'
 import personServiceFactory from '../services/personService'
 import paginationService from '../services/paginationService'
@@ -61,7 +60,6 @@ const controller = ({
 
   router.get('/prisoner-finance-details/private-cash', prisonerPrivateCash({ prisonApi, prisonerFinanceService }))
   router.get('/prisoner-finance-details/spends', prisonerSpends({ prisonApi, prisonerFinanceService }))
-  router.get('/prisoner-finance-details/savings', prisonerSavings({ prisonApi, prisonerFinanceService }))
 
   return router
 }
