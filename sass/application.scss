@@ -158,13 +158,6 @@ pre {
   @include govuk-font($size: false, $tabular: true, $weight: bold);
 }
 
-.csra-history-table {
-  table {
-    table-layout: fixed;
-    word-break: break-word;
-  }
-}
-
 .change-someones-cell-has-moved-content {
   margin-bottom: 100px;
 }

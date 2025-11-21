@@ -155,12 +155,6 @@ export const prisonApiFactory = (client) => {
   const getAssessments = (context, { code, offenderNumbers }) =>
     post(context, `/api/offender-assessments/${code}`, offenderNumbers)
 
-  const getCsraAssessments = (context, offenderNumbers) =>
-    post(context, `/api/offender-assessments/csra/list`, offenderNumbers)
-
-  const getCsraAssessmentsForPrisoner = (context, offenderNumber) =>
-    get(context, `/api/offender-assessments/csra/${offenderNumber}`)
-
   const searchActivityLocations = (context, agencyId, bookedOnDay, timeSlot) =>
     get(context, `/api/agencies/${agencyId}/eventLocationsBooked?bookedOnDay=${bookedOnDay}&timeSlot=${timeSlot}`)
 
@@ -367,8 +361,6 @@ export const prisonApiFactory = (client) => {
     getProfileInformation,
     getScheduledEventsForThisWeek,
     getScheduledEventsForNextWeek,
-    getCsraAssessments,
-    getCsraAssessmentsForPrisoner,
     getLocationDetails,
     getInmatesAtLocation,
     getInmatesAtLocationPrefix,
