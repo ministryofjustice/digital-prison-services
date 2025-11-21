@@ -3,7 +3,6 @@ import EsweService from '../services/esweService'
 import prisonerSchedule from '../controllers/prisonerProfile/prisonerSchedule'
 import prisonerProfessionalContacts from '../controllers/prisonerProfile/prisonerProfessionalContacts'
 import prisonerCsraHistory from '../controllers/prisonerProfile/prisonerCsraHistory'
-import prisonerCsraReview from '../controllers/prisonerProfile/prisonerCsraReview'
 import prisonerDamageObligations from '../controllers/prisonerProfile/prisonerFinances/prisonerDamageObligations'
 import prisonerPrivateCash from '../controllers/prisonerProfile/prisonerFinances/prisonerPrivateCash'
 import prisonerSpends from '../controllers/prisonerProfile/prisonerFinances/prisonerSpends'
@@ -68,7 +67,6 @@ const controller = ({
   router.get('/prisoner-finance-details/savings', prisonerSavings({ prisonApi, prisonerFinanceService }))
 
   router.get('/csra-history', prisonerCsraHistory({ prisonApi }))
-  router.get('/csra-review', prisonerCsraReview({ prisonApi }))
 
   return router
 }
