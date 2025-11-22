@@ -1,6 +1,5 @@
 import express from 'express'
 import EsweService from '../services/esweService'
-import prisonerSchedule from '../controllers/prisonerProfile/prisonerSchedule'
 import paginationService from '../services/paginationService'
 import workInsidePrison from '../controllers/prisonerProfile/prisonerWorkInsidePrisonDetails'
 import prisonerProfileRedirect from '../controllers/prisonerProfile/prisonerProfileRedirect'
@@ -39,7 +38,6 @@ const controller = ({
   router.get('/sentence-and-release', prisonerProfileRedirect({ path: '/offences' }))
   router.get('/work-and-skills', prisonerProfileRedirect({ path: '/work-and-skills' }))
   router.get('/work-activities', workInsidePrison({ paginationService, prisonApi, esweService }))
-  router.get('/schedule', prisonerSchedule({ prisonApi, logError }))
 
   router.get('/cell-history', prisonerProfileRedirect({ path: '/location-details' }))
 
