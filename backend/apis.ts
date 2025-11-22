@@ -12,7 +12,6 @@ import { restrictedPatientApiFactory } from './api/restrictedPatientApi'
 import { caseNotesApiFactory } from './api/caseNotesApi'
 import { tokenVerificationApiFactory } from './api/tokenVerificationApi'
 import { offenderSearchApiFactory } from './api/offenderSearchApi'
-import { complexityApiFactory } from './api/complexityApi'
 import { hmppsManageUsersApiFactory } from './api/hmppsManageUsersApi'
 import { feComponentsApiFactory } from './api/feComponents'
 import { bookAVideoLinkApiFactory } from './api/bookAVideoLinkApi'
@@ -118,13 +117,6 @@ export const offenderSearchApi = offenderSearchApiFactory(
   })
 )
 
-export const complexityApi = complexityApiFactory(
-  clientFactory({
-    baseUrl: config.apis.complexity.url,
-    timeout: config.apis.complexity.timeoutSeconds * 1000,
-  })
-)
-
 export const curiousApi = CuriousApi.create(clientFactory({ baseUrl: config.apis.curious.url }))
 
 export const feComponentsApi = feComponentsApiFactory(
@@ -147,7 +139,6 @@ export default {
   prisonerAlertsApi,
   tokenVerificationApi,
   offenderSearchApi,
-  complexityApi,
   curiousApi,
   restrictedPatientApi,
   feComponentsApi,

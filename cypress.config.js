@@ -22,7 +22,6 @@ const alertsResponse = require('./integration-tests/mockApis/responses/alertsRes
 const delius = require('./integration-tests/mockApis/delius')
 const restrictedPatientApi = require('./integration-tests/mockApis/restrictedPatient')
 const offenderSearch = require('./integration-tests/mockApis/offenderSearch')
-const complexity = require('./integration-tests/mockApis/complexity')
 const curiousApi = require('./integration-tests/mockApis/curiousApi')
 
 const { stubScenario, resetStubs } = require('./integration-tests/mockApis/wiremock')
@@ -73,7 +72,6 @@ module.exports = defineConfig({
             tokenverification.stubHealth(),
             delius.stubHealth(),
             offenderSearch.stubHealth(),
-            complexity.stubHealth(),
             nomisMapping.stubHealth(),
             bookAVideoLinkApi.stubHealth(),
           ]),
@@ -151,7 +149,6 @@ module.exports = defineConfig({
           caseNoteSummary,
           retentionRecord,
           offenderNo,
-          complexOffenders = [],
           offenderSearchDetails = [{ restrictedPatient: false, indeterminateSentence: false }],
           caseloads = null,
         }) =>
@@ -163,7 +160,6 @@ module.exports = defineConfig({
             prisonApi.stubStaffRoles(),
             prisonApi.stubOffenderImage(),
             dataComplianceApi.stubRetentionRecord(offenderNo, retentionRecord),
-            complexity.stubGetComplexOffenders(complexOffenders),
             offenderSearch.stubPrisonerDetails(offenderSearchDetails),
           ]),
 
@@ -478,7 +474,6 @@ module.exports = defineConfig({
         stubGetDetailsFailure: ({ status }) => prisonApi.stubGetDetailsFailure(status),
         stubGetPrisoners: (response) => prisonApi.stubGetPrisoners(response),
         stubGetUserDetailsList: (response) => Promise.all([prisonApi.stubGetUserDetailsList(response)]),
-        stubGetComplexOffenders: (offenders) => complexity.stubGetComplexOffenders(offenders),
         stubCellMoveHistory: ({ assignmentDate, agencyId, cellMoves }) =>
           prisonApi.stubCellMoveHistory({ assignmentDate, agencyId, cellMoves }),
         stubGetWhereaboutsAppointments: (appointments) => whereabouts.stubGetWhereaboutsAppointments(appointments),

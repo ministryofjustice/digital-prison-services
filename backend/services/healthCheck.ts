@@ -42,7 +42,6 @@ export default function healthcheckFactory(
   caseNotesUrl,
   tokenverificationUrl,
   offenderSearchUrl,
-  complexityUrl,
   bookAVideoLinkUrl,
   locationsInsidePrisonApiUrl,
   nomisMappingUrl
@@ -55,7 +54,6 @@ export default function healthcheckFactory(
     service('casenotes', caseNotesUrl),
     service('tokenverification', tokenverificationUrl),
     service('offenderSearch', offenderSearchUrl),
-    service('complexity', complexityUrl),
     service('locationsInsidePrisonApi', locationsInsidePrisonApiUrl),
     service('nomisMapping', nomisMappingUrl),
     service('bookAVideoLinkApi', bookAVideoLinkUrl),

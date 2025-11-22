@@ -14,7 +14,6 @@ const health = healthFactory(
   joinUrlPath(config.apis.caseNotes.url, '/health/ping'),
   joinUrlPath(config.apis.tokenverification.url, '/health/ping'),
   joinUrlPath(config.apis.offenderSearch.url, '/health/ping'),
-  joinUrlPath(config.apis.complexity.url, '/ping'),
   joinUrlPath(config.apis.bookAVideoLinkApi.url, '/health/ping'),
   joinUrlPath(config.apis.locationsInsidePrisonApi.url, '/health/ping'),
   joinUrlPath(config.apis.nomisMapping.url, '/health/ping')
