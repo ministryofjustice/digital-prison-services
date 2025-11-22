@@ -11,7 +11,6 @@ const health = healthFactory(
   joinUrlPath(config.apis.prisonApi.url, '/health/ping'),
   joinUrlPath(config.apis.whereabouts.url, '/health/ping'),
   joinUrlPath(config.apis.deliusIntegration.url, '/health'),
-  joinUrlPath(config.apis.keyworker.url, '/health/ping'),
   joinUrlPath(config.apis.caseNotes.url, '/health/ping'),
   joinUrlPath(config.apis.tokenverification.url, '/health/ping'),
   joinUrlPath(config.apis.offenderSearch.url, '/health/ping'),

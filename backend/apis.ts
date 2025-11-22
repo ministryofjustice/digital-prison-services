@@ -8,7 +8,6 @@ import { whereaboutsApiFactory } from './api/whereaboutsApi'
 import { locationsInsidePrisonApiFactory } from './api/locationsInsidePrisonApi'
 import { deliusIntegrationApiFactory } from './api/deliusIntegrationApi'
 import { dataComplianceApiFactory } from './api/dataComplianceApi'
-import { keyworkerApiFactory } from './api/keyworkerApi'
 import { restrictedPatientApiFactory } from './api/restrictedPatientApi'
 import { caseNotesApiFactory } from './api/caseNotesApi'
 import { tokenVerificationApiFactory } from './api/tokenVerificationApi'
@@ -85,13 +84,6 @@ export const dataComplianceApi = dataComplianceApiFactory(
   })
 )
 
-export const keyworkerApi = keyworkerApiFactory(
-  clientFactory({
-    baseUrl: config.apis.keyworker.url,
-    timeout: config.apis.keyworker.timeoutSeconds * 1000,
-  })
-)
-
 export const restrictedPatientApi = restrictedPatientApiFactory(
   clientFactory({
     baseUrl: config.apis.restrictedPatient.url,
@@ -159,7 +151,6 @@ export default {
   hmppsManageUsersApi,
   deliusIntegrationApi,
   dataComplianceApi,
-  keyworkerApi,
   caseNotesApi,
   prisonerAlertsApi,
   tokenVerificationApi,

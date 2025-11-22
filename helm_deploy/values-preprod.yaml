@@ -19,7 +19,6 @@ generic-service:
     HMPPS_COOKIE_NAME: hmpps-session-preprod
     API_DELIUS_ENDPOINT_URL: https://dps-and-delius-preprod.hmpps.service.justice.gov.uk
     API_DATA_COMPLIANCE_ENDPOINT_URL: https://prison-data-compliance-preprod.prison.service.justice.gov.uk
-    KEYWORKER_API_URL: https://keyworker-api-preprod.prison.service.justice.gov.uk/
     CATEGORISATION_UI_URL: https://preprod.offender-categorisation.service.justice.gov.uk/
     USE_OF_FORCE_URL: https://preprod.use-of-force.service.justice.gov.uk
     USE_OF_FORCE_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BHI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FEI,FHI,FKI,FMI,FNI,FSI,FWI,GHI,GMI,GNI,GTI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WTI,WWI,MKI"
@@ -66,7 +65,6 @@ generic-service:
     RESTRICTED_PATIENT_API_URL: https://restricted-patients-api-preprod.hmpps.service.justice.gov.uk/
     HISTORICAL_PRISONER_APPLICATION_URL: https://historical-prisoner-preprod.prison.service.justice.gov.uk
     WHEREABOUTS_MAINTENANCE_MODE: false
-    KEYWORKER_MAINTENANCE_MODE: false
     COVID_UNITS_ENABLED: false
     GET_SOMEONE_READY_FOR_WORK_URL: https://get-ready-for-work-preprod.hmpps.service.justice.gov.uk
     LEARNING_AND_WORK_PROGRESS_URL: https://ciag-induction-preprod.hmpps.service.justice.gov.uk

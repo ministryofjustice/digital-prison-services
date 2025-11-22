@@ -13,7 +13,6 @@ const homepagePage = (title = 'DPS Home page') =>
     useOfForce: () => cy.get('[data-test="use-of-force"]'),
     hdcLicences: () => cy.get('[data-test="hdc-licences"]'),
     establishmentRoll: () => cy.get('[data-test="establishment-roll"]'),
-    manageKeyWorkers: () => cy.get('[data-test="manage-key-workers"]'),
     manageUsers: () => cy.get('[data-test="manage-users"]'),
     categorisation: () => cy.get('[data-test="categorisation"]'),
     secureMove: () => cy.get('[data-test="secure-move"]'),

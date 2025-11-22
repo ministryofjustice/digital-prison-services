@@ -8,8 +8,6 @@ context('Global errors', () => {
       cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [] })
       cy.signIn()
     })
-
-    cy.task('stubKeyworkerMigrated')
   })
 
   it('should render 404 page', () => {

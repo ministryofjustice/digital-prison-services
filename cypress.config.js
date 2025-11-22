@@ -12,7 +12,6 @@ const whereabouts = require('./integration-tests/mockApis/whereabouts')
 const locationsInsidePrisonApi = require('./integration-tests/mockApis/locationsInsidePrisonApi')
 const nomisMapping = require('./integration-tests/mockApis/nomisMapping')
 const tokenverification = require('./integration-tests/mockApis/tokenverification')
-const keyworker = require('./integration-tests/mockApis/keyworker')
 const caseNotes = require('./integration-tests/mockApis/caseNotes')
 const activityResponse = require('./integration-tests/mockApis/responses/activityResponse')
 const {
@@ -71,7 +70,6 @@ module.exports = defineConfig({
             prisonApi.stubHealth(),
             whereabouts.stubHealth(),
             locationsInsidePrisonApi.stubHealth(),
-            keyworker.stubHealth(),
             caseNotes.stubHealth(),
             tokenverification.stubHealth(),
             delius.stubHealth(),
@@ -87,7 +85,6 @@ module.exports = defineConfig({
             users.stubUserMe(username, 12345, 'James Stuart', caseload),
             prisonApi.stubUserCaseloads(caseloads),
             tokenverification.stubVerifyToken(true),
-            keyworker.stubKeyworkerMigrated(),
           ]),
         stubSignInCourt: () =>
           Promise.all([auth.stubSignInCourt(), prisonApi.stubUserCaseloads(), tokenverification.stubVerifyToken(true)]),
@@ -155,7 +152,6 @@ module.exports = defineConfig({
           caseNoteSummary,
           retentionRecord,
           offenderNo,
-          keyworkerDetails,
           complexOffenders = [],
           offenderSearchDetails = [{ restrictedPatient: false, indeterminateSentence: false }],
           caseloads = null,
@@ -167,7 +163,6 @@ module.exports = defineConfig({
             prisonApi.stubUserCaseloads(caseloads),
             prisonApi.stubStaffRoles(),
             prisonApi.stubOffenderImage(),
-            keyworker.stubKeyworkerByCaseloadAndOffenderNo(keyworkerDetails),
             dataComplianceApi.stubRetentionRecord(offenderNo, retentionRecord),
             complexity.stubGetComplexOffenders(complexOffenders),
             offenderSearch.stubPrisonerDetails(offenderSearchDetails),
@@ -488,7 +483,6 @@ module.exports = defineConfig({
         stubGetComplexOffenders: (offenders) => complexity.stubGetComplexOffenders(offenders),
         stubCellMoveHistory: ({ assignmentDate, agencyId, cellMoves }) =>
           prisonApi.stubCellMoveHistory({ assignmentDate, agencyId, cellMoves }),
-        stubKeyworkerMigrated: () => keyworker.stubKeyworkerMigrated(),
         stubGetWhereaboutsAppointments: (appointments) => whereabouts.stubGetWhereaboutsAppointments(appointments),
         stubCreateAppointment: () => whereabouts.stubCreateAppointment(),
         stubGetAppointment: ({ appointment, id, status }) =>

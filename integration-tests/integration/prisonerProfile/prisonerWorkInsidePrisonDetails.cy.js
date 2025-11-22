@@ -218,7 +218,6 @@ context('Work inside prison details page', () => {
 
     beforeEach(() => {
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
-      cy.task('stubKeyworkerMigrated')
     })
 
     it('should render the page with correct data', () => {

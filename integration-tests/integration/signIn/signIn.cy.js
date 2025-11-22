@@ -10,7 +10,6 @@ context('Sign in functionality', () => {
     cy.task('stubUserLocations')
     cy.task('stubStaffRoles', { roles: [] })
     cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })
-    cy.task('stubKeyworkerMigrated')
     cy.task('stubComponentsFail')
   })
 

@@ -25,7 +25,6 @@ export const app = {
   neurodiversityEnabledPrisons: process.env.NEURODIVERSITY_ENABLED_PRISONS || [],
   disableRequestLimiter: process.env.DISABLE_REQUEST_LIMITER ? process.env.DISABLE_REQUEST_LIMITER === 'true' : false,
   whereaboutsMaintenanceMode: process.env.WHEREABOUTS_MAINTENANCE_MODE === 'true' || false,
-  keyworkerMaintenanceMode: process.env.KEYWORKER_MAINTENANCE_MODE === 'true' || false,
   covidUnitsEnabled: process.env.COVID_UNITS_ENABLED === 'true' || false,
   videoConferenceScheduleUrl: process.env.VIDEO_CONFERENCE_SCHEDULE_URL,
   prisonerProfileRedirect: {
@@ -119,10 +118,6 @@ export const apis = {
   datacompliance: {
     url: process.env.API_DATA_COMPLIANCE_ENDPOINT_URL || 'http://localhost:8083/',
     timeoutSeconds: toNumber(process.env.API_DATA_COMPLIANCE_ENDPOINT_TIMEOUT_SECONDS) || 30,
-  },
-  keyworker: {
-    url: process.env.KEYWORKER_API_URL || 'http://localhost:8081/',
-    timeoutSeconds: toNumber(process.env.KEYWORKER_API_TIMEOUT_SECONDS) || 30,
   },
   restrictedPatient: {
     url: process.env.RESTRICTED_PATIENT_API_URL || 'http://localhost:8089/',

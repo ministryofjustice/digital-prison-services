@@ -39,7 +39,6 @@ export default function healthcheckFactory(
   prisonApiUrl,
   whereaboutsUrl,
   deliusIntegrationUrl,
-  keyworkerUrl,
   caseNotesUrl,
   tokenverificationUrl,
   offenderSearchUrl,
@@ -64,10 +63,6 @@ export default function healthcheckFactory(
 
   if (!config.app.whereaboutsMaintenanceMode) {
     checks.push(service('whereabouts', whereaboutsUrl))
-  }
-
-  if (!config.app.keyworkerMaintenanceMode) {
-    checks.push(service('keyworker', keyworkerUrl))
   }
 
   return (callback) =>
