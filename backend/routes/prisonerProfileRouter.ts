@@ -6,26 +6,7 @@ import prisonerProfileRedirect from '../controllers/prisonerProfile/prisonerProf
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({
-  prisonApi,
-  prisonerAlertsApi,
-  keyworkerApi,
-  oauthApi,
-  hmppsManageUsersApi,
-  caseNotesApi,
-  systemOauthClient,
-  dataComplianceApi,
-  pathfinderApi,
-  logError,
-  socApi,
-  whereaboutsApi,
-  complexityApi,
-  offenderSearchApi,
-  curiousApi,
-  incentivesApi,
-  restrictedPatientApi,
-  nonAssociationsApi,
-}) => {
+const controller = ({ prisonApi, systemOauthClient, whereaboutsApi, curiousApi }) => {
   const esweService = EsweService.create(curiousApi, systemOauthClient, prisonApi, whereaboutsApi)
 
   router.get('/', prisonerProfileRedirect({ path: '/' }))
@@ -37,9 +18,10 @@ const controller = ({
   router.get('/case-notes', prisonerProfileRedirect({ path: '/case-notes' }))
   router.get('/sentence-and-release', prisonerProfileRedirect({ path: '/offences' }))
   router.get('/work-and-skills', prisonerProfileRedirect({ path: '/work-and-skills' }))
-  router.get('/work-activities', workInsidePrison({ paginationService, prisonApi, esweService }))
-
   router.get('/cell-history', prisonerProfileRedirect({ path: '/location-details' }))
+
+  // NB: route not migrated https://github.com/ministryofjustice/hmpps-prisoner-profile/blob/2cab81565a749f2b9af2696a5b939c878b1379bc/server/routes/index.ts#L136
+  router.get('/work-activities', workInsidePrison({ paginationService, prisonApi, esweService }))
 
   return router
 }

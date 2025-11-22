@@ -4,7 +4,6 @@ import { logError } from './logError'
 import { probationDocumentsFactory } from './controllers/probationDocuments'
 import { downloadProbationDocumentFactory } from './controllers/downloadProbationDocument'
 import { attendanceStatisticsFactory } from './controllers/attendance/attendanceStatistics'
-import referenceCodesService from './controllers/reference-codes-service'
 import contentController from './controllers/content'
 import selectResidentialLocationController from './controllers/selectResidentialLocation'
 import bulkAppointmentsAddDetailsRouter from './routes/appointments/bulkAppointmentsAddDetailsRouter'
@@ -113,15 +112,10 @@ const setup = ({
   hmppsManageUsersApi,
   deliusIntegrationApi,
   dataComplianceApi,
-  keyworkerApi,
   caseNotesApi,
-  pathfinderApi,
-  socApi,
   offenderSearchApi,
-  complexityApi,
   curiousApi,
   incentivesApi,
-  nonAssociationsApi,
   restrictedPatientApi,
   whereaboutsMaintenanceMode,
   getClientCredentialsTokens,
@@ -342,26 +336,7 @@ const setup = ({
 
   router.use(
     '/prisoner/:offenderNo',
-    prisonerProfileRouter({
-      prisonApi,
-      prisonerAlertsApi,
-      keyworkerApi,
-      oauthApi,
-      hmppsManageUsersApi,
-      caseNotesApi,
-      systemOauthClient,
-      pathfinderApi,
-      dataComplianceApi,
-      logError,
-      socApi,
-      whereaboutsApi,
-      complexityApi,
-      offenderSearchApi,
-      curiousApi,
-      incentivesApi,
-      restrictedPatientApi,
-      nonAssociationsApi,
-    })
+    prisonerProfileRouter({ prisonApi, systemOauthClient, whereaboutsApi, curiousApi })
   )
 
   router.use('/change-someones-cell*', permit(oauthApi, ['CELL_MOVE']), changeSomeonesCellHasMovedRouter())
