@@ -152,12 +152,6 @@ export const apis = {
     url: process.env.ALERTS_API_URL || 'http://localhost:8083',
     timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
   },
-  soc: {
-    url: process.env.SOC_API_URL || '',
-    ui_url: process.env.SOC_UI_URL || '',
-    timeoutSeconds: 10,
-    enabled: process.env.SOC_API_ENABLED === 'true',
-  },
   offenderSearch: {
     url: process.env.OFFENDER_SEARCH_API_URL || 'http://localhost:8085',
     timeoutSeconds: toNumber(process.env.OFFENDER_SEARCH_API_TIMEOUT_SECONDS) || 10,

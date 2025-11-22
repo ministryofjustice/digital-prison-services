@@ -73,14 +73,11 @@ npm run int-test
 - Chromedriver: https://sites.google.com/a/chromium.org/chromedriver
 
 ### Feature toggles
-- **SOC API:**
-This will enable/disable to ability to refer a prisoner to the SOC service and view their SOC profile if already referred.
-To enable the feature, change the environment variable of **SOC_API_ENABLED** to **true**. Any other value will disable the feature. 
 - **Neurodivergence accelerated prisons:**
 To restrict access to neurodivergence information to nominated prisons only. This is a temporary measure agreed with stakeholders and to allow third party curiousApi provider time to rethink their API connections threshold. To enable the feature, add prison codes to the environment variable **NEURODIVERSITY_ENABLED_PRISONS**. For example, to allow access to only Moorland and Bristol: **NEURODIVERSITY_ENABLED_PRISONS**=**MDI,BLI**  If left blank then *all* prisons will have access to the neurodivergence information.
 
 #### Phase Name Banner
-To show the phase name banner add the environment variable ``` SYSTEM_PHASE=ENV_NAME ```. 
+To show the phase name banner add the environment variable ``` SYSTEM_PHASE=ENV_NAME ```.
 This will trigger the banner to become visible showing the given name.
 
 ### Regenerating API typescript types

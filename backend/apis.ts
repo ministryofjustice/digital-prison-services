@@ -11,7 +11,6 @@ import { dataComplianceApiFactory } from './api/dataComplianceApi'
 import { restrictedPatientApiFactory } from './api/restrictedPatientApi'
 import { caseNotesApiFactory } from './api/caseNotesApi'
 import { tokenVerificationApiFactory } from './api/tokenVerificationApi'
-import { socApiFactory } from './api/socApi'
 import { offenderSearchApiFactory } from './api/offenderSearchApi'
 import { complexityApiFactory } from './api/complexityApi'
 import { hmppsManageUsersApiFactory } from './api/hmppsManageUsersApi'
@@ -112,13 +111,6 @@ export const tokenVerificationApi = tokenVerificationApiFactory(
   })
 )
 
-export const socApi = socApiFactory(
-  clientFactory({
-    baseUrl: config.apis.soc.url,
-    timeout: config.apis.soc.timeoutSeconds * 1000,
-  })
-)
-
 export const offenderSearchApi = offenderSearchApiFactory(
   clientFactory({
     baseUrl: config.apis.offenderSearch.url,
@@ -154,7 +146,6 @@ export default {
   caseNotesApi,
   prisonerAlertsApi,
   tokenVerificationApi,
-  socApi,
   offenderSearchApi,
   complexityApi,
   curiousApi,

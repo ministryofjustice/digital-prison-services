@@ -26,8 +26,6 @@ generic-service:
     TOKENVERIFICATION_API_URL: https://token-verification-api.prison.service.justice.gov.uk
     CASENOTES_API_URL: https://offender-case-notes.service.justice.gov.uk/
     PIN_PHONES_URL: https://pcms.prison.service.justice.gov.uk/
-    SOC_UI_URL: https://manage-soc-cases.hmpps.service.justice.gov.uk/
-    SOC_API_URL: https://manage-soc-cases-api.hmpps.service.justice.gov.uk/
     OFFENDER_SEARCH_API_URL: https://prisoner-search.prison.service.justice.gov.uk
     SUPPORT_URL: https://support.hmpps.service.justice.gov.uk/
     BVL_URL: https://book-a-video-link.prison.service.justice.gov.uk

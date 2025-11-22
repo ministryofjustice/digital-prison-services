@@ -27,8 +27,6 @@ generic-service:
     TOKENVERIFICATION_API_URL: https://token-verification-api-preprod.prison.service.justice.gov.uk
     CASENOTES_API_URL: https://preprod.offender-case-notes.service.justice.gov.uk/
     PIN_PHONES_URL: https://pcms-qa.prison.service.justice.gov.uk/
-    SOC_UI_URL: https://manage-soc-cases-preprod.hmpps.service.justice.gov.uk/
-    SOC_API_URL: https://manage-soc-cases-api-preprod.hmpps.service.justice.gov.uk/
     OFFENDER_SEARCH_API_URL: https://prisoner-search-preprod.prison.service.justice.gov.uk
     SUPPORT_URL: https://support-preprod.hmpps.service.justice.gov.uk/
     SYSTEM_PHASE: PRE-PRODUCTION

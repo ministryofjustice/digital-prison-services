@@ -19,7 +19,6 @@ const homepagePage = (title = 'DPS Home page') =>
     checkMyDiary: () => cy.get('[data-test="check-my-diary"]'),
     changeSomeonesCell: () => cy.get('[data-test="change-someones-cell"]'),
     pom: () => cy.get('[data-test="pom"]'),
-    soc: () => cy.get('[data-test="soc"]'),
     feedbackBanner: () => cy.get('[data-test="feedback-banner"]'),
     sendLegalMail: () => cy.get('[data-test="check-rule39-mail"]'),
     welcomePeopleIntoPrison: () => ({
