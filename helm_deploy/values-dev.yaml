@@ -29,8 +29,6 @@ generic-service:
    CHECK_MY_DIARY_URL: https://check-my-diary-dev.prison.service.justice.gov.uk?fromDPS=true
    INCENTIVES_URL: https://incentives-ui-dev.hmpps.service.justice.gov.uk
    INCENTIVES_API_ENDPOINT_URL: https://incentives-api-dev.hmpps.service.justice.gov.uk
-   NON_ASSOCIATIONS_API_ENDPOINT_URL: https://non-associations-api-dev.hmpps.service.justice.gov.uk
-   NON_ASSOCIATIONS_UI_URL: https://non-associations-dev.hmpps.service.justice.gov.uk
    TOKENVERIFICATION_API_URL: https://token-verification-api-dev.prison.service.justice.gov.uk
    CASENOTES_API_URL: https://dev.offender-case-notes.service.justice.gov.uk/
    PATHFINDER_UI_URL: https://dev.pathfinder.service.justice.gov.uk/

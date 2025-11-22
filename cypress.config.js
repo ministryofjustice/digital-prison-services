@@ -7,7 +7,6 @@ const users = require('./integration-tests/mockApis/users')
 const bookAVideoLinkApi = require('./integration-tests/mockApis/bookAVideoLinkApi')
 const prisonApi = require('./integration-tests/mockApis/prisonApi')
 const incentivesApi = require('./integration-tests/mockApis/incentivesApi')
-const nonAssociationsApi = require('./integration-tests/mockApis/nonAssociationsApi')
 const dataComplianceApi = require('./integration-tests/mockApis/dataCompliance')
 const prisonerProfile = require('./integration-tests/mockApis/prisonerProfile')
 const whereabouts = require('./integration-tests/mockApis/whereabouts')
@@ -195,7 +194,6 @@ module.exports = defineConfig({
           iepSummary,
           positiveCaseNotes,
           negativeCaseNotes,
-          prisonerNonAssociations,
           visitsSummary,
           visitBalances,
           todaysEvents,
@@ -209,7 +207,6 @@ module.exports = defineConfig({
             incentivesApi.stubGetIepSummaryForBooking(iepSummary),
             prisonApi.stubPositiveCaseNotes(positiveCaseNotes),
             prisonApi.stubNegativeCaseNotes(negativeCaseNotes),
-            nonAssociationsApi.stubGetPrisonerNonAssociations(prisonerNonAssociations),
             prisonApi.stubVisitsSummary(visitsSummary),
             prisonApi.stubPrisonerVisitBalances(visitBalances),
             prisonApi.stubEventsForToday(todaysEvents),
@@ -228,7 +225,6 @@ module.exports = defineConfig({
             prisonApi.stubPrisonerVisitBalances(null, 500),
             prisonApi.stubEventsForToday([], 500),
             prisonApi.stubProfileInformation(null, 500),
-            nonAssociationsApi.stubGetPrisonerNonAssociations(null, 500),
           ]),
 
         stubPrisonerDetails: (prisonerDetails) => prisonApi.stubPrisonerDetails(prisonerDetails),
@@ -403,8 +399,6 @@ module.exports = defineConfig({
         verifySaveAmendment: caseNotes.verifySaveAmendment,
         stubGetCaseNoteTypes: caseNotes.stubGetCaseNoteTypes,
         stubSaveAmendment: caseNotes.stubSaveAmendment,
-        stubOffenderNonAssociationsLegacy: (response) => nonAssociationsApi.stubOffenderNonAssociationsLegacy(response),
-        stubGetPrisonerNonAssociations: (response) => nonAssociationsApi.stubGetPrisonerNonAssociations(response),
         stubProfessionalContacts: ({
           offenderBasicDetails,
           contacts,
