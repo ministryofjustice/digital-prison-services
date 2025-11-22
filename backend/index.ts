@@ -114,7 +114,6 @@ app.use(
     dataComplianceApi: apis.dataComplianceApi,
     keyworkerApi: apis.keyworkerApi,
     caseNotesApi: apis.caseNotesApi,
-    allocationManagerApi: apis.allocationManagerApi,
     pathfinderApi: apis.pathfinderApi,
     socApi: apis.socApi,
     offenderSearchApi: apis.offenderSearchApi,

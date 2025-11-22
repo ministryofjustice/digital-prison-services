@@ -11,7 +11,6 @@ import { dataComplianceApiFactory } from './api/dataComplianceApi'
 import { keyworkerApiFactory } from './api/keyworkerApi'
 import { restrictedPatientApiFactory } from './api/restrictedPatientApi'
 import { caseNotesApiFactory } from './api/caseNotesApi'
-import { allocationManagerApiFactory } from './api/allocationManagerApi'
 import { tokenVerificationApiFactory } from './api/tokenVerificationApi'
 import { pathfinderApiFactory } from './api/pathfinderApi'
 import { socApiFactory } from './api/socApi'
@@ -124,13 +123,6 @@ export const tokenVerificationApi = tokenVerificationApiFactory(
   })
 )
 
-export const allocationManagerApi = allocationManagerApiFactory(
-  clientFactory({
-    baseUrl: config.apis.allocationManager.url,
-    timeout: config.apis.allocationManager.timeoutSeconds * 1000,
-  })
-)
-
 export const pathfinderApi = pathfinderApiFactory(
   clientFactory({
     baseUrl: config.apis.pathfinder.url,
@@ -195,7 +187,6 @@ export default {
   caseNotesApi,
   prisonerAlertsApi,
   tokenVerificationApi,
-  allocationManagerApi,
   pathfinderApi,
   socApi,
   offenderSearchApi,

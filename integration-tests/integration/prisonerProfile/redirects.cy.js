@@ -1,7 +1,7 @@
 const noCaseloadPage = require('../../pages/prisonerProfile/noCaseloads')
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
-const { businessPrimary, businessNonPrimary, otherContacts } = require('./prisonerProfessionalContacts.cy')
+const { businessPrimary, businessNonPrimary, otherContacts } = require('./prisonerProfessionalContacts')
 
 context('Current prisoner profile should redirect to the new prisoner profile', () => {
   context('When the case load IS Leeds', () => {
@@ -51,10 +51,6 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
             { number: '02222222222', type: 'MOB' },
             { number: '033333333333', type: 'BUS', ext: '123' },
           ],
-          prisonOffenderManagers: {
-            primary_pom: { staffId: 1, name: 'SMITH, JANE' },
-            secondary_pom: { staffId: 2, name: 'DOE, JOHN' },
-          },
         })
       })
 
@@ -68,21 +64,6 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
 
         cy.get('h1').should('contain.text', 'New Prisoner Profile!')
         cy.get('h2').should('contain.text', 'Personal')
-      })
-
-      context('Redirect to overview page', () => {
-        before(() => {
-          cy.task('stubPrisonerProfile', {})
-        })
-
-        it('Link should redirect to the new prisoner profile - overview page', () => {
-          const offenderNo = 'A1234A'
-          cy.visit(`http://localhost:3008/prisoner/${offenderNo}/professional-contacts`)
-          cy.get('[data-test="return-to-profile-overview"]').should('be.visible')
-          cy.get('[data-test="return-to-profile-overview"]').click()
-          cy.get('h1').should('contain.text', 'New Prisoner Profile!')
-          cy.get('h2').should('contain.text', 'Overview')
-        })
       })
     })
 

@@ -41,7 +41,6 @@ describe('Whereabouts maintenance mode flag is true', () => {
       dataComplianceApi: '',
       keyworkerApi: '',
       caseNotesApi: '',
-      allocationManagerApi: '',
       pathfinderApi: '',
       socApi: '',
       offenderSearchApi: '',

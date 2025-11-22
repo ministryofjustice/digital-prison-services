@@ -251,8 +251,6 @@ export const prisonApiFactory = (client) => {
 
   const getPrisonerDetail = (context, bookingId) => get(context, `/api/bookings/${bookingId}`)
 
-  const getPrisonerContacts = (context, bookingId) => get(context, `/api/bookings/${bookingId}/contacts`)
-
   const getPersonAddresses = (context, personId) => get(context, `/api/persons/${personId}/addresses`)
 
   const getPersonEmails = (context, personId) => get(context, `/api/persons/${personId}/emails`)
@@ -345,7 +343,6 @@ export const prisonApiFactory = (client) => {
     getImage,
     getPrisonerProperty,
     getPrisonerDetail,
-    getPrisonerContacts,
     getPersonAddresses,
     getPersonEmails,
     getPersonPhones,

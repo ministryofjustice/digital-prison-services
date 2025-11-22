@@ -33,7 +33,6 @@ generic-service:
    NON_ASSOCIATIONS_UI_URL: https://non-associations-dev.hmpps.service.justice.gov.uk
    TOKENVERIFICATION_API_URL: https://token-verification-api-dev.prison.service.justice.gov.uk
    CASENOTES_API_URL: https://dev.offender-case-notes.service.justice.gov.uk/
-   ALLOCATION_MANAGER_ENDPOINT_URL: https://dev.moic.service.justice.gov.uk/
    PATHFINDER_UI_URL: https://dev.pathfinder.service.justice.gov.uk/
    PATHFINDER_ENDPOINT_API_URL: https://dev-api.pathfinder.service.justice.gov.uk/
    PIN_PHONES_URL: https://pcms-dev.prison.service.justice.gov.uk/
