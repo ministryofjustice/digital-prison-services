@@ -12,7 +12,6 @@ import { keyworkerApiFactory } from './api/keyworkerApi'
 import { restrictedPatientApiFactory } from './api/restrictedPatientApi'
 import { caseNotesApiFactory } from './api/caseNotesApi'
 import { tokenVerificationApiFactory } from './api/tokenVerificationApi'
-import { pathfinderApiFactory } from './api/pathfinderApi'
 import { socApiFactory } from './api/socApi'
 import { offenderSearchApiFactory } from './api/offenderSearchApi'
 import { complexityApiFactory } from './api/complexityApi'
@@ -121,13 +120,6 @@ export const tokenVerificationApi = tokenVerificationApiFactory(
   })
 )
 
-export const pathfinderApi = pathfinderApiFactory(
-  clientFactory({
-    baseUrl: config.apis.pathfinder.url,
-    timeout: config.apis.pathfinder.timeoutSeconds * 1000,
-  })
-)
-
 export const socApi = socApiFactory(
   clientFactory({
     baseUrl: config.apis.soc.url,
@@ -171,7 +163,6 @@ export default {
   caseNotesApi,
   prisonerAlertsApi,
   tokenVerificationApi,
-  pathfinderApi,
   socApi,
   offenderSearchApi,
   complexityApi,

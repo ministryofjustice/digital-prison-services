@@ -11,7 +11,6 @@ const homepagePage = (title = 'DPS Home page') =>
     globalSearch: () => cy.get('[data-test="global-search"]'),
     managePrisonerWhereabouts: () => cy.get('[data-test="manage-prisoner-whereabouts"]'),
     useOfForce: () => cy.get('[data-test="use-of-force"]'),
-    pathfinder: () => cy.get('[data-test="pathfinder"]'),
     hdcLicences: () => cy.get('[data-test="hdc-licences"]'),
     establishmentRoll: () => cy.get('[data-test="establishment-roll"]'),
     manageKeyWorkers: () => cy.get('[data-test="manage-key-workers"]'),

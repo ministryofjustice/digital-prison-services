@@ -157,11 +157,6 @@ export const apis = {
     url: process.env.ALERTS_API_URL || 'http://localhost:8083',
     timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
   },
-  pathfinder: {
-    url: process.env.PATHFINDER_ENDPOINT_API_URL || '',
-    ui_url: process.env.PATHFINDER_UI_URL,
-    timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
-  },
   soc: {
     url: process.env.SOC_API_URL || '',
     ui_url: process.env.SOC_UI_URL || '',
