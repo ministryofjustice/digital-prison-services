@@ -25,7 +25,6 @@ generic-service:
     USE_OF_FORCE_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BHI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FEI,FHI,FKI,FMI,FNI,FSI,FWI,GHI,GMI,GNI,GTI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WTI,WWI,MKI"
     CHECK_MY_DIARY_URL: https://check-my-diary-preprod.prison.service.justice.gov.uk?fromDPS=true
     INCENTIVES_URL: https://incentives-ui-preprod.hmpps.service.justice.gov.uk
-    INCENTIVES_API_ENDPOINT_URL: https://incentives-api-preprod.hmpps.service.justice.gov.uk
     TOKENVERIFICATION_API_URL: https://token-verification-api-preprod.prison.service.justice.gov.uk
     CASENOTES_API_URL: https://preprod.offender-case-notes.service.justice.gov.uk/
     PATHFINDER_UI_URL: https://preprod.pathfinder.service.justice.gov.uk/

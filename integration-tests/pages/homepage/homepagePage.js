@@ -42,12 +42,6 @@ const homepagePage = (title = 'DPS Home page') =>
       link: () => cy.get('[data-test="manage-restricted-patients"] a'),
       description: () => cy.get('[data-test="manage-restricted-patients"] p'),
     }),
-    incentives: () => ({
-      tile: () => cy.get('[data-test="incentives"]'),
-      title: () => cy.get('[data-test="incentives"] h2'),
-      link: () => cy.get('[data-test="incentives"] a'),
-      description: () => cy.get('[data-test="incentives"] p'),
-    }),
     getSomeoneReadyToWork: () => ({
       tile: () => cy.get('[data-test="get-someone-ready-to-work"]'),
       title: () => cy.get('[data-test="get-someone-ready-to-work"] h2'),

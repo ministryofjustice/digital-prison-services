@@ -38,7 +38,6 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
-          iepSummary: {},
           caseNoteSummary: {},
         })
 

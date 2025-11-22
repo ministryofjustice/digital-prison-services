@@ -115,7 +115,6 @@ app.use(
     caseNotesApi: apis.caseNotesApi,
     offenderSearchApi: apis.offenderSearchApi,
     curiousApi: apis.curiousApi,
-    incentivesApi: apis.incentivesApi,
     restrictedPatientApi: apis.restrictedPatientApi,
     nomisMapping: apis.nomisMapping,
     whereaboutsMaintenanceMode: config.app.whereaboutsMaintenanceMode,

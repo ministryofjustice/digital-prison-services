@@ -6,7 +6,6 @@ const auth = require('./integration-tests/mockApis/auth')
 const users = require('./integration-tests/mockApis/users')
 const bookAVideoLinkApi = require('./integration-tests/mockApis/bookAVideoLinkApi')
 const prisonApi = require('./integration-tests/mockApis/prisonApi')
-const incentivesApi = require('./integration-tests/mockApis/incentivesApi')
 const dataComplianceApi = require('./integration-tests/mockApis/dataCompliance')
 const prisonerProfile = require('./integration-tests/mockApis/prisonerProfile')
 const whereabouts = require('./integration-tests/mockApis/whereabouts')
@@ -154,7 +153,6 @@ module.exports = defineConfig({
         stubPrisonerProfileHeaderData: ({
           offenderBasicDetails,
           offenderFullDetails,
-          iepSummary,
           caseNoteSummary,
           retentionRecord,
           offenderNo,
@@ -166,7 +164,6 @@ module.exports = defineConfig({
           Promise.all([
             prisonApi.stubOffenderBasicDetails(offenderBasicDetails),
             prisonApi.stubOffenderFullDetails(offenderFullDetails),
-            incentivesApi.stubGetIepSummaryForBookingIds(iepSummary),
             prisonApi.stubOffenderCaseNoteSummary(caseNoteSummary),
             prisonApi.stubUserCaseloads(caseloads),
             prisonApi.stubStaffRoles(),
@@ -191,7 +188,6 @@ module.exports = defineConfig({
           prisonerDetails,
           sentenceDetails,
           balances,
-          iepSummary,
           positiveCaseNotes,
           negativeCaseNotes,
           visitsSummary,
@@ -204,7 +200,6 @@ module.exports = defineConfig({
             prisonApi.stubPrisonerDetails(prisonerDetails),
             prisonApi.stubPrisonerSentenceDetails(sentenceDetails),
             prisonApi.stubPrisonerBalances(balances),
-            incentivesApi.stubGetIepSummaryForBooking(iepSummary),
             prisonApi.stubPositiveCaseNotes(positiveCaseNotes),
             prisonApi.stubNegativeCaseNotes(negativeCaseNotes),
             prisonApi.stubVisitsSummary(visitsSummary),
@@ -218,7 +213,6 @@ module.exports = defineConfig({
             prisonApi.stubPrisonerDetails([], 500),
             prisonApi.stubPrisonerSentenceDetails(null, 500),
             prisonApi.stubPrisonerBalances(null, 500),
-            incentivesApi.stubGetIepSummaryForBooking(null, 500),
             prisonApi.stubPositiveCaseNotes(null, 500),
             prisonApi.stubNegativeCaseNotes(null, 500),
             prisonApi.stubVisitsSummary(null, 500),
@@ -473,18 +467,14 @@ module.exports = defineConfig({
           whereabouts.stubGetAttendancesForBookings(agencyId, timeSlot, date, data),
         stubDocuments: ({ offenderNo, response }) => delius.stubDocuments(offenderNo, response),
         stubDocument: ({ documentId, content }) => delius.stubDocument(documentId, content),
-        stubGetIepSummaryForBooking: (iepSummary) => incentivesApi.stubGetIepSummaryForBooking(iepSummary),
         stubMovementsIn: ({ agencyId, fromDate, movements }) =>
           prisonApi.stubMovementsIn({ agencyId, fromDate, movements }),
         stubMovementsOut: ({ agencyId, fromDate, movements }) =>
           prisonApi.stubMovementsOut({ agencyId, fromDate, movements }),
-        stubGetIepSummaryForBookingIds: (body) => incentivesApi.stubGetIepSummaryForBookingIds(body),
         stubSystemAlerts: prisonApi.stubSystemAlerts,
         stubEnRoute: ({ agencyId, results }) => prisonApi.stubEnRoute(agencyId, results),
         stubCurrentlyOut: ({ livingUnitId, movements }) => prisonApi.stubCurrentlyOut(livingUnitId, movements),
         stubTotalCurrentlyOut: ({ agencyId, movements }) => prisonApi.stubTotalCurrentlyOut(agencyId, movements),
-        stubGetPrisonIncentiveLevels: (response) => incentivesApi.stubGetPrisonIncentiveLevels(response),
-        stubChangeIepLevel: (body) => incentivesApi.stubChangeIepLevel(body),
         stubGetPrisonerDamageObligations: (response) => prisonApi.stubGetPrisonerDamageObligations(response),
         stubGetTransactionHistory: ({ response, accountCode, transactionType, fromDate, toDate }) =>
           prisonApi.stubGetTransactionHistory({ response, accountCode, transactionType, fromDate, toDate }),

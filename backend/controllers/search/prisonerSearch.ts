@@ -65,7 +65,6 @@ export default ({
   paginationService
   prisonApi
   offenderSearchApi
-  incentivesApi: typeof apis.incentivesApi
   telemetry
   logError
   systemOauthClient

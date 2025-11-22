@@ -11,7 +11,6 @@ describe('Prisoner search', () => {
   const offenderSearchApi = {
     establishmentSearch: jest.fn(),
   }
-  const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
   const paginationService = {
     getPagination: jest.fn(),
   }
@@ -107,7 +106,6 @@ describe('Prisoner search', () => {
     controller = prisonerSearchController({
       paginationService,
       prisonApi,
-      incentivesApi,
       telemetry,
       logError,
       offenderSearchApi,
