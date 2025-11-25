@@ -39,13 +39,9 @@ export default function healthcheckFactory(
   prisonApiUrl,
   whereaboutsUrl,
   deliusIntegrationUrl,
-  keyworkerUrl,
   caseNotesUrl,
-  allocationManagerUrl,
   tokenverificationUrl,
   offenderSearchUrl,
-  complexityUrl,
-  incentivesApiUrl,
   bookAVideoLinkUrl,
   locationsInsidePrisonApiUrl,
   nomisMappingUrl
@@ -55,12 +51,9 @@ export default function healthcheckFactory(
     service('hmppsManageUsers', manageUsersApiUrl),
     service('prisonApi', prisonApiUrl),
     service('delius', deliusIntegrationUrl),
-    service('allocationManager', allocationManagerUrl),
     service('casenotes', caseNotesUrl),
     service('tokenverification', tokenverificationUrl),
     service('offenderSearch', offenderSearchUrl),
-    service('complexity', complexityUrl),
-    service('incentivesApi', incentivesApiUrl),
     service('locationsInsidePrisonApi', locationsInsidePrisonApiUrl),
     service('nomisMapping', nomisMappingUrl),
     service('bookAVideoLinkApi', bookAVideoLinkUrl),
@@ -68,10 +61,6 @@ export default function healthcheckFactory(
 
   if (!config.app.whereaboutsMaintenanceMode) {
     checks.push(service('whereabouts', whereaboutsUrl))
-  }
-
-  if (!config.app.keyworkerMaintenanceMode) {
-    checks.push(service('keyworker', keyworkerUrl))
   }
 
   return (callback) =>

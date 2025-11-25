@@ -5,12 +5,11 @@ import telemetry from '../azure-appinsights'
 
 const router = express.Router()
 
-const controller = ({ prisonApi, offenderSearchApi, incentivesApi, logError, systemOauthClient }) => {
+const controller = ({ prisonApi, offenderSearchApi, logError, systemOauthClient }) => {
   const { index, post } = prisonerSearchController({
     paginationService,
     prisonApi,
     offenderSearchApi,
-    incentivesApi,
     telemetry,
     logError,
     systemOauthClient,

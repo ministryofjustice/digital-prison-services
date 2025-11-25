@@ -18,23 +18,14 @@ generic-service:
     LICENCES_URL: https://licences.prison.service.justice.gov.uk/
     HMPPS_COOKIE_NAME: hmpps-session-preprod
     API_DELIUS_ENDPOINT_URL: https://dps-and-delius.hmpps.service.justice.gov.uk
-    KEYWORKER_API_URL: https://keyworker-api.prison.service.justice.gov.uk/
     CATEGORISATION_UI_URL: https://offender-categorisation.service.justice.gov.uk/
     USE_OF_FORCE_URL: https://use-of-force.service.justice.gov.uk
     USE_OF_FORCE_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BHI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FEI,FHI,FKI,FMI,FNI,FSI,FWI,GHI,GMI,GNI,GTI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WTI,WWI,MKI"
     CHECK_MY_DIARY_URL: https://checkmydiary.service.justice.gov.uk?fromDPS=true
     INCENTIVES_URL: https://incentives-ui.hmpps.service.justice.gov.uk
-    INCENTIVES_API_ENDPOINT_URL: https://incentives-api.hmpps.service.justice.gov.uk
-    NON_ASSOCIATIONS_API_ENDPOINT_URL: https://non-associations-api.hmpps.service.justice.gov.uk
-    NON_ASSOCIATIONS_UI_URL: https://non-associations.hmpps.service.justice.gov.uk
     TOKENVERIFICATION_API_URL: https://token-verification-api.prison.service.justice.gov.uk
     CASENOTES_API_URL: https://offender-case-notes.service.justice.gov.uk/
-    ALLOCATION_MANAGER_ENDPOINT_URL: https://moic.service.justice.gov.uk/
-    PATHFINDER_UI_URL: https://pathfinder.service.justice.gov.uk/
-    PATHFINDER_ENDPOINT_API_URL: https://api.pathfinder.service.justice.gov.uk/
     PIN_PHONES_URL: https://pcms.prison.service.justice.gov.uk/
-    SOC_UI_URL: https://manage-soc-cases.hmpps.service.justice.gov.uk/
-    SOC_API_URL: https://manage-soc-cases-api.hmpps.service.justice.gov.uk/
     OFFENDER_SEARCH_API_URL: https://prisoner-search.prison.service.justice.gov.uk
     SUPPORT_URL: https://support.hmpps.service.justice.gov.uk/
     BVL_URL: https://book-a-video-link.prison.service.justice.gov.uk
@@ -43,8 +34,6 @@ generic-service:
     OMIC_URL: https://manage-key-workers.service.justice.gov.uk
     MANAGE_AUTH_ACCOUNTS_URL: https://manage-users.hmpps.service.justice.gov.uk
     PECS_URL: https://bookasecuremove.service.justice.gov.uk
-    COMPLEXITY_OF_NEED_URI: https://complexity-of-need.hmpps.service.justice.gov.uk
-    PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS: "AGI,BZI,DHI,DWI,ESI,EWI,FHI,LNI,NHI,PFI,SDI,STI"
     PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: "RNI,WLI,MDI,EXI,BXI,PVI,NHI,DMI,BLI,LFI,NSI,SWI,BNI,STI,SPI,SUI,BSI,LWI,CFI,DTI,EEI,FSI,FNI,HMI,LHI,LLI,NMI,ONI,RCI,SKI,WNI,WCI,AGI,BWI,DWI,DHI,ESI,FMI,FHI,HDI,HOI,HHI,HLI,ISI,KVI,LEI,LNI,UPI,RSI,SDI,WWI,WII,WEI,WSI,FYI,UKI,WYI,LYI"
     MANAGE_ADJUDICATIONS_URL: https://manage-adjudications.hmpps.service.justice.gov.uk/
     MANAGE_RESTRICTED_PATIENTS_URL: https://manage-restricted-patients.hmpps.service.justice.gov.uk/
@@ -73,7 +62,6 @@ generic-service:
     RESTRICTED_PATIENT_API_URL: https://restricted-patients-api.hmpps.service.justice.gov.uk/
     HISTORICAL_PRISONER_APPLICATION_URL: https://historical-prisoner.prison.service.justice.gov.uk
     WHEREABOUTS_MAINTENANCE_MODE: false
-    KEYWORKER_MAINTENANCE_MODE: false
     COVID_UNITS_ENABLED: false
     GET_SOMEONE_READY_FOR_WORK_URL: https://get-ready-for-work.hmpps.service.justice.gov.uk
     LEARNING_AND_WORK_PROGRESS_URL: https://ciag-induction.hmpps.service.justice.gov.uk

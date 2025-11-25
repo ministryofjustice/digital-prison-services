@@ -125,11 +125,6 @@ export const prisonApiFactory = (client) => {
       offenderNumbers
     )
 
-  const getVisitsForBookingWithVisitors = (context, bookingId, params) =>
-    get(context, `/api/bookings/${bookingId}/visits-with-visitors?${mapToQueryString(params)}`)
-
-  const getVisitsPrisons = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits/prisons`)
-
   const getAppointments = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
     post(
       context,
@@ -159,15 +154,6 @@ export const prisonApiFactory = (client) => {
 
   const getAssessments = (context, { code, offenderNumbers }) =>
     post(context, `/api/offender-assessments/${code}`, offenderNumbers)
-
-  const getCsraAssessments = (context, offenderNumbers) =>
-    post(context, `/api/offender-assessments/csra/list`, offenderNumbers)
-
-  const getCsraAssessmentsForPrisoner = (context, offenderNumber) =>
-    get(context, `/api/offender-assessments/csra/${offenderNumber}`)
-
-  const getCsraReviewForBooking = (context, bookingId, assessmentSeq) =>
-    get(context, `/api/offender-assessments/csra/${bookingId}/assessment/${assessmentSeq}`)
 
   const searchActivityLocations = (context, agencyId, bookedOnDay, timeSlot) =>
     get(context, `/api/agencies/${agencyId}/eventLocationsBooked?bookedOnDay=${bookedOnDay}&timeSlot=${timeSlot}`)
@@ -246,12 +232,7 @@ export const prisonApiFactory = (client) => {
     }
   }
 
-  const getPrisonerBalances = (context, bookingId) => get(context, `/api/bookings/${bookingId}/balances`)
-
   const getPrisonerDetails = (context, offenderNo) => get(context, `/api/prisoners/${offenderNo}`)
-
-  const getPrisonerVisitBalances = (context, offenderNo) =>
-    get(context, `/api/bookings/offenderNo/${offenderNo}/visit/balances?allowNoContent=true`)
 
   const getPhysicalAttributes = (context, bookingId) => get(context, `/api/bookings/${bookingId}/physicalAttributes`)
 
@@ -269,8 +250,6 @@ export const prisonApiFactory = (client) => {
     get(context, `/api/bookings/${bookingId}/property`)
 
   const getPrisonerDetail = (context, bookingId) => get(context, `/api/bookings/${bookingId}`)
-
-  const getPrisonerContacts = (context, bookingId) => get(context, `/api/bookings/${bookingId}/contacts`)
 
   const getPersonAddresses = (context, personId) => get(context, `/api/persons/${personId}/addresses`)
 
@@ -291,34 +270,16 @@ export const prisonApiFactory = (client) => {
 
   const getProfileInformation = (context, bookingId) => get(context, `/api/bookings/${bookingId}/profileInformation`)
 
-  const getCellAttributes = (context) => get(context, '/api/reference-domains/domains/HOU_UNIT_ATT', 1000)
-
-  const getCellMoveReasonTypes = (context) => get(context, '/api/reference-domains/domains/CHG_HOUS_RSN', 1000)
-
-  const getVisitCompletionReasons = (context) => get(context, '/api/reference-domains/domains/VIS_COMPLETE', 1000)
-  const getVisitCancellationReasons = (context) => get(context, '/api/reference-domains/domains/MOVE_CANC_RS', 1000)
-
   const getScheduledEventsForThisWeek = (context, bookingId) =>
     get(context, `/api/bookings/${bookingId}/events/thisWeek`)
 
   const getScheduledEventsForNextWeek = (context, bookingId) =>
     get(context, `/api/bookings/${bookingId}/events/nextWeek`)
 
-  const getAttributesForLocation = (context, locationId) => get(context, `/api/cell/${locationId}/attributes`)
-
-  const getHistoryForLocation = (context, { locationId, fromDate, toDate }) =>
-    get(context, `/api/cell/${locationId}/history?fromDate=${fromDate}&toDate=${toDate}`)
-
   const getHistoryByDate = (context, { assignmentDate, agencyId }) =>
     get(context, `/api/cell/${agencyId}/history/${assignmentDate}`)
 
   const moveToCellSwap = (context, { bookingId }) => put(context, `/api/bookings/${bookingId}/move-to-cell-swap`, {})
-
-  const getOffenderDamageObligations = (context, offenderNo) =>
-    get(context, `/api/offenders/${offenderNo}/damage-obligations`)
-
-  const getTransactionHistory = (context, offenderNo, params) =>
-    get(context, `/api/offenders/${offenderNo}/transaction-history?${mapToQueryString(params)}`)
 
   const getPrisoners = (context, searchCriteria) => post(context, `/api/prisoners`, searchCriteria)
 
@@ -345,8 +306,6 @@ export const prisonApiFactory = (client) => {
     getActivityList,
     searchActivityLocations,
     getVisits,
-    getVisitsForBookingWithVisitors,
-    getVisitsPrisons,
     getAppointments,
     getActivities,
     getPrisons,
@@ -376,9 +335,7 @@ export const prisonApiFactory = (client) => {
     addSingleAppointment,
     getCaseNoteSummaryByTypes,
     getStaffRoles,
-    getPrisonerBalances,
     getPrisonerDetails,
-    getPrisonerVisitBalances,
     getScheduledActivities,
     getPhysicalAttributes,
     getPhysicalCharacteristics,
@@ -386,34 +343,22 @@ export const prisonApiFactory = (client) => {
     getImage,
     getPrisonerProperty,
     getPrisonerDetail,
-    getPrisonerContacts,
     getPersonAddresses,
     getPersonEmails,
     getPersonPhones,
     getProfileInformation,
     getScheduledEventsForThisWeek,
     getScheduledEventsForNextWeek,
-    getCellAttributes,
-    getCellMoveReasonTypes,
-    getCsraAssessments,
-    getCsraAssessmentsForPrisoner,
-    getCsraReviewForBooking,
-    getAttributesForLocation,
-    getHistoryForLocation,
     getLocationDetails,
     getInmatesAtLocation,
     getInmatesAtLocationPrefix,
     moveToCellSwap,
-    getOffenderDamageObligations,
-    getTransactionHistory,
     getPrisoners,
     getUserDetailsList,
     getHistoryByDate,
     getOffenderActivitiesHistory,
     getMovementReasons,
     getTransfers,
-    getVisitCompletionReasons,
-    getVisitCancellationReasons,
   }
 }
 
