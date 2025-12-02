@@ -4,7 +4,7 @@ const stubDpsHomepage = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPath: '/dpshomepage/',
+      urlPath: '/dpshomepage',
     },
     response: {
       status: 200,
