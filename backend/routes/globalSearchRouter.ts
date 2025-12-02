@@ -2,6 +2,7 @@ import express from 'express'
 import globalSearchController from '../controllers/globalSearch'
 import paginationService from '../services/paginationService'
 import telemetry from '../azure-appinsights'
+import globalSearchRedirect from '../controllers/search/globalSearchRedirect'
 
 const router = express.Router()
 
@@ -15,8 +16,8 @@ const controller = ({ offenderSearchApi, oauthApi, logError }) => {
     logError,
   })
 
-  router.get('/', indexPage)
-  router.get('/results', resultsPage)
+  router.get('/', globalSearchRedirect({ path: 'global-search' }), indexPage)
+  router.get('/results', globalSearchRedirect({ path: 'global-search/results' }), resultsPage)
 
   return router
 }
