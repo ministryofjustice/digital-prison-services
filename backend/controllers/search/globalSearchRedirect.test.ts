@@ -2,7 +2,7 @@ import config from '../../config'
 import globalSearchRedirect from './globalSearchRedirect'
 
 describe('globalSearchRedirect', () => {
-  const homepageUrl = 'http://dpshomepage/'
+  const homepageUrl = 'http://dpshomepage'
   const path = 'some-path'
   const activeCaseLoadId = 'MDI'
 

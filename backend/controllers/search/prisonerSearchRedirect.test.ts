@@ -2,7 +2,7 @@ import config from '../../config'
 import prisonerSearchRedirect from './prisonerSearchRedirect'
 
 describe('prisonerSearchRedirect', () => {
-  const homepageUrl = 'http://dpshomepage/'
+  const homepageUrl = 'http://dpshomepage'
   const activeCaseLoadId = 'MDI'
 
   let req

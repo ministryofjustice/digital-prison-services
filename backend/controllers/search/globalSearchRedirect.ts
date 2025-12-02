@@ -7,7 +7,7 @@ export default ({ path }) => {
     const redirectEnabledPrisons = config.app.homepageRedirect.searchRedirect.enabledPrisons.split(',')
 
     if (redirectEnabledPrisons.includes('***') || redirectEnabledPrisons.includes(activeCaseLoadId)) {
-      return res.redirect(`${config.app.homepageRedirect.url}${path}${query ? `?${query}` : ''}`)
+      return res.redirect(`${config.app.homepageRedirect.url}/${path}${query ? `?${query}` : ''}`)
     }
     return next()
   }
