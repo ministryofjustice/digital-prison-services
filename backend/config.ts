@@ -36,6 +36,9 @@ export const app = {
     enabledPrisons: process.env.HOMEPAGE_REDIRECT_ENABLED_PRISONS || '',
     scheduleRedirectForPrisons: process.env.HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS || '',
     exemptions: process.env.HOMEPAGE_REDIRECT_EXEMPTIONS || '',
+    searchRedirect: {
+      enabledPrisons: process.env.SEARCH_REDIRECT_ENABLED_PRISONS || '',
+    },
   },
   bvlsMasteredAppointmentTypes: ['VLB', 'VLPM'].filter(Boolean),
   bvlsDefaultCourtVideoUrl: process.env.BVLS_DEFAULT_COURT_VIDEO_URL || 'meet.video.justice.gov.uk',

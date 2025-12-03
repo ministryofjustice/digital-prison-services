@@ -16,8 +16,8 @@ context('Establishment roll has moved', () => {
     cy.visit('/establishment-roll')
 
     cy.get('h1').should('contain', 'Establishment roll has moved')
-    cy.get('a[href="http://localhost:9191/dpshomepage//establishment-roll"]').should('contain', 'new web address')
-    cy.get('a[href="http://localhost:9191/dpshomepage//whats-new/establishment-roll-update"]').should(
+    cy.get('a[href="http://localhost:9191/dpshomepage/establishment-roll"]').should('contain', 'new web address')
+    cy.get('a[href="http://localhost:9191/dpshomepage/whats-new/establishment-roll-update"]').should(
       'contain',
       "changes we've made to the Establishment roll"
     )

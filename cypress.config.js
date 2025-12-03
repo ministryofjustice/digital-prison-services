@@ -26,7 +26,12 @@ const curiousApi = require('./integration-tests/mockApis/curiousApi')
 
 const { stubScenario, resetStubs } = require('./integration-tests/mockApis/wiremock')
 const components = require('./integration-tests/mockApis/components')
-const { stubDpsHomepage } = require('./integration-tests/mockApis/dpsHomepage')
+const {
+  stubDpsHomepage,
+  stubGlobalSearchResultsPage,
+  stubGlobalSearchPage,
+  stubPrisonerSearchPage,
+} = require('./integration-tests/mockApis/dpsHomepage')
 const { NonResidentialUsageType } = require('./backend/api/locationsInsidePrisonApi')
 
 const extractOffenderNumbers = (activityList) => {
@@ -380,13 +385,7 @@ module.exports = defineConfig({
         verifySaveAmendment: caseNotes.verifySaveAmendment,
         stubGetCaseNoteTypes: caseNotes.stubGetCaseNoteTypes,
         stubSaveAmendment: caseNotes.stubSaveAmendment,
-        stubProfessionalContacts: ({
-          offenderBasicDetails,
-          contacts,
-          personAddresses,
-          personEmails,
-          personPhones,
-        }) =>
+        stubProfessionalContacts: ({ offenderBasicDetails, contacts, personAddresses, personEmails, personPhones }) =>
           Promise.all([
             prisonApi.stubOffenderBasicDetails(offenderBasicDetails),
             prisonApi.stubPrisonerContacts(contacts),
@@ -500,6 +499,9 @@ module.exports = defineConfig({
         stubComponents: components.stubComponents,
         stubComponentsFail: components.stubComponentsFail,
         stubDpsHomepage: stubDpsHomepage,
+        stubGlobalSearchPage: stubGlobalSearchPage,
+        stubGlobalSearchResultsPage: stubGlobalSearchResultsPage,
+        stubPrisonerSearchPage: stubPrisonerSearchPage,
         stubNomisLocationMapping: nomisMapping.stubNomisLocationMapping,
         matchAppointmentToVideoLinkBooking: bookAVideoLinkApi.matchAppointmentToVideoLinkBooking,
         stubGetPrisonVideoLinkSchedule: bookAVideoLinkApi.stubGetPrisonVideoLinkSchedule,

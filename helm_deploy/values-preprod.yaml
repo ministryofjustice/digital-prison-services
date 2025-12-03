@@ -79,6 +79,7 @@ generic-service:
     CHANGE_SOMEONES_CELL_URL: https://change-someones-cell-preprod.prison.service.justice.gov.uk
     SUNSET_BANNER_ENABLED: true
     ALERTS_API_URL: "https://alerts-api-preprod.hmpps.service.justice.gov.uk"
+    SEARCH_REDIRECT_ENABLED_PRISONS: "LEI"
 
   allowlist:
     palo-alto-prisma-corporate: 128.77.75.64/26
