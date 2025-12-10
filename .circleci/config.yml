@@ -22,12 +22,12 @@ jobs:
       - checkout
       - run:
           name: Update npm
-          command: 'sudo npm i -g npm@9.2.0'
+          command: 'sudo npm install -g npm@9.2.0'
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
-          command: CYPRESS_INSTALL_BINARY=0 npm run setup --no-audit
+          command: CYPRESS_INSTALL_BINARY=0 npm run setup
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
@@ -109,7 +109,7 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: install-npm
-          command: 'npm run setup --no-audit'
+          command: 'npm run setup'
       - run:
           name: Check version
           command: 'npm --version'
