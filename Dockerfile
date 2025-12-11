@@ -1,5 +1,5 @@
 # Stage: base image
-FROM node:22-alpine AS base
+FROM node:24-alpine AS base
 
 LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
@@ -37,7 +37,7 @@ ARG GIT_REF
 ARG GIT_BRANCH
 
 COPY package*.json ./
-RUN CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
+RUN CYPRESS_INSTALL_BINARY=0 npm run setup
 ENV NODE_ENV='production'
 
 COPY . .

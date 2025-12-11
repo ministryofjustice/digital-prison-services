@@ -11,7 +11,7 @@ parameters:
 
   node-version:
     type: string
-    default: 22.14-browsers
+    default: 24.12-browsers
 
 jobs:
   build:
@@ -27,7 +27,7 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
-          command: CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
+          command: CYPRESS_INSTALL_BINARY=0 npm run setup
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
@@ -60,7 +60,7 @@ jobs:
   cypress_integration_tests:
     working_directory: ~/app
     docker:
-      - image: cimg/node:22.21.0-browsers
+      - image: cimg/node:24.12.0-browsers
       - image: redis:8.4
         environment: ALLOW_EMPTY_PASSWORD=yes
     resource_class: xlarge
@@ -109,7 +109,7 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: install-npm
-          command: 'npm ci --no-audit'
+          command: 'npm run setup'
       - run:
           name: Check version
           command: 'npm --version'
