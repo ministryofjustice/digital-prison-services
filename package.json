@@ -6,7 +6,7 @@
   "license": "MIT",
   "engines": {
     "npm": "^11",
-    "node": "^22"
+    "node": "^24"
   },
   "overrides": {
     "glob": ">=10.5.0"
