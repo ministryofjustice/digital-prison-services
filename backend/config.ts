@@ -25,7 +25,6 @@ export const app = {
   neurodiversityEnabledPrisons: process.env.NEURODIVERSITY_ENABLED_PRISONS || [],
   disableRequestLimiter: process.env.DISABLE_REQUEST_LIMITER ? process.env.DISABLE_REQUEST_LIMITER === 'true' : false,
   whereaboutsMaintenanceMode: process.env.WHEREABOUTS_MAINTENANCE_MODE === 'true' || false,
-  keyworkerMaintenanceMode: process.env.KEYWORKER_MAINTENANCE_MODE === 'true' || false,
   covidUnitsEnabled: process.env.COVID_UNITS_ENABLED === 'true' || false,
   videoConferenceScheduleUrl: process.env.VIDEO_CONFERENCE_SCHEDULE_URL,
   prisonerProfileRedirect: {
@@ -37,6 +36,9 @@ export const app = {
     enabledPrisons: process.env.HOMEPAGE_REDIRECT_ENABLED_PRISONS || '',
     scheduleRedirectForPrisons: process.env.HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS || '',
     exemptions: process.env.HOMEPAGE_REDIRECT_EXEMPTIONS || '',
+    searchRedirect: {
+      enabledPrisons: process.env.SEARCH_REDIRECT_ENABLED_PRISONS || '',
+    },
   },
   bvlsMasteredAppointmentTypes: ['VLB', 'VLPM'].filter(Boolean),
   bvlsDefaultCourtVideoUrl: process.env.BVLS_DEFAULT_COURT_VIDEO_URL || 'meet.video.justice.gov.uk',
@@ -120,21 +122,6 @@ export const apis = {
     url: process.env.API_DATA_COMPLIANCE_ENDPOINT_URL || 'http://localhost:8083/',
     timeoutSeconds: toNumber(process.env.API_DATA_COMPLIANCE_ENDPOINT_TIMEOUT_SECONDS) || 30,
   },
-  incentivesApi: {
-    url: process.env.INCENTIVES_API_ENDPOINT_URL || 'http://localhost:8087',
-    timeoutSeconds: toNumber(process.env.INCENTIVES_API_ENDPOINT_TIMEOUT_SECONDS) || 30,
-  },
-  nonAssociationsApi: {
-    url: process.env.NON_ASSOCIATIONS_API_ENDPOINT_URL || 'http://localhost:8088',
-    timeoutSeconds: toNumber(process.env.NON_ASSOCIATIONS_API_ENDPOINT_TIMEOUT_SECONDS) || 30,
-  },
-  nonAssociations: {
-    ui_url: process.env.NON_ASSOCIATIONS_UI_URL,
-  },
-  keyworker: {
-    url: process.env.KEYWORKER_API_URL || 'http://localhost:8081/',
-    timeoutSeconds: toNumber(process.env.KEYWORKER_API_TIMEOUT_SECONDS) || 30,
-  },
   restrictedPatient: {
     url: process.env.RESTRICTED_PATIENT_API_URL || 'http://localhost:8089/',
     timeoutSeconds: toNumber(process.env.RESTRICTED_PATIENT_API_TIMEOUT_SECONDS) || 30,
@@ -168,21 +155,6 @@ export const apis = {
     url: process.env.ALERTS_API_URL || 'http://localhost:8083',
     timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
   },
-  allocationManager: {
-    url: process.env.ALLOCATION_MANAGER_ENDPOINT_URL || '',
-    timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
-  },
-  pathfinder: {
-    url: process.env.PATHFINDER_ENDPOINT_API_URL || '',
-    ui_url: process.env.PATHFINDER_UI_URL,
-    timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
-  },
-  soc: {
-    url: process.env.SOC_API_URL || '',
-    ui_url: process.env.SOC_UI_URL || '',
-    timeoutSeconds: 10,
-    enabled: process.env.SOC_API_ENABLED === 'true',
-  },
   offenderSearch: {
     url: process.env.OFFENDER_SEARCH_API_URL || 'http://localhost:8085',
     timeoutSeconds: toNumber(process.env.OFFENDER_SEARCH_API_TIMEOUT_SECONDS) || 10,
@@ -206,11 +178,6 @@ export const apis = {
   },
   omic: {
     url: process.env.OMIC_URL || 'http://localhost:3001',
-  },
-  complexity: {
-    url: process.env.COMPLEXITY_OF_NEED_URI || '',
-    timeoutSeconds: 10,
-    enabled_prisons: process.env.PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS,
   },
   pinPhones: {
     ui_url: process.env.PIN_PHONES_URL || 'http://localhost:3000/',

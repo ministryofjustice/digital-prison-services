@@ -293,9 +293,10 @@ describe('Add appointment details controller', () => {
       it('should validate maximum length of comments', async () => {
         const comments = [...Array(3601).keys()].map((_) => 'A').join('')
 
+        const tomorrow = moment().add(1, 'day')
         req.body = {
-          date: moment().format(DAY_MONTH_YEAR),
-          startTimeHours: moment().add(1, 'hours').hours(),
+          date: tomorrow.format(DAY_MONTH_YEAR),
+          startTimeHours: tomorrow.add(1, 'hours').hours(),
           startTimeMinutes: '00',
           appointmentType: 'app1',
           location: 1,

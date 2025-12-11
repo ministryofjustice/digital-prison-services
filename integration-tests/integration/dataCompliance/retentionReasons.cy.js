@@ -25,7 +25,6 @@ context('Retention reasons', () => {
         offenderNo,
       },
       offenderFullDetails,
-      iepSummary: {},
       caseNoteSummary: {},
       offenderNo,
     })

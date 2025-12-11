@@ -1,20 +1,18 @@
 $govuk-page-width: 1170px;
 $govuk-font-family-print: 'GDS Transport';
-@import 'node_modules/govuk-frontend/govuk/all';
+@import 'node_modules/govuk-frontend/dist/govuk/all';
 @import 'node_modules/@ministryofjustice/frontend/moj/components/sortable-table/sortable-table';
 @import 'node_modules/@ministryofjustice/frontend/moj/all';
+@import 'node_modules/@ministryofjustice/hmpps-connect-dps-shared-items/dist/assets/dps/components/alert-flag/alert-flag';
 @import 'components/fallback_header';
 @import 'components/header';
 @import 'components/sortable-table';
 @import 'components/print-link';
 @import 'components/offender-basic-details';
-@import 'components/alert-flags';
+@import 'components/flags';
 @import 'components/attendance-stats';
 @import 'components/establishment-roll';
 @import 'components/buttons';
-@import 'components/prisonerProfile/prisoner-visits';
-@import 'components/prisonerProfile/prisoner-schedule';
-@import 'components/prisonerProfile/prisoner-courses-qualifications-details';
 @import 'components/prisonerProfile/prisoner-work-inside-prison-details';
 @import 'components/prisonerProfile/prisoner-change-incentive-level';
 @import 'components/covid/dashboard';
@@ -157,13 +155,6 @@ pre {
 
 .app-\!-font-family-tabular-bold {
   @include govuk-font($size: false, $tabular: true, $weight: bold);
-}
-
-.csra-history-table {
-  table {
-    table-layout: fixed;
-    word-break: break-word;
-  }
 }
 
 .change-someones-cell-has-moved-content {

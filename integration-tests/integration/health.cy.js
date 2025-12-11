@@ -9,18 +9,14 @@ context('Health page reports health correctly', () => {
       // eslint-disable-next-line no-unused-expressions
       expect(response.body.version).to.not.be.empty
       expect(response.body.api).to.deep.equal({
-        allocationManager: 'UP',
         auth: { timeout: 1000, code: 'ECONNABORTED', errno: 'ETIMEDOUT', retries: 2 },
         hmppsManageUsers: 'UP',
         casenotes: 'UP',
         delius: 'UP',
         prisonApi: { timeout: 1000, code: 'ECONNABORTED', errno: 'ETIMEDOUT', retries: 2 },
-        keyworker: 'UP',
         tokenverification: 'UP',
         whereabouts: 'UP',
         offenderSearch: 'UP',
-        complexity: 'UP',
-        incentivesApi: 'UP',
         locationsInsidePrisonApi: 'UP',
         nomisMapping: 'UP',
         bookAVideoLinkApi: 'UP',
@@ -37,18 +33,14 @@ context('Health page reports health correctly', () => {
       // eslint-disable-next-line no-unused-expressions
       expect(response.body.version).to.not.be.empty
       expect(response.body.api).to.deep.equal({
-        allocationManager: 'UP',
         auth: 'UP',
         hmppsManageUsers: 'UP',
         casenotes: 'UP',
         delius: 'UP',
         prisonApi: 'UP',
-        keyworker: 'UP',
         tokenverification: 'UP',
         whereabouts: 'UP',
         offenderSearch: 'UP',
-        complexity: 'UP',
-        incentivesApi: 'UP',
         locationsInsidePrisonApi: 'UP',
         nomisMapping: 'UP',
         bookAVideoLinkApi: 'UP',

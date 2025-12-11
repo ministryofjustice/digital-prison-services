@@ -299,3 +299,35 @@ context('Prisoner search', () => {
     })
   })
 })
+
+context('When the user is in a redirecting caseload', () => {
+  beforeEach(() => {
+    cy.session('hmpps-prisoner-dev', () => {
+      cy.clearCookies()
+      cy.task('resetAndStubTokenVerification')
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'LEI',
+        caseloads: [
+          {
+            caseLoadId: 'LEI',
+            description: 'Leeds',
+            currentlyActive: true,
+          },
+        ],
+      })
+    })
+  })
+
+  it('Redirects to the new search', () => {
+    cy.task('stubPrisonerSearchPage')
+    cy.signIn('/prisoner-search')
+    cy.url().should('include', 'dpshomepage/prisoner-search')
+  })
+
+  it('Redirects to the new search with query params', () => {
+    cy.task('stubPrisonerSearchPage')
+    cy.signIn('/prisoner-search?one=foo&two=bar')
+    cy.url().should('include', 'dpshomepage/prisoner-search?one=foo&two=bar')
+  })
+})

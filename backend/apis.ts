@@ -8,17 +8,10 @@ import { whereaboutsApiFactory } from './api/whereaboutsApi'
 import { locationsInsidePrisonApiFactory } from './api/locationsInsidePrisonApi'
 import { deliusIntegrationApiFactory } from './api/deliusIntegrationApi'
 import { dataComplianceApiFactory } from './api/dataComplianceApi'
-import { keyworkerApiFactory } from './api/keyworkerApi'
 import { restrictedPatientApiFactory } from './api/restrictedPatientApi'
 import { caseNotesApiFactory } from './api/caseNotesApi'
-import { allocationManagerApiFactory } from './api/allocationManagerApi'
 import { tokenVerificationApiFactory } from './api/tokenVerificationApi'
-import { pathfinderApiFactory } from './api/pathfinderApi'
-import { socApiFactory } from './api/socApi'
 import { offenderSearchApiFactory } from './api/offenderSearchApi'
-import { complexityApiFactory } from './api/complexityApi'
-import { incentivesApiFactory } from './api/incentivesApi'
-import { nonAssociationsApiFactory } from './api/nonAssociationsApi'
 import { hmppsManageUsersApiFactory } from './api/hmppsManageUsersApi'
 import { feComponentsApiFactory } from './api/feComponents'
 import { bookAVideoLinkApiFactory } from './api/bookAVideoLinkApi'
@@ -89,13 +82,6 @@ export const dataComplianceApi = dataComplianceApiFactory(
   })
 )
 
-export const keyworkerApi = keyworkerApiFactory(
-  clientFactory({
-    baseUrl: config.apis.keyworker.url,
-    timeout: config.apis.keyworker.timeoutSeconds * 1000,
-  })
-)
-
 export const restrictedPatientApi = restrictedPatientApiFactory(
   clientFactory({
     baseUrl: config.apis.restrictedPatient.url,
@@ -124,52 +110,10 @@ export const tokenVerificationApi = tokenVerificationApiFactory(
   })
 )
 
-export const allocationManagerApi = allocationManagerApiFactory(
-  clientFactory({
-    baseUrl: config.apis.allocationManager.url,
-    timeout: config.apis.allocationManager.timeoutSeconds * 1000,
-  })
-)
-
-export const pathfinderApi = pathfinderApiFactory(
-  clientFactory({
-    baseUrl: config.apis.pathfinder.url,
-    timeout: config.apis.pathfinder.timeoutSeconds * 1000,
-  })
-)
-
-export const socApi = socApiFactory(
-  clientFactory({
-    baseUrl: config.apis.soc.url,
-    timeout: config.apis.soc.timeoutSeconds * 1000,
-  })
-)
-
 export const offenderSearchApi = offenderSearchApiFactory(
   clientFactory({
     baseUrl: config.apis.offenderSearch.url,
     timeout: config.apis.offenderSearch.timeoutSeconds * 1000,
-  })
-)
-
-export const complexityApi = complexityApiFactory(
-  clientFactory({
-    baseUrl: config.apis.complexity.url,
-    timeout: config.apis.complexity.timeoutSeconds * 1000,
-  })
-)
-
-export const incentivesApi = incentivesApiFactory(
-  clientFactory({
-    baseUrl: config.apis.incentivesApi.url,
-    timeout: config.apis.incentivesApi.timeoutSeconds * 1000,
-  })
-)
-
-export const nonAssociationsApi = nonAssociationsApiFactory(
-  clientFactory({
-    baseUrl: config.apis.nonAssociationsApi.url,
-    timeout: config.apis.nonAssociationsApi.timeoutSeconds * 1000,
   })
 )
 
@@ -191,18 +135,11 @@ export default {
   hmppsManageUsersApi,
   deliusIntegrationApi,
   dataComplianceApi,
-  keyworkerApi,
   caseNotesApi,
   prisonerAlertsApi,
   tokenVerificationApi,
-  allocationManagerApi,
-  pathfinderApi,
-  socApi,
   offenderSearchApi,
-  complexityApi,
   curiousApi,
-  incentivesApi,
-  nonAssociationsApi,
   restrictedPatientApi,
   feComponentsApi,
   nomisMapping,
