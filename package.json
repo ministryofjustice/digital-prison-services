@@ -8,6 +8,9 @@
     "npm": "^11",
     "node": "^22"
   },
+  "overrides": {
+    "glob": ">=10.5.0"
+  },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@contentful/rich-text-html-renderer": "^14.1.2",
