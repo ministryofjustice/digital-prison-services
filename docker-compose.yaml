@@ -19,7 +19,7 @@ services:
       - REDIS_PORT=6379
       - PORT=3002
   oauth:
-    image: quay.io/hmpps/hmpps-auth:latest
+    image: ghcr.io/ministryofjustice/hmpps-auth:latest
     container_name: oauth_psh
     ports:
       - '9090:8080'
