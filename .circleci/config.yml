@@ -7,7 +7,7 @@ orbs:
 parameters:
   alerts-slack-channel:
     type: string
-    default: dps_alerts_security
+    default: activities-and-appointments-alerts
 
   node-version:
     type: string
