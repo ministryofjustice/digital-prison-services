@@ -82,7 +82,7 @@ generic-service:
    CHANGE_SOMEONES_CELL_URL: https://change-someones-cell-dev.prison.service.justice.gov.uk
    SUNSET_BANNER_ENABLED: true
    ALERTS_API_URL: "https://alerts-api-dev.hmpps.service.justice.gov.uk"
-   SEARCH_REDIRECT_ENABLED_PRISONS: "LEI"
+   SEARCH_REDIRECT_ENABLED_PRISONS: "ACI,BCI,FBI,HII,HVI,KMI,LFI,LPI,PNI,RSI,TCI,WMI"
 
 generic-prometheus-alerts:
  alertSeverity: hmpps-activities-management-dev
