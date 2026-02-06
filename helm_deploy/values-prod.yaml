@@ -80,7 +80,7 @@ generic-service:
     CHANGE_SOMEONES_CELL_URL: https://change-someones-cell.prison.service.justice.gov.uk
     SUNSET_BANNER_ENABLED: true
     ALERTS_API_URL: "https://alerts-api.hmpps.service.justice.gov.uk"
-    SEARCH_REDIRECT_ENABLED_PRISONS: ""
+    SEARCH_REDIRECT_ENABLED_PRISONS: "ACI,BCI,FBI,HII,HVI,KMI,LFI,LPI,PNI,RSI,TCI,WMI,BMI,BSI,BXI,DGI,FEI,FMI,FSI,HEI,HOI,ISI,LCI,LII,MHI,NMI,NSI,ONI,OWI,PVI,RNI,SFI,SHI,SKI,SNI,SUI,TSI,WSI,WTI,WWI"
 
   allowlist:
     sscl-blackpool: 31.121.5.27/32
