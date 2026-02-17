@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   hmpps: ministryofjustice/hmpps@11.2.0
-  slack: circleci/slack@6.1.2
+  slack: circleci/slack@6.1.3
 
 parameters:
   alerts-slack-channel:
