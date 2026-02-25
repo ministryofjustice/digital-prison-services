@@ -61,7 +61,7 @@ jobs:
     working_directory: ~/app
     docker:
       - image: cimg/node:24.12.0-browsers
-      - image: redis:8.4
+      - image: redis:8.6
         environment: ALLOW_EMPTY_PASSWORD=yes
     resource_class: xlarge
     steps:
