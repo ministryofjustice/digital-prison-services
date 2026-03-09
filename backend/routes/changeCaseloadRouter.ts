@@ -1,13 +1,13 @@
 import express from 'express'
 import changeCaseloadFactory from '../controllers/changeCaseload'
+import changeCaseloadRedirect from '../controllers/changeCaseloadRedirect'
 
 const router = express.Router()
 
 const controller = ({ prisonApi, logError, systemOauthClient }) => {
-  const { index, post } = changeCaseloadFactory(prisonApi, logError, systemOauthClient)
+  const { index } = changeCaseloadFactory(prisonApi, logError, systemOauthClient)
 
-  router.get('/', index)
-  router.post('/', post)
+  router.get('/', changeCaseloadRedirect({ path: 'change-caseload' }), index)
   return router
 }
 
