@@ -31,6 +31,7 @@ const {
   stubGlobalSearchResultsPage,
   stubGlobalSearchPage,
   stubPrisonerSearchPage,
+  stubChangeCaseloadPage
 } = require('./integration-tests/mockApis/dpsHomepage')
 const { NonResidentialUsageType } = require('./backend/api/locationsInsidePrisonApi')
 
@@ -502,6 +503,7 @@ module.exports = defineConfig({
         stubGlobalSearchPage: stubGlobalSearchPage,
         stubGlobalSearchResultsPage: stubGlobalSearchResultsPage,
         stubPrisonerSearchPage: stubPrisonerSearchPage,
+        stubChangeCaseloadPage: stubChangeCaseloadPage,
         stubNomisLocationMapping: nomisMapping.stubNomisLocationMapping,
         matchAppointmentToVideoLinkBooking: bookAVideoLinkApi.matchAppointmentToVideoLinkBooking,
         stubGetPrisonVideoLinkSchedule: bookAVideoLinkApi.stubGetPrisonVideoLinkSchedule,

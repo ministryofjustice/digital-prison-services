@@ -30,11 +30,13 @@ context('Caseload switcher', () => {
 
   context('When user is in a redirecting caseload', () => {
     it('should redirect to the new change caseload page', () => {
+      cy.task('stubChangeCaseloadPage')
       cy.signIn('/change-caseload')
       cy.url().should('include', 'dpshomepage/change-caseload')
     })
 
     it('should redirect to the new change caseload page maintaining search params', () => {
+      cy.task('stubChangeCaseloadPage')
       cy.signIn('/change-caseload?someParam=quimby')
       cy.url().should('include', 'dpshomepage/change-caseload?someParam=quimby')
     })
