@@ -57,7 +57,7 @@ context('Caseload switcher', () => {
       cy.url().should('include', 'dpshomepage/change-caseload')
     })
 
-    it('should redirect to the new change caseload page maintaining search params', () => {
+    it('should redirect to the new change caseload page maintaining params', () => {
       cy.task('stubChangeCaseloadPage')
       cy.signIn('/change-caseload?someParam=quimby')
       cy.url().should('include', 'dpshomepage/change-caseload?someParam=quimby')
