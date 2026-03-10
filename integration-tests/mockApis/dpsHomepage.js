@@ -30,6 +30,21 @@ const stubGlobalSearchPage = () =>
     },
   })
 
+const stubChangeCaseloadPage = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPath: `/dpshomepage/change-caseload`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/html',
+      },
+      body: '<html><body><h1>New change caseload page</h1></body></html>',
+    },
+  })
+
 const stubGlobalSearchResultsPage = () =>
   stubFor({
     request: {
@@ -65,4 +80,5 @@ module.exports = {
   stubGlobalSearchPage,
   stubGlobalSearchResultsPage,
   stubPrisonerSearchPage,
+  stubChangeCaseloadPage,
 }
