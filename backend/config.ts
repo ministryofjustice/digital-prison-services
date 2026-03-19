@@ -1,3 +1,5 @@
+import changeCaseload from './controllers/changeCaseload'
+
 const toNumber = (value: string | undefined): number | undefined => {
   const result = parseInt(value, 10)
   return Number.isSafeInteger(result) && result
@@ -38,6 +40,9 @@ export const app = {
     exemptions: process.env.HOMEPAGE_REDIRECT_EXEMPTIONS || '',
     searchRedirect: {
       enabledPrisons: process.env.SEARCH_REDIRECT_ENABLED_PRISONS || '',
+    },
+    changeCaseloadRedirect: {
+      enabledPrisons: process.env.CHANGE_CASELOAD_REDIRECT_ENABLED_PRISONS || '',
     },
   },
   bvlsMasteredAppointmentTypes: ['VLB', 'VLPM'].filter(Boolean),
