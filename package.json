@@ -203,7 +203,6 @@
     "lint": "node node_modules/eslint/bin/eslint.js src backend --quiet",
     "verify": "npm run lint && npm test",
     "security_audit": "npx audit-ci --config audit-ci.json",
-    "start-test-env": "./start-test-environment.sh",
     "int-test": "cypress run",
     "int-test-no-artefacts": "cypress run --config video=false,screenshotOnRunFailure=false",
     "int-test-ui": "cypress open --e2e --browser chrome",
