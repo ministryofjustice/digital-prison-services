@@ -25,6 +25,7 @@ export default (maxConnections?) =>
 
 const initRedisStoreIfEnabled = ({ host, port, password, production }) => {
   if (!redis.enabled || !host) return null
+  if (!redis.enabled || !host) return null
   const client = redis.createClient({
     host,
     port,
