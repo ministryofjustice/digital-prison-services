@@ -31,13 +31,15 @@ context('Common component functionality', () => {
       count: 0,
       data: [],
     })
-    cy.visit(`/prisoner-search?feature=new`)
+    // using manage whereabout since search redirects to new dps
+    cy.visit(`/manage-prisoner-whereabouts`)
   })
 
   it('Sign in takes user to sign in page', () => {
     cy.task('stubComponents')
-    cy.visit(`/prisoner-search?feature=new`)
-    const page = homepagePage.homepagePage('Prisoner search results')
+    // using manage whereabout since search redirects to new dps
+    cy.visit(`/manage-prisoner-whereabouts`)
+    cy.get('h1').contains('Prisoner whereabouts')
     page.commonComponentsHeader().should('exist')
     page.commonComponentsFooter().should('exist')
   })

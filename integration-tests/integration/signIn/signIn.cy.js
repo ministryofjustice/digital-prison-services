@@ -89,9 +89,10 @@ context('Sign in functionality', () => {
     })
     cy.task('stubUserLocations')
     cy.signIn()
-    cy.visit(`/prisoner-search?feature=new`)
-    const homePage = HomePage.verifyOnPage('Prisoner search results')
-    homePage.fallbackHeaderUserName().contains('J. Stuart')
+    // using manage whereabout since search redirects to new dps
+    cy.visit(`/manage-prisoner-whereabouts`)
+    cy.get('h1').contains('Prisoner whereabouts')
+    cy.get('[data-qa=header-user-name]').contains('J. Stuart')
     cy.task('stubVerifyToken', false)
 
     // can't do a visit here as cypress requires only one domain
@@ -100,9 +101,9 @@ context('Sign in functionality', () => {
     cy.task('stubVerifyToken', true)
     cy.task('stubUserMe', { name: 'Bobby Brown' })
     cy.signIn()
-    cy.visit(`/prisoner-search?feature=new`)
-
-    homePage.fallbackHeaderUserName().contains('B. Brown')
+    cy.visit(`/manage-prisoner-whereabouts`)
+    cy.get('h1').contains('Prisoner whereabouts')
+    cy.get('[data-qa=header-user-name]').contains('B. Brown')
   })
 
   it('Sign in as ordinary user', () => {
