@@ -7,7 +7,7 @@ import prisonerSearchRedirect from '../controllers/search/prisonerSearchRedirect
 const router = express.Router()
 
 const controller = ({ prisonApi, offenderSearchApi, logError, systemOauthClient }) => {
-  const { index, post } = prisonerSearchController({
+  const { post } = prisonerSearchController({
     paginationService,
     prisonApi,
     offenderSearchApi,
@@ -15,7 +15,7 @@ const controller = ({ prisonApi, offenderSearchApi, logError, systemOauthClient 
     logError,
     systemOauthClient,
   })
-  router.get('/', prisonerSearchRedirect(), index)
+  router.get('/', prisonerSearchRedirect())
   router.post('/', post)
 
   return router

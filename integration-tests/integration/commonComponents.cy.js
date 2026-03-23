@@ -40,7 +40,7 @@ context('Common component functionality', () => {
     // using manage whereabout since search redirects to new dps
     cy.visit(`/manage-prisoner-whereabouts`)
     cy.get('h1').contains('Prisoner whereabouts')
-    page.commonComponentsHeader().should('exist')
-    page.commonComponentsFooter().should('exist')
+    cy.get('h1').contains('Common Components Header')
+    cy.get('h1').contains('Common Components Footer')
   })
 })
