@@ -1,12 +1,11 @@
 context('Global Search', () => {
   const caseloads = [
     {
-      caseLoadId: 'ABC',
-      description: 'Anything',
+      caseLoadId: 'LEI',
+      description: 'Leeds',
       currentlyActive: true,
     },
   ]
-  before(() => {})
 
   beforeEach(() => {
     cy.clearCookies()
