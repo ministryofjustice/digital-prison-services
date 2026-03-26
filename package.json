@@ -139,7 +139,7 @@
     "babel-jest": "^29.7.0",
     "babel-loader": "^8.3.0",
     "cheerio": "^1.0.0-rc.10",
-    "copy-webpack-plugin": "^7.0.0",
+    "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^6.11.0",
     "cypress": "^13.17.0",
     "cypress-file-upload": "^5.0.8",
