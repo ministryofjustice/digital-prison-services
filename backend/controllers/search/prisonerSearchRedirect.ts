@@ -1,5 +1,5 @@
-import config from '../../config'
 import qs from 'querystring'
+import config from '../../config'
 
 export const prisonerSearchGetRedirect = (req, res) => {
   const query = req.url.split('?')[1]

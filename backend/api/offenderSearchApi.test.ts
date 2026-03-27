@@ -1,11 +1,24 @@
 import moment from 'moment'
 import nock from 'nock'
-import { PagingContext } from '../controllers/search/prisonerSearch'
 import clientFactory from './oauthEnabledClient'
 
 import { offenderSearchApiFactory } from './offenderSearchApi'
 
 const hostname = 'http://localhost:8080'
+
+// Moved here from deleted search controller file.
+// Only used in unit tests.
+interface PagingContext {
+  requestHeaders: {
+    'page-offset'?: number
+    'page-limit'?: number
+    'sort-fields'?: string
+    'sort-order'?: string
+  }
+  responseHeaders?: {
+    'total-records'?: number
+  }
+}
 
 describe('offender search api tests', () => {
   const client = clientFactory({ baseUrl: `${hostname}`, timeout: 2000 })
