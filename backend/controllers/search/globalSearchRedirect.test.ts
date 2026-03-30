@@ -22,10 +22,19 @@ describe('globalSearchRedirect', () => {
     redirect = globalSearchRedirect({ path })
   })
 
+  it('Does not redirect for users without a caseload (probation)', () => {
+    req = { ...req, url: 'http://localhost:8080/globalSearch', session: { userDetails: {} } }
+    redirect(req, res, next)
+
+    expect(res.redirect).not.toHaveBeenCalled()
+    expect(next).toHaveBeenCalled()
+  })
+
   it('Redirects the user with any caseload', () => {
     req = { ...req, url: 'http://localhost:8080/globalSearch', session: { userDetails: { activeCaseLoadId: 'ABC' } } }
     redirect(req, res, next)
 
+    expect(next).not.toHaveBeenCalled()
     expect(res.redirect).toHaveBeenCalledWith('http://dpshomepage/some-path')
   })
 
@@ -37,6 +46,7 @@ describe('globalSearchRedirect', () => {
     }
     redirect(req, res, next)
 
+    expect(next).not.toHaveBeenCalled()
     expect(res.redirect).toHaveBeenCalledWith('http://dpshomepage/some-path?searchText=quimby')
   })
 })
