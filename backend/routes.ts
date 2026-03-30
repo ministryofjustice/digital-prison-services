@@ -358,7 +358,7 @@ const setup = ({
     })
   )
 
-  router.use('/global-search', globalSearchRouter)
+  router.use('/global-search', globalSearchRouter({ offenderSearchApi, oauthApi, logError }))
 
   router.get('/back-to-start', backToStart())
 
