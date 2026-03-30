@@ -173,10 +173,7 @@ export const apis = {
     enabled_prisons: process.env.WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS || '',
   },
   mercurySubmit: {
-    url: process.env.MERCURY_SUBMIT_URL,
-    privateBetaDate: parseDate(process.env.MERCURY_SUBMIT_PRIVATE_BETA_ENABLED_DATE),
-    enabled_prisons: process.env.MERCURY_SUBMIT_PRIVATE_BETA_ENABLED_PRISONS || '',
-    liveDate: parseDate(process.env.MERCURY_SUBMIT_LIVE_ENABLED_DATE),
+    url: process.env.MERCURY_SUBMIT_URL
   },
   omic: {
     url: process.env.OMIC_URL || 'http://localhost:3001',
