@@ -10,7 +10,7 @@ context('Global search (no caseload)', () => {
 
   beforeEach(() => {
     cy.task('resetAndStubTokenVerification')
-     cy.task('stubSignInNoCaseload', {})
+    cy.task('stubSignInNoCaseload', {})
     cy.task('stubOffenderImage')
   })
 
@@ -111,24 +111,14 @@ context('Global search (no caseload)', () => {
     })
   })
 
-  it('should only link to active prisoners', () => {
+  it('should not link to active prisoners since since user is probation user', () => {
     cy.task('stubGlobalSearch')
     cy.visit('/global-search/results?searchText=quimby')
     const globalSearchPage = GlobalSearchPage.verifyOnResultsPage()
-
-    globalSearchPage.profileLinks().then(($profileLinks) => {
-      cy.get($profileLinks).its('length').should('eq', 1)
-
-      cy.get($profileLinks)
-        .first()
-        .invoke('attr', 'href')
-        .then((href) => {
-          expect(href).to.equal('http://localhost:9191/prisonerprofile/prisoner/A1234AC')
-        })
-    })
+    globalSearchPage.profileLinksShouldNotExist()
   })
 
-  it('should display the missing profile picture', () => {
+  it('should only display the missing profile picture since user is probation user', () => {
     cy.task('stubGlobalSearch')
     cy.visit('/global-search/results?searchText=quimby')
     const globalSearchPage = GlobalSearchPage.verifyOnResultsPage()
@@ -139,7 +129,7 @@ context('Global search (no caseload)', () => {
       cy.get($prisonerImages)
         .first()
         .invoke('attr', 'src')
-        .then((src) => expect(src).to.equal('/app/images/A1234AC/data?imageId=1111111'))
+        .then((src) => expect(src).to.equal('/images/image-missing.jpg'))
 
       cy.get($prisonerImages)
         .last()
@@ -246,106 +236,6 @@ context('Global search (no caseload)', () => {
         location: 'OUT',
         includeAliases: true,
       })
-    })
-  })
-})
-
-context('when user can has INACTIVE_BOOKINGS role (no caseload)', () => {
-  beforeEach(() => {
-    cy.clearCookies()
-    cy.task('reset')
-    cy.task('stubSignInNoCaseload', {
-      roles: ['ROLE_INACTIVE_BOOKINGS'],
-    })
-    cy.signIn('/global-search')
-  })
-
-  it('should link to both active and inactive prisoner profiles', () => {
-    cy.task('stubGlobalSearch')
-    cy.visit('/global-search/results?searchText=quimby')
-    const globalSearchPage = GlobalSearchPage.verifyOnResultsPage()
-
-    globalSearchPage.profileLinks().then(($profileLinks) => {
-      cy.get($profileLinks).its('length').should('eq', 2)
-
-      cy.get($profileLinks)
-        .first()
-        .invoke('attr', 'href')
-        .then((href) => {
-          expect(href).to.equal('http://localhost:9191/prisonerprofile/prisoner/A1234AC')
-        })
-
-      cy.get($profileLinks)
-        .last()
-        .invoke('attr', 'href')
-        .then((href) => {
-          expect(href).to.equal('http://localhost:9191/prisonerprofile/prisoner/A1234AA')
-        })
-    })
-  })
-})
-
-context('when user has LICENCE_RO role (no caseload)', () => {
-  beforeEach(() => {
-    cy.clearCookies()
-    cy.task('reset')
-    cy.task('stubSignInNoCaseload', {
-      roles: ['ROLE_LICENCE_RO'],
-    })
-    cy.signIn('/global-search')
-  })
-
-  it('should have an update licence link for the active prisoner', () => {
-    cy.task('stubGlobalSearch')
-    cy.visit('/global-search/results?searchText=quimby')
-    const globalSearchPage = GlobalSearchPage.verifyOnResultsPage()
-
-    globalSearchPage.updateLicenceLinks().then(($licenceLinks) => {
-      cy.get($licenceLinks).its('length').should('eq', 1)
-
-      cy.get($licenceLinks)
-        .first()
-        .invoke('attr', 'href')
-        .then((href) => {
-          expect(href).to.equal('http://localhost:3003/hdc/taskList/1')
-        })
-    })
-  })
-})
-
-context('when user has LICENCE_RO and LICENCE_VARY roles (no caseload)', () => {
-  beforeEach(() => {
-    cy.clearCookies()
-    cy.task('reset')
-    cy.task('stubSignInNoCaseload', {
-      roles: ['ROLE_LICENCE_RO', 'ROLE_LICENCE_VARY'],
-    })
-    cy.signIn('/global-search')
-  })
-
-  it('should have an update licence link for both active and inactive prisoners', () => {
-    cy.task('stubGlobalSearch')
-    cy.visit('/global-search/results?searchText=quimby')
-    const globalSearchPage = GlobalSearchPage.verifyOnResultsPage()
-
-    globalSearchPage.updateLicenceLinks().then(($licenceLinks) => {
-      cy.get($licenceLinks).its('length').should('eq', 2)
-      cy.get($licenceLinks).eq(0).should('contain.text', 'Update HDC licence')
-      cy.get($licenceLinks).eq(1).should('contain.text', 'Update HDC licence')
-
-      cy.get($licenceLinks)
-        .first()
-        .invoke('attr', 'href')
-        .then((href) => {
-          expect(href).to.equal('http://localhost:3003/hdc/taskList/1')
-        })
-
-      cy.get($licenceLinks)
-        .last()
-        .invoke('attr', 'href')
-        .then((href) => {
-          expect(href).to.equal('http://localhost:3003/hdc/taskList/2')
-        })
     })
   })
 })
