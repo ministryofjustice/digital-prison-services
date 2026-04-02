@@ -82,6 +82,13 @@ module.exports = defineConfig({
             bookAVideoLinkApi.stubHealth(),
           ]),
         getSignInUrl: auth.getSignInUrl,
+        stubSignInNoCaseload: ({ username = 'ITAG_USER', roles = [] }) =>
+          Promise.all([
+            auth.stubSignInNoCaseload(username, undefined, roles),
+            users.stubUserMeNoDefaults(username, 12345, 'James Stuart', undefined),
+            prisonApi.stubUserCaseloads([]),
+            tokenverification.stubVerifyToken(true),
+          ]),
         stubSignIn: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
           Promise.all([
             auth.stubSignIn(username, caseload, roles),

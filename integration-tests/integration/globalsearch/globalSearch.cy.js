@@ -4,13 +4,13 @@ context('Global search (no caseload)', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: undefined })
+    cy.task('stubSignInNoCaseload', {})
     cy.signIn('/global-search')
   })
 
   beforeEach(() => {
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', {})
+     cy.task('stubSignInNoCaseload', {})
     cy.task('stubOffenderImage')
   })
 
@@ -254,9 +254,7 @@ context('when user can has INACTIVE_BOOKINGS role (no caseload)', () => {
   beforeEach(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubSignIn', {
-      username: 'ITAG_USER',
-      caseload: undefined,
+    cy.task('stubSignInNoCaseload', {
       roles: ['ROLE_INACTIVE_BOOKINGS'],
     })
     cy.signIn('/global-search')
@@ -291,9 +289,7 @@ context('when user has LICENCE_RO role (no caseload)', () => {
   beforeEach(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubSignIn', {
-      username: 'ITAG_USER',
-      caseload: undefined,
+    cy.task('stubSignInNoCaseload', {
       roles: ['ROLE_LICENCE_RO'],
     })
     cy.signIn('/global-search')
@@ -321,9 +317,7 @@ context('when user has LICENCE_RO and LICENCE_VARY roles (no caseload)', () => {
   beforeEach(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubSignIn', {
-      username: 'ITAG_USER',
-      caseload: undefined,
+    cy.task('stubSignInNoCaseload', {
       roles: ['ROLE_LICENCE_RO', 'ROLE_LICENCE_VARY'],
     })
     cy.signIn('/global-search')

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { stubUserMe, stubUser } = require('./users')
+const { stubUserMe, stubUserMeNoDefaults, stubUser, stubUserNoDefaults } = require('./users')
 const { stubFor, getMatchingRequests, getFor } = require('./wiremock')
 const { stubStaffRoles, stubUserLocations } = require('./prisonApi')
 const { stubLocationConfig } = require('./whereabouts')
@@ -127,6 +127,18 @@ const stubClientCredentialsRequest = () =>
 module.exports = {
   stubHealth,
   getSignInUrl,
+  stubSignInNoCaseload: (username = 'ITAG_USER', roles = []) =>
+    Promise.all([
+      favicon(),
+      redirect(),
+      signOut(),
+      token(roles),
+      stubUserMeNoDefaults(username, 12345, 'James Stuart', undefined),
+      stubUserNoDefaults(username, undefined),
+      stubUserLocations(),
+      stubStaffRoles(),
+      stubLocationConfig({ agencyId: undefined, response: { enabled: false } }),
+    ]),
   stubSignIn: (username, caseloadId, roles = []) =>
     Promise.all([
       favicon(),
