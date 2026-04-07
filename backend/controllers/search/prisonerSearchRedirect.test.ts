@@ -1,24 +1,18 @@
 import config from '../../config'
-import prisonerSearchRedirect from './prisonerSearchRedirect'
+import { prisonerSearchGetRedirect } from './prisonerSearchRedirect'
 
 describe('prisonerSearchRedirect', () => {
   const homepageUrl = 'http://dpshomepage'
 
   let req
   let res
-  let next
-  let redirect
 
   beforeEach(() => {
     config.app.homepageRedirect.url = homepageUrl
-
-    next = jest.fn()
     res = {
       redirect: jest.fn(),
       render: jest.fn(),
     }
-
-    redirect = prisonerSearchRedirect()
   })
 
   it('Redirects the user with any caseload', () => {
@@ -27,7 +21,7 @@ describe('prisonerSearchRedirect', () => {
       url: 'http://localhost:8080/prisoner-search',
       session: { userDetails: { activeCaseLoadId: 'ABC' } },
     }
-    redirect(req, res, next)
+    prisonerSearchGetRedirect(req, res)
 
     expect(res.redirect).toHaveBeenCalledWith('http://dpshomepage/prisoner-search')
   })
@@ -38,7 +32,7 @@ describe('prisonerSearchRedirect', () => {
       url: 'http://localhost:8080/prisoner-search?searchText=quimby',
       session: { userDetails: { activeCaseLoadId: 'ABC' } },
     }
-    redirect(req, res, next)
+    prisonerSearchGetRedirect(req, res)
 
     expect(res.redirect).toHaveBeenCalledWith('http://dpshomepage/prisoner-search?searchText=quimby')
   })

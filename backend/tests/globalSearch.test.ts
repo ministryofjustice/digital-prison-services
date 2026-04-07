@@ -1,5 +1,4 @@
 import globalSearchController from '../controllers/globalSearch'
-import config from '../config'
 
 describe('Global search', () => {
   const offenderSearchApi = {}
