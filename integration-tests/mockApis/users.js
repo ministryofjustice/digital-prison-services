@@ -15,9 +15,11 @@ const stubHealth = (status = 200) =>
         },
     })
 
-const stubUser = (username, caseload) => {
-    const user = username || 'ITAG_USER'
-    const activeCaseLoadId = caseload || 'MDI'
+const stubUser = (user = 'ITAG_USER', activeCaseLoadId = 'MDI') => {
+    return stubUserNoDefaults(user, activeCaseLoadId);
+}
+
+const stubUserNoDefaults = (user, activeCaseLoadId) => {
     return stubFor({
         request: {
             method: 'GET',
@@ -41,7 +43,11 @@ const stubUser = (username, caseload) => {
     })
 }
 
-const stubUserMe = (username = 'ITAG_USER', staffId = 12345, name = 'James Stuart', caseload = 'MDI') =>
+const stubUserMe = (username = 'ITAG_USER', staffId = 12345, name = 'James Stuart', caseload = 'MDI') => {
+    return stubUserMeNoDefaults(username, staffId, name, caseload);
+}
+
+const stubUserMeNoDefaults = (username, staffId, name, caseload) =>
     getFor({
         urlPath: '/users/users/me',
         body: {
@@ -75,6 +81,8 @@ const stubEmail = (username) =>
 module.exports = {
     stubHealth,
     stubUserMe,
+    stubUserMeNoDefaults,
     stubUser,
+    stubUserNoDefaults,
     stubEmail,
 }

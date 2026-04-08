@@ -344,7 +344,7 @@ const setup = ({
 
   router.use('/attendance-changes', attendanceChangesRouter({ prisonApi, whereaboutsApi, systemOauthClient }))
 
-  router.use('/prisoner-search', prisonerSearchRouter({ prisonApi, offenderSearchApi, logError, systemOauthClient }))
+  router.use('/prisoner-search', prisonerSearchRouter)
 
   router.use(
     '/prisoner/:offenderNo/case-notes/delete-case-note/:caseNoteId/:caseNoteAmendmentId?',
@@ -358,7 +358,7 @@ const setup = ({
     })
   )
 
-  router.use('/global-search', globalSearchRouter())
+  router.use('/global-search', globalSearchRouter({ offenderSearchApi, oauthApi, logError }))
 
   router.get('/back-to-start', backToStart())
 
