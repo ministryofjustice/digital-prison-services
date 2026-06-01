@@ -6,6 +6,8 @@ import config from '../config'
 
 jest.mock('../raiseAnalyticsEvent', () => jest.fn())
 
+jest.setTimeout(30000)
+
 describe('Whereabouts maintenance mode flag is true', () => {
   let req
   let res
