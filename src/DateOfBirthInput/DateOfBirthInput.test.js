@@ -1,13 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import moment from 'moment'
-import { JSDOM } from 'jsdom'
 import DateOfBirthInput from './DateOfBirthInput'
-
-const jsdom = new JSDOM('<!doctype html><html lang="en"><body></body></html>')
-const { window } = jsdom
-global.window = window
-global.document = window.document
 
 describe('DateOfBirthInput', () => {
   it('Should render', () => {
