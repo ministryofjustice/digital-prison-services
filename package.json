@@ -9,7 +9,13 @@
     "node": "^24"
   },
   "overrides": {
-    "glob": ">=10.5.0"
+    "brace-expansion": "^5.0.6",
+    "eslint-plugin-import": {
+      "minimatch": "^8.0.0"
+    },
+    "glob": ">=10.5.0",
+    "qs": "^6.15.2",
+    "serialize-javascript": "~7.0.5"
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
@@ -152,7 +158,6 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-webpack": "^0.13.2",
     "eslint-plugin-cypress": "^2.12.1",
-    "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.6.0",
     "eslint-plugin-no-only-tests": "^2.6.0",
     "eslint-plugin-prettier": "^3.4.1",
