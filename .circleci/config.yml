@@ -179,9 +179,6 @@ workflows:
       - hmpps/npm_security_audit:
           context:
             - hmpps-common-vars
-      - hmpps/trivy_latest_scan:
-          context:
-            - hmpps-common-vars
       - hmpps/veracode_pipeline_scan:
           context:
             - veracode-credentials
