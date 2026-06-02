@@ -171,11 +171,14 @@ context('Houseblock list page list page', () => {
   })
 
   it('Displays the houseblock list', () => {
+    cy.intercept('GET', /.*houseblocklist.*/).as('getHouseBlockList')
+
     cy.visit('/manage-prisoner-whereabouts/select-residential-location')
 
     cy.get('[data-test="period-select"]').select('AM')
     cy.get('[data-test="location-select"]').select('1')
     cy.get('button[type="submit"]').click()
+    cy.wait('@getHouseBlockList')
 
     const houseblockPage = HouseblockPage.verifyOnPage('1')
     houseblockPage.tableRows().should('have.length', 4)
@@ -186,8 +189,8 @@ context('Houseblock list page list page', () => {
 
     houseblockPage
       .tableRows()
-      .find('td:not(no-display):not(.no-print)')
-      .then(($cells) => {
+      .find('td:not(.no-display):not(.no-print)')
+      .should(($cells) => {
         expect($cells.get(0)).to.contain('Anderson, Arthur')
         expect($cells.get(1)).to.contain('A-1-1')
         expect($cells.get(2)).to.contain('A1234AA')
@@ -213,20 +216,18 @@ context('Houseblock list page list page', () => {
     houseblockPage
       .tableRows()
       .find('td.no-print')
-      .then(($cells) => {
+      .should(($cells) => {
         expect($cells.get(2)).to.contain('Received')
       })
 
-    cy.task('stubGetAbsenceReasons')
-
-    cy.get('td[data-qa="other-option"]').then(($inputs) => {
+    cy.get('td[data-qa="other-option"]').should(($inputs) => {
       expect($inputs.get(0).innerText).to.eq('Other')
       expect($inputs.get(1).innerText).to.eq('Unacceptable absence - incentive level warning added')
     })
 
     cy.get('[data-qa="other-message"]').contains('Unacceptable absence - incentive level warning added')
     cy.get('[data-qa="other-message"]').parent().click({ multiple: true })
-    // cy.get('[name="absentReason"]').find(':selected').should('have.text', 'Unacceptable absence')
+    cy.get('[name="absentReason"]').find(':selected').should('have.text', 'Unacceptable absence')
     cy.get('[name="absentSubReason"]').find(':selected').contains('Courses, programmes and interventions')
     cy.get('[name="iep"]:checked').next().should('have.text', 'Yes')
     cy.get('[name="comments"]').contains('Never turned up')
