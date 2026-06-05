@@ -83,17 +83,13 @@ generic-service:
     CHANGE_CASELOAD_REDIRECT_ENABLED_PRISONS: "TODO"
 
   allowlist:
-    sscl-blackpool: 31.121.5.27/32
-    sscl-azure: 51.142.106.199/32
-    sscl-york: 62.6.61.29/32
-    sscl-newcastle: 62.172.79.105/32
-    sscl-newport: 217.38.237.212/32
     palo-alto-prisma-corporate: 128.77.75.64/26
     groups:
       - internal
       - prisons
       - private_prisons
       - police
+      - sscl
 
 # determine which slack channel alerts are sent to, via the correct Alert Manager receiver
 generic-prometheus-alerts:
