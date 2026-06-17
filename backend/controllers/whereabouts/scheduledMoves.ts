@@ -204,6 +204,12 @@ export default ({ prisonApi, prisonerAlertsApi, offenderSearchApi, systemOauthCl
     const date = req.query?.date || moment().format('DD/MM/YYYY')
     const { scheduledType } = req.query
 
+    const checkDate = moment(date, 'DD/MM/YYYY', true)
+    if (!checkDate.isValid()) {
+      res.locals.redirectUrl = '/whereabouts/scheduled-moves'
+      throw new Error(`Invalid date format: ${date}`)
+    }
+
     const [movementReasons, agencyDetails, scheduledMovements] = await Promise.all([
       prisonApi.getMovementReasons(res.locals),
       prisonApi.getAgencyDetails(res.locals, activeCaseLoadId),
