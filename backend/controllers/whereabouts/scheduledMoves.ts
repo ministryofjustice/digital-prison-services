@@ -206,7 +206,7 @@ export default ({ prisonApi, prisonerAlertsApi, offenderSearchApi, systemOauthCl
 
     const checkDate = moment(date, 'DD/MM/YYYY', true)
     if (!checkDate.isValid()) {
-      res.locals.redirectUrl = '/whereabouts/scheduled-moves'
+      res.locals.redirectUrl = '/manage-prisoner-whereabouts/scheduled-moves'
       throw new Error(`Invalid date format: ${date}`)
     }
 
