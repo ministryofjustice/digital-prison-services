@@ -220,18 +220,6 @@ export const prisonApiFactory = (client) => {
   const getCaseNoteSummaryByTypes = (context, params) =>
     get(context, `/api/case-notes/summary?${mapToQueryString(params)}`)
 
-  const getStaffRoles = async (context, staffId, agencyId) => {
-    try {
-      return await get(context, `/api/staff/${staffId}/${agencyId}/roles`)
-    } catch (error) {
-      if (error.status === 403 || error.status === 404) {
-        // can happen for CADM (central admin) users
-        return []
-      }
-      throw error
-    }
-  }
-
   const getPrisonerDetails = (context, offenderNo) => get(context, `/api/prisoners/${offenderNo}`)
 
   const getPhysicalAttributes = (context, bookingId) => get(context, `/api/bookings/${bookingId}/physicalAttributes`)
@@ -334,7 +322,6 @@ export const prisonApiFactory = (client) => {
     getActivitiesAtLocation,
     addSingleAppointment,
     getCaseNoteSummaryByTypes,
-    getStaffRoles,
     getPrisonerDetails,
     getScheduledActivities,
     getPhysicalAttributes,

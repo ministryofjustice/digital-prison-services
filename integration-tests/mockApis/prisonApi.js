@@ -312,20 +312,19 @@ module.exports = {
         jsonBody: summary || [],
       },
     }),
-  stubStaffRoles: (roles, status) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/api/staff/.+?/.+?/roles`,
-      },
-      response: {
-        status: status || 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: roles || [{ role: 'KW' }, { role: 'WORK_READINESS_VIEW' }],
-      },
-    }),
+  //   stubFor({
+  //     request: {
+  //       method: 'GET',
+  //       urlPattern: `/api/staff/.+?/.+?/roles`,
+  //     },
+  //     response: {
+  //       status: status || 200,
+  //       headers: {
+  //         'Content-Type': 'application/json;charset=UTF-8',
+  //       },
+  //       jsonBody: roles || [{ role: 'KW' }, { role: 'WORK_READINESS_VIEW' }],
+  //     },
+  //   }),
   stubAlertTypes: () =>
     stubFor({
       request: {
