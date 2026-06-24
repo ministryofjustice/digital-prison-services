@@ -1,4 +1,4 @@
-const { stubFor, postFor, verifyPut, verifyGet, verifyPosts, resetStub, getMatchingRequests } = require('./wiremock')
+const { stubFor, postFor, verifyPut, verifyPosts, resetStub, getMatchingRequests } = require('./wiremock')
 const alertTypes = require('./responses/alertTypes.json')
 const cellAttributes = require('./responses/cellAttributes.json')
 const assessmentsResponse = require('./responses/assessmentsResponse.json')
@@ -312,19 +312,6 @@ module.exports = {
         jsonBody: summary || [],
       },
     }),
-  //   stubFor({
-  //     request: {
-  //       method: 'GET',
-  //       urlPattern: `/api/staff/.+?/.+?/roles`,
-  //     },
-  //     response: {
-  //       status: status || 200,
-  //       headers: {
-  //         'Content-Type': 'application/json;charset=UTF-8',
-  //       },
-  //       jsonBody: roles || [{ role: 'KW' }, { role: 'WORK_READINESS_VIEW' }],
-  //     },
-  //   }),
   stubAlertTypes: () =>
     stubFor({
       request: {

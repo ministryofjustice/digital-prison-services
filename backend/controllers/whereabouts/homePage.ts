@@ -91,13 +91,13 @@ export default ({ oauthApi }: any) => {
       activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
       appointments.enabled_prisons.split(',').includes(activeCaseLoadId)
     ) {
-      res.redirect('/')
+      return res.redirect('/')
     }
 
     const oauthRoles = userRoles.map((userRole) => userRole.roleCode)
     const roles = [...oauthRoles]
 
-    res.render('whereabouts/whereaboutsHomepage.njk', {
+    return res.render('whereabouts/whereaboutsHomepage.njk', {
       tasks: whereaboutsTasks.filter((task) => task.enabled({ roles })).map(({ enabled, ...task }) => task),
     })
   }

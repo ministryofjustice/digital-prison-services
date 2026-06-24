@@ -14,7 +14,7 @@ export default ({ oauthApi, prisonApi, prisonerAlertsApi, offenderSearchApi, sys
     systemOauthClient,
   })
 
-  router.get('/', homePage({ oauthApi, prisonApi }).index)
+  router.get('/', homePage({ oauthApi }).index)
   router.get('/scheduled-moves', useApiClientCreds({ systemOauthClient }), scheduledMovesController.index)
 
   return router

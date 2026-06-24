@@ -49,15 +49,6 @@ context('Sign in functionality', () => {
     cy.request('/auth/sign-out').its('body').should('contain', 'Sign in')
   })
 
-  it('Page shown when roles are not found', () => {
-    cy.task('stubSignIn', {})
-    cy.signIn()
-    HomePage.verifyOnPage()
-
-    // can't do a visit here as cypress requires only one domain
-    cy.request('/auth/sign-out').its('body').should('contain', 'Sign in')
-  })
-
   it('Token verification failure takes user to sign in page', () => {
     cy.task('stubSignIn', {})
     cy.signIn()

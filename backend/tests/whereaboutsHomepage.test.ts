@@ -9,6 +9,7 @@ describe('Homepage', () => {
   const oauthApi = {
     userRoles: jest.fn(),
   }
+  const prisonApi = {}
   const prisonerAlertsApi = {}
   const offenderSearchApi = {}
 
@@ -38,7 +39,10 @@ describe('Homepage', () => {
     next()
   })
 
-  app.use('/', whereaboutsHomepage({ prisonerAlertsApi, oauthApi, offenderSearchApi, systemOauthClient: {} }))
+  app.use(
+    '/',
+    whereaboutsHomepage({ prisonApi, prisonerAlertsApi, oauthApi, offenderSearchApi, systemOauthClient: {} })
+  )
 
   const getTasks = (excluding: string[] = []) =>
     whereaboutsTasks.filter(({ id }) => !excluding.includes(id)).map(({ enabled, ...rest }) => rest)
