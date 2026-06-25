@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { stubUserMe, stubUserMeNoDefaults, stubUser, stubUserNoDefaults } = require('./users')
-const { stubFor, getMatchingRequests, getFor } = require('./wiremock')
-const { stubStaffRoles, stubUserLocations } = require('./prisonApi')
+const { stubFor, getMatchingRequests } = require('./wiremock')
+const { stubUserLocations } = require('./prisonApi')
 const { stubLocationConfig } = require('./whereabouts')
 
 const createToken = (roles) => {
@@ -136,7 +136,6 @@ module.exports = {
       stubUserMeNoDefaults(username, 12345, 'James Stuart', undefined),
       stubUserNoDefaults(username, undefined),
       stubUserLocations(),
-      stubStaffRoles(),
       stubLocationConfig({ agencyId: undefined, response: { enabled: false } }),
     ]),
   stubSignIn: (username, caseloadId, roles = []) =>
@@ -148,7 +147,6 @@ module.exports = {
       stubUserMe(username, 12345, 'James Stuart', caseloadId),
       stubUser(username, caseloadId),
       stubUserLocations(),
-      stubStaffRoles(),
       stubLocationConfig({ agencyId: caseloadId, response: { enabled: false } }),
     ]),
   stubSignInCourt: () =>

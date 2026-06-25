@@ -9,9 +9,7 @@ describe('Homepage', () => {
   const oauthApi = {
     userRoles: jest.fn(),
   }
-  const prisonApi = {
-    getStaffRoles: jest.fn(),
-  }
+  const prisonApi = {}
   const prisonerAlertsApi = {}
   const offenderSearchApi = {}
 
@@ -27,7 +25,6 @@ describe('Homepage', () => {
       },
     }
     res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
-    prisonApi.getStaffRoles = jest.fn().mockResolvedValue([])
     oauthApi.userRoles = jest.fn().mockReturnValue([])
   })
 

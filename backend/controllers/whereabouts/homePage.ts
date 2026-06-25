@@ -82,24 +82,21 @@ export const whereaboutsTasks: TaskType[] = [
   },
 ]
 
-export default ({ oauthApi, prisonApi }: any) => {
+export default ({ oauthApi }: any) => {
   const index = async (req, res) => {
-    const { activeCaseLoadId, staffId } = req.session.userDetails
+    const { activeCaseLoadId } = req.session.userDetails
     const userRoles = oauthApi.userRoles(res.locals)
-    const staffRoles = await prisonApi.getStaffRoles(res.locals, staffId, activeCaseLoadId)
 
     if (
       activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
       appointments.enabled_prisons.split(',').includes(activeCaseLoadId)
     ) {
-      res.redirect('/')
+      return res.redirect('/')
     }
 
-    const oauthRoles = userRoles.map((userRole) => userRole.roleCode)
-    const prisonStaffRoles = staffRoles.map((staffRole) => staffRole.role)
-    const roles = [...oauthRoles, ...prisonStaffRoles]
+    const roles = userRoles.map((userRole) => userRole.roleCode)
 
-    res.render('whereabouts/whereaboutsHomepage.njk', {
+    return res.render('whereabouts/whereaboutsHomepage.njk', {
       tasks: whereaboutsTasks.filter((task) => task.enabled({ roles })).map(({ enabled, ...task }) => task),
     })
   }

@@ -8,7 +8,6 @@ context('Sign in functionality', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubUserLocations')
-    cy.task('stubStaffRoles', { roles: [] })
     cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })
     cy.task('stubComponentsFail')
   })
@@ -43,26 +42,6 @@ context('Sign in functionality', () => {
 
   it('Sign in takes user to sign in page', () => {
     cy.task('stubSignIn', {})
-    cy.signIn()
-    HomePage.verifyOnPage()
-
-    // can't do a visit here as cypress requires only one domain
-    cy.request('/auth/sign-out').its('body').should('contain', 'Sign in')
-  })
-
-  it('Page shown when roles are unauthorised', () => {
-    cy.task('stubSignIn', {})
-    cy.task('stubStaffRoles', { roles: [], status: 403 })
-    cy.signIn()
-    HomePage.verifyOnPage()
-
-    // can't do a visit here as cypress requires only one domain
-    cy.request('/auth/sign-out').its('body').should('contain', 'Sign in')
-  })
-
-  it('Page shown when roles are not found', () => {
-    cy.task('stubSignIn', {})
-    cy.task('stubStaffRoles', { roles: [], status: 404 })
     cy.signIn()
     HomePage.verifyOnPage()
 
