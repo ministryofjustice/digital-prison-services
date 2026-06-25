@@ -94,8 +94,7 @@ export default ({ oauthApi }: any) => {
       return res.redirect('/')
     }
 
-    const oauthRoles = userRoles.map((userRole) => userRole.roleCode)
-    const roles = [...oauthRoles]
+    const roles = userRoles.map((userRole) => userRole.roleCode)
 
     return res.render('whereabouts/whereaboutsHomepage.njk', {
       tasks: whereaboutsTasks.filter((task) => task.enabled({ roles })).map(({ enabled, ...task }) => task),
