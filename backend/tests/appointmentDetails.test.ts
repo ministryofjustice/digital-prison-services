@@ -1,6 +1,5 @@
-import { makeNotFoundError } from './helpers'
 import { prisonApiFactory } from '../api/prisonApi'
-
+import { hmppsManageUsersApiFactory } from '../api/hmppsManageUsersApi'
 import appointmentDetails from '../controllers/appointmentDetails'
 import appointmentDetailsServiceFactory from '../services/appointmentDetailsService'
 import { oauthApiFactory } from '../api/oauthApi'
@@ -26,6 +25,7 @@ describe('appointment details', () => {
 
   const oauthApi: Partial<ReturnType<typeof oauthApiFactory>> = {}
   const prisonApi: Partial<ReturnType<typeof prisonApiFactory>> = {}
+  const hmppsManageUsersApi: Partial<ReturnType<typeof hmppsManageUsersApiFactory>> = {}
   const whereaboutsApi: Partial<ReturnType<typeof whereaboutsApiFactory>> = {}
   const videoLinkBookingService: Partial<ReturnType<typeof VideoLinkBookingService>> = {}
   const locationsInsidePrisonApi: Partial<ReturnType<typeof locationsInsidePrisonApiFactory>> = {}
@@ -59,9 +59,15 @@ describe('appointment details', () => {
       { code: 'GYM', description: 'Gym' },
       { description: 'Video link booking', code: 'VLB' },
     ])
-    prisonApi.getStaffDetails = jest
-      .fn()
-      .mockResolvedValue({ username: 'TEST_USER', firstName: 'TEST', lastName: 'USER' })
+
+    hmppsManageUsersApi.userDetails = jest.fn().mockResolvedValue({
+      username: 'USER_1',
+      active: false,
+      name: 'John Smith',
+      authSource: 'nomis',
+      userId: '231232',
+      uuid: '12345-6789-abc1234',
+    })
 
     whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(testAppointment)
 
@@ -88,6 +94,7 @@ describe('appointment details', () => {
 
     appointmentDetailsService = appointmentDetailsServiceFactory({
       prisonApi: prisonApi as ReturnType<typeof prisonApiFactory>,
+      hmppsManageUsersApi: hmppsManageUsersApi as ReturnType<typeof hmppsManageUsersApiFactory>,
       videoLinkBookingService: videoLinkBookingService as ReturnType<typeof VideoLinkBookingService>,
       locationsInsidePrisonApi: locationsInsidePrisonApi as ReturnType<typeof locationsInsidePrisonApiFactory>,
       nomisMapping: nomisMapping as ReturnType<typeof nomisMappingClientFactory>,
@@ -116,11 +123,11 @@ describe('appointment details', () => {
         NonResidentialUsageType.APPOINTMENT
       )
       expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
-      expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'TEST_USER')
+      expect(hmppsManageUsersApi.userDetails).toHaveBeenCalledWith(res.locals, 'TEST_USER')
     })
 
     it('should fall back to the user id if there are errors fetching the user details', async () => {
-      prisonApi.getStaffDetails = jest.fn().mockRejectedValue(makeNotFoundError())
+      hmppsManageUsersApi.userDetails = jest.fn().mockResolvedValue(null)
 
       await controller(req, res)
 
@@ -143,7 +150,7 @@ describe('appointment details', () => {
         appointmentAmendLink: false, // Not allowed to edit non-vlb appointments
         additionalDetails: {
           comments: 'Not entered',
-          addedBy: 'Test User',
+          addedBy: 'John Smith',
         },
         basicDetails: {
           location: 'Gymnasium',

@@ -376,6 +376,7 @@ const setup = ({
           locationsInsidePrisonApi,
           nomisMapping,
           getClientCredentialsTokens,
+          hmppsManageUsersApi,
         }),
         videoLinkBookingService,
         getClientCredentialsTokens,
@@ -393,6 +394,7 @@ const setup = ({
           locationsInsidePrisonApi,
           nomisMapping,
           getClientCredentialsTokens,
+          hmppsManageUsersApi,
         }),
         videoLinkBookingService,
         getClientCredentialsTokens,
@@ -427,6 +429,7 @@ const setup = ({
           locationsInsidePrisonApi,
           nomisMapping,
           getClientCredentialsTokens,
+          hmppsManageUsersApi,
         }),
         systemOauthClient,
       })
