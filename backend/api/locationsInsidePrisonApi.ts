@@ -19,7 +19,7 @@ export interface LocationGroup {
   }
 }
 
-export const enum NonResidentialUsageType {
+export const enum ServiceType {
   ADJUDICATION_HEARING = 'ADJUDICATION_HEARING',
   APPOINTMENT = 'APPOINTMENT',
   MOVEMENT = 'MOVEMENT',
@@ -56,18 +56,18 @@ export const locationsInsidePrisonApiFactory = (client: OauthApiClient) => {
   const getLocationByKey = (systemContext, locationKey): Promise<Location> =>
     getWith404AsNull(systemContext, `/locations/key/${locationKey}`)
 
-  async function getLocationsByNonResidentialUsageType(
+  async function getLocationsByServiceType(
     systemContext,
     prisonId: string,
-    usageType?: NonResidentialUsageType
+    serviceType?: ServiceType
   ): Promise<Location[]> {
-    logger.info(`getting locations for prison ${prisonId} and usageType ${usageType}`)
+    logger.info(`getting locations for prison ${prisonId} and serviceType ${serviceType}`)
     return (
       await client.get(
         { ...systemContext, customRequestHeaders: { 'Sort-Fields': 'userDescription' } },
-        `/locations/non-residential/prison/${prisonId}/service/${usageType}`,
+        `/locations/non-residential/prison/${prisonId}/service/${serviceType}`,
         {},
-        'formatLocalName=true&sortByLocalName=true'
+        'formatLocalName=true&sortByLocalName=true&filterParents=false'
       )
     ).body
   }
@@ -82,7 +82,7 @@ export const locationsInsidePrisonApiFactory = (client: OauthApiClient) => {
     getSearchGroups,
     getLocationById,
     getLocationByKey,
-    getLocationsByNonResidentialUsageType,
+    getLocationsByServiceType,
   }
 }
 

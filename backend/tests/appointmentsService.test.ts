@@ -1,6 +1,6 @@
 import { appointmentsServiceFactory } from '../services/appointmentsService'
 import { prisonApiFactory } from '../api/prisonApi'
-import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../api/locationsInsidePrisonApi'
+import { locationsInsidePrisonApiFactory, ServiceType } from '../api/locationsInsidePrisonApi'
 import { nomisMappingClientFactory } from '../api/nomisMappingClient'
 
 describe('Appointments service', () => {
@@ -40,7 +40,7 @@ describe('Appointments service', () => {
   let service
 
   beforeEach(() => {
-    locationsInsidePrisonApi.getLocationsByNonResidentialUsageType = jest.fn()
+    locationsInsidePrisonApi.getLocationsByServiceType = jest.fn()
     prisonApi.getAppointmentTypes = jest.fn()
     prisonApi.addAppointments = jest.fn()
 
@@ -54,10 +54,10 @@ describe('Appointments service', () => {
   it('should make a request for appointment locations and types', async () => {
     await service.getAppointmentOptions(locals, context, agency)
 
-    expect(locationsInsidePrisonApi.getLocationsByNonResidentialUsageType).toHaveBeenCalledWith(
+    expect(locationsInsidePrisonApi.getLocationsByServiceType).toHaveBeenCalledWith(
       context,
       agency,
-      NonResidentialUsageType.APPOINTMENT
+      ServiceType.APPOINTMENT
     )
     expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(locals)
   })
@@ -69,7 +69,7 @@ describe('Appointments service', () => {
   })
 
   it('should map appointment types and locations correctly', async () => {
-    ;(locationsInsidePrisonApi.getLocationsByNonResidentialUsageType as jest.Mock).mockReturnValue(locationTypes)
+    ;(locationsInsidePrisonApi.getLocationsByServiceType as jest.Mock).mockReturnValue(locationTypes)
     ;(prisonApi.getAppointmentTypes as jest.Mock).mockReturnValue(appointmentTypes)
 
     const response = await service.getAppointmentOptions(context, agency)
