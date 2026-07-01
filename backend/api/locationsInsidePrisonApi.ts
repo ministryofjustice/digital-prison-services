@@ -65,7 +65,7 @@ export const locationsInsidePrisonApiFactory = (client: OauthApiClient) => {
     return (
       await client.get(
         { ...systemContext, customRequestHeaders: { 'Sort-Fields': 'userDescription' } },
-        `/locations/prison/${prisonId}/non-residential-usage-type/${usageType}`,
+        `/locations/non-residential/prison/${prisonId}/service/${usageType}`,
         {},
         'formatLocalName=true&sortByLocalName=true'
       )
