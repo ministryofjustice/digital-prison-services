@@ -6,30 +6,30 @@ const hostname = 'http://localhost:8080'
 const client = clientFactory({ baseUrl: `${hostname}`, timeout: 2000 })
 const hmppsManageUsersApi = hmppsManageUsersApiFactory(client)
 const context = {
-  access_token:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJhdXRob3JpdGllcyI6WyJST0xFX1RFU1QiXX0.brDYlcg4pVOcz5hp1ejVWLNYKZsYYWT4vz_N52m0JzA',
+  access_token: 'token',
 }
 
 describe('hmppsManageUsersApi tests', () => {
   beforeEach(() => {
     nock.cleanAll()
+    jest.clearAllMocks()
   })
 
   describe('currentUser', () => {
     const userDetails = { bob: 'hello there' }
-    let actual
 
     beforeEach(() => {
-      client.get = jest.fn().mockReturnValue({
-        then: () => userDetails,
+      client.get = jest.fn().mockResolvedValue({
+        body: userDetails,
       })
-      actual = hmppsManageUsersApi.currentUser(context)
     })
 
-    it('should return user details from endpoint', () => {
-      expect(actual).toEqual(userDetails)
+    it('should return user details from endpoint', async () => {
+      const result = await hmppsManageUsersApi.currentUser(context)
+      expect(result).toEqual(userDetails)
     })
-    it('should call user endpoint', () => {
+    it('should call user endpoint', async () => {
+      await hmppsManageUsersApi.currentUser(context)
       expect(client.get).toBeCalledWith(context, '/users/me')
     })
   })
@@ -37,39 +37,62 @@ describe('hmppsManageUsersApi tests', () => {
   describe('userDetails', () => {
     const userDetails = { bob: 'hello there' }
     const username = 'bob'
-    let actual
 
     beforeEach(() => {
-      client.get = jest.fn().mockReturnValue({
-        then: () => userDetails,
+      client.get = jest.fn().mockResolvedValue({
+        body: userDetails,
+        headers: {},
       })
-      actual = hmppsManageUsersApi.userDetails(context, username)
     })
 
-    it('should return user details from endpoint', () => {
-      expect(actual).toEqual(userDetails)
+    it('should return user details from endpoint', async () => {
+      const result = await hmppsManageUsersApi.userDetails(context, username)
+      expect(result).toEqual(userDetails)
     })
-    it('should call user endpoint', () => {
-      expect(client.get).toBeCalledWith(context, `/users/${username}`)
+
+    it('should call user endpoint with correct args', async () => {
+      await hmppsManageUsersApi.userDetails(context, username)
+
+      expect(client.get).toHaveBeenCalledWith(context, `/users/${username}`, {
+        resultsLimit: undefined,
+        retryOverride: undefined,
+      })
+    })
+
+    it('should return null when API returns 404', async () => {
+      client.get = jest.fn().mockRejectedValue({
+        response: { status: 404 },
+      })
+
+      const result = await hmppsManageUsersApi.userDetails(context, username)
+
+      expect(result).toBeNull()
+    })
+
+    it('should throw error for non-404 errors', async () => {
+      const error = { response: { status: 500 } }
+      client.get = jest.fn().mockRejectedValue(error)
+
+      await expect(hmppsManageUsersApi.userDetails(context, username)).rejects.toEqual(error)
     })
   })
 
   describe('userEmail', () => {
     const userEmail = { email: 'bob@local' }
     const username = 'bob'
-    let actual
 
     beforeEach(() => {
-      client.get = jest.fn().mockReturnValue({
-        then: () => userEmail,
+      client.get = jest.fn().mockResolvedValue({
+        body: userEmail,
       })
-      actual = hmppsManageUsersApi.userEmail(context, username)
     })
 
-    it('should return user details from endpoint', () => {
-      expect(actual).toEqual(userEmail)
+    it('should return user details from endpoint', async () => {
+      const result = await hmppsManageUsersApi.userEmail(context, username)
+      expect(result).toEqual(userEmail)
     })
-    it('should call user endpoint', () => {
+    it('should call user endpoint', async () => {
+      await hmppsManageUsersApi.userEmail(context, username)
       expect(client.get).toBeCalledWith(context, `/users/${username}/email`)
     })
   })

@@ -1,8 +1,9 @@
 import moment from 'moment'
 import { endRecurringEndingDate, repeatTypes } from '../shared/appointmentConstants'
-import { formatName, getDate, getTime, getWith404AsNull, toFullCourtLink } from '../utils'
+import { getDate, getTime, getWith404AsNull, toFullCourtLink } from '../utils'
 import { app } from '../config'
 import { prisonApiFactory } from '../api/prisonApi'
+import { hmppsManageUsersApiFactory } from '../api/hmppsManageUsersApi'
 import VideoLinkBookingService from './videoLinkBookingService'
 import { locationsInsidePrisonApiFactory, ServiceType } from '../api/locationsInsidePrisonApi'
 import { nomisMappingClientFactory } from '../api/nomisMappingClient'
@@ -15,17 +16,19 @@ export default ({
   locationsInsidePrisonApi,
   nomisMapping,
   getClientCredentialsTokens,
+  hmppsManageUsersApi,
 }: {
   prisonApi: ReturnType<typeof prisonApiFactory>
   videoLinkBookingService: ReturnType<typeof VideoLinkBookingService>
   locationsInsidePrisonApi: ReturnType<typeof locationsInsidePrisonApiFactory>
   nomisMapping: ReturnType<typeof nomisMappingClientFactory>
   getClientCredentialsTokens: typeof GetClientCredentialsToken
+  hmppsManageUsersApi: ReturnType<typeof hmppsManageUsersApiFactory>
 }) => {
   const getAddedByUser = async (res, userId) => {
-    const staffDetails = await getWith404AsNull(prisonApi.getStaffDetails(res.locals, userId))
+    const staffDetails = await getWith404AsNull(hmppsManageUsersApi.userDetails(res.locals, userId))
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'firstName' does not exist on type 'unkno... Remove this comment to see the full error message
-    return (staffDetails && formatName(staffDetails.firstName, staffDetails.lastName)) || userId
+    return staffDetails?.name || userId
   }
 
   const fetchVlbAppointments = (videoLinkBooking) => {

@@ -5,6 +5,7 @@ const { defineConfig } = require('cypress')
 const auth = require('./integration-tests/mockApis/auth')
 const users = require('./integration-tests/mockApis/users')
 const bookAVideoLinkApi = require('./integration-tests/mockApis/bookAVideoLinkApi')
+const manageUserApi = require('./integration-tests/mockApis/manageUsersApi')
 const prisonApi = require('./integration-tests/mockApis/prisonApi')
 const dataComplianceApi = require('./integration-tests/mockApis/dataCompliance')
 const prisonerProfile = require('./integration-tests/mockApis/prisonerProfile')
@@ -33,6 +34,7 @@ const {
   stubPrisonerSearchPage,
   stubChangeCaseloadPage,
 } = require('./integration-tests/mockApis/dpsHomepage')
+const manageUsersApi = require('./integration-tests/mockApis/manageUsersApi')
 const { ServiceType } = require('./backend/api/locationsInsidePrisonApi')
 
 const extractOffenderNumbers = (activityList) => {
@@ -474,7 +476,7 @@ module.exports = defineConfig({
         stubPrisonerBalances: (response) => prisonApi.stubPrisonerBalances(response),
         stubGetCellMoveReason: ({ bookingId, bedAssignmentHistorySequence, cellMoveReason, status }) =>
           whereabouts.stubGetCellMoveReason(bookingId, bedAssignmentHistorySequence, cellMoveReason, status),
-        stubGetStaffDetails: ({ staffId, response }) => prisonApi.stubGetStaffDetails(staffId, response),
+        stubGetStaffDetails: ({ username, response }) => manageUsersApi.stubGetStaffDetails(username, response),
         stubLocationConfig: ({ agencyId, response }) => whereabouts.stubLocationConfig({ agencyId, response }),
         stubGetDetailsFailure: ({ status }) => prisonApi.stubGetDetailsFailure(status),
         stubGetPrisoners: (response) => prisonApi.stubGetPrisoners(response),
