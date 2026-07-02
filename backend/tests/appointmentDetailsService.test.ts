@@ -3,7 +3,7 @@ import config from '../config'
 import { prisonApiFactory } from '../api/prisonApi'
 import { hmppsManageUsersApiFactory } from '../api/hmppsManageUsersApi'
 import VideoLinkBookingService from '../services/videoLinkBookingService'
-import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../api/locationsInsidePrisonApi'
+import { locationsInsidePrisonApiFactory, ServiceType } from '../api/locationsInsidePrisonApi'
 import { nomisMappingClientFactory } from '../api/nomisMappingClient'
 
 describe('appointment details', () => {
@@ -86,7 +86,7 @@ describe('appointment details', () => {
       )
     )
 
-    locationsInsidePrisonApi.getLocationsByNonResidentialUsageType = jest.fn().mockResolvedValue([
+    locationsInsidePrisonApi.getLocationsByServiceType = jest.fn().mockResolvedValue([
       { key: 'ROOM1', localName: 'VCC Room 1', id: 'abc-123' },
       { key: 'ROOM2', localName: 'Gymnasium', id: 'cba-222' },
       { key: 'ROOM3', localName: 'VCC Room 2', id: 'zyx-321' },
@@ -124,10 +124,10 @@ describe('appointment details', () => {
 
       expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
       expect(hmppsManageUsersApi.userDetails).toHaveBeenCalledWith(res.locals, 'TEST_USER')
-      expect(locationsInsidePrisonApi.getLocationsByNonResidentialUsageType).toHaveBeenCalledWith(
+      expect(locationsInsidePrisonApi.getLocationsByServiceType).toHaveBeenCalledWith(
         context,
         'MDI',
-        NonResidentialUsageType.APPOINTMENT
+        ServiceType.APPOINTMENT
       )
     })
 

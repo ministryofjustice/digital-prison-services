@@ -79,7 +79,7 @@ context('A user can view list of appointments', () => {
 
     cy.task('stubNomisLocationMapping', { nomisLocationId: 1, dpsLocationId: 'dps-1' })
     cy.task('stubNomisLocationMapping', { nomisLocationId: 2, dpsLocationId: 'dps-2' })
-    cy.task('stubGetLocationsByNonResidentialUsageType', {
+    cy.task('stubGetLocationsByServiceType', {
       agency: 'MDI',
       locations: [
         {

@@ -34,8 +34,8 @@ const {
   stubPrisonerSearchPage,
   stubChangeCaseloadPage,
 } = require('./integration-tests/mockApis/dpsHomepage')
-const { NonResidentialUsageType } = require('./backend/api/locationsInsidePrisonApi')
 const manageUsersApi = require('./integration-tests/mockApis/manageUsersApi')
+const { ServiceType } = require('./backend/api/locationsInsidePrisonApi')
 
 const extractOffenderNumbers = (activityList) => {
   const result = Object.keys(activityList).reduce((r, k) => r.concat(activityList[k]), [])
@@ -342,11 +342,11 @@ module.exports = defineConfig({
         stubSentenceData: (details) => prisonApi.stubSentenceData(details),
         stubLocation: ({ locationId, locationData }) => Promise.all([prisonApi.stubLocation(locationId, locationData)]),
         stubAgencyDetails: ({ agencyId, details }) => Promise.all([prisonApi.stubAgencyDetails(agencyId, details)]),
-        stubGetLocationsByNonResidentialUsageType: ({ agency, locations }) =>
+        stubGetLocationsByServiceType: ({ agency, locations }) =>
           Promise.all([
-            locationsInsidePrisonApi.stubGetLocationsByNonResidentialUsageType({
+            locationsInsidePrisonApi.stubGetLocationsByServiceType({
               prisonId: agency,
-              usageType: NonResidentialUsageType.APPOINTMENT,
+              serviceType: ServiceType.APPOINTMENT,
               response: locations,
             }),
           ]),

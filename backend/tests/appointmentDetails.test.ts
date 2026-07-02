@@ -5,7 +5,7 @@ import appointmentDetailsServiceFactory from '../services/appointmentDetailsServ
 import { oauthApiFactory } from '../api/oauthApi'
 import { whereaboutsApiFactory } from '../api/whereaboutsApi'
 import VideoLinkBookingService from '../services/videoLinkBookingService'
-import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../api/locationsInsidePrisonApi'
+import { locationsInsidePrisonApiFactory, ServiceType } from '../api/locationsInsidePrisonApi'
 import { nomisMappingClientFactory } from '../api/nomisMappingClient'
 
 describe('appointment details', () => {
@@ -74,7 +74,7 @@ describe('appointment details', () => {
     locationsInsidePrisonApi.getLocationByKey = jest.fn(
       async (_, key) => ({ LOCATION_1: { id: 'abc-1' }, LOCATION_3: { id: 'abc-3' } }[key])
     )
-    locationsInsidePrisonApi.getLocationsByNonResidentialUsageType = jest.fn().mockResolvedValue([
+    locationsInsidePrisonApi.getLocationsByServiceType = jest.fn().mockResolvedValue([
       { localName: 'VCC Room 1', id: 'abc-1' },
       { localName: 'Gymnasium', id: 'abc-2' },
       { localName: 'VCC Room 2', id: 'abc-3' },
@@ -117,10 +117,10 @@ describe('appointment details', () => {
       expect(oauthApi.userRoles).toHaveBeenCalledWith(res.locals)
       expect(whereaboutsApi.getAppointment).toHaveBeenCalledWith(res.locals, 1)
       expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, 'ABC123')
-      expect(locationsInsidePrisonApi.getLocationsByNonResidentialUsageType).toHaveBeenCalledWith(
+      expect(locationsInsidePrisonApi.getLocationsByServiceType).toHaveBeenCalledWith(
         context,
         'MDI',
-        NonResidentialUsageType.APPOINTMENT
+        ServiceType.APPOINTMENT
       )
       expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
       expect(hmppsManageUsersApi.userDetails).toHaveBeenCalledWith(res.locals, 'TEST_USER')

@@ -26,7 +26,7 @@ context('Confirm appointment deletion page', () => {
     cy.task('stubNomisLocationMapping', { nomisLocationId: 1, dpsLocationId: 'dps-1' })
     cy.task('stubNomisLocationMapping', { nomisLocationId: 2, dpsLocationId: 'dps-2' })
     cy.task('stubNomisLocationMapping', { nomisLocationId: 3, dpsLocationId: 'dps-3' })
-    cy.task('stubGetLocationsByNonResidentialUsageType', {
+    cy.task('stubGetLocationsByServiceType', {
       agency: 'MDI',
       locations: [
         { localName: 'VCC Room 1', id: 'dps-1' },
