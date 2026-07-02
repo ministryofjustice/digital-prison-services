@@ -4,7 +4,7 @@ import { formatName, getDate, getTime, getWith404AsNull, toFullCourtLink } from 
 import { app } from '../config'
 import { prisonApiFactory } from '../api/prisonApi'
 import VideoLinkBookingService from './videoLinkBookingService'
-import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../api/locationsInsidePrisonApi'
+import { locationsInsidePrisonApiFactory, ServiceType } from '../api/locationsInsidePrisonApi'
 import { nomisMappingClientFactory } from '../api/nomisMappingClient'
 import { getClientCredentialsTokens as GetClientCredentialsToken } from '../api/systemOauthClient'
 import { mapLocationApiResponse } from './appointmentsService'
@@ -51,11 +51,7 @@ export default ({
     const { appointment, recurring } = appointmentDetails
 
     const [appointmentLocationsUnmapped, appointmentTypes] = await Promise.all([
-      locationsInsidePrisonApi.getLocationsByNonResidentialUsageType(
-        context,
-        activeCaseLoadId,
-        NonResidentialUsageType.APPOINTMENT
-      ),
+      locationsInsidePrisonApi.getLocationsByServiceType(context, activeCaseLoadId, ServiceType.APPOINTMENT),
       prisonApi.getAppointmentTypes(res.locals),
     ])
 

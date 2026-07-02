@@ -19,15 +19,16 @@ export interface LocationGroup {
   }
 }
 
-export const enum NonResidentialUsageType {
-  ADJUDICATION_HEARING = 'ADJUDICATION_HEARING',
+export const enum ServiceType {
   APPOINTMENT = 'APPOINTMENT',
-  MOVEMENT = 'MOVEMENT',
-  OCCURRENCE = 'OCCURRENCE',
-  PROGRAMMES_ACTIVITIES = 'PROGRAMMES_ACTIVITIES',
-  PROPERTY = 'PROPERTY',
-  VISIT = 'VISIT',
-  OTHER = 'OTHER',
+  PROGRAMMES_AND_ACTIVITIES = 'PROGRAMMES_AND_ACTIVITIES',
+  VIDEO_LINK = 'VIDEO_LINK',
+  HEARING_LOCATION = 'HEARING_LOCATION',
+  LOCATION_OF_INCIDENT = 'LOCATION_OF_INCIDENT',
+  INTERNAL_MOVEMENTS = 'INTERNAL_MOVEMENTS',
+  OFFICIAL_VISITS = 'OFFICIAL_VISITS',
+  USE_OF_FORCE = 'USE_OF_FORCE',
+  VIDEO_ENABLED = 'VIDEO_ENABLED',
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -56,18 +57,18 @@ export const locationsInsidePrisonApiFactory = (client: OauthApiClient) => {
   const getLocationByKey = (systemContext, locationKey): Promise<Location> =>
     getWith404AsNull(systemContext, `/locations/key/${locationKey}`)
 
-  async function getLocationsByNonResidentialUsageType(
+  async function getLocationsByServiceType(
     systemContext,
     prisonId: string,
-    usageType?: NonResidentialUsageType
+    serviceType?: ServiceType
   ): Promise<Location[]> {
-    logger.info(`getting locations for prison ${prisonId} and usageType ${usageType}`)
+    logger.info(`getting locations for prison ${prisonId} and serviceType ${serviceType}`)
     return (
       await client.get(
         { ...systemContext, customRequestHeaders: { 'Sort-Fields': 'userDescription' } },
-        `/locations/prison/${prisonId}/non-residential-usage-type/${usageType}`,
+        `/locations/non-residential/prison/${prisonId}/service/${serviceType}`,
         {},
-        'formatLocalName=true&sortByLocalName=true'
+        'formatLocalName=true&sortByLocalName=true&filterParents=false'
       )
     ).body
   }
@@ -82,7 +83,7 @@ export const locationsInsidePrisonApiFactory = (client: OauthApiClient) => {
     getSearchGroups,
     getLocationById,
     getLocationByKey,
-    getLocationsByNonResidentialUsageType,
+    getLocationsByServiceType,
   }
 }
 

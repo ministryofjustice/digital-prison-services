@@ -30,11 +30,11 @@ module.exports = {
       },
     }),
 
-  stubGetLocationsByNonResidentialUsageType: ({ prisonId, usageType, response }) =>
+  stubGetLocationsByServiceType: ({ prisonId, serviceType, response }) =>
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/locations/locations/prison/${prisonId}/non-residential-usage-type/${usageType}(\\?.+)?`,
+        urlPattern: `/locations/locations/non-residential/prison/${prisonId}/service/${serviceType}(\\?.+)?`,
       },
       response: {
         status: 200,

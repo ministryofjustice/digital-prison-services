@@ -7,7 +7,7 @@ import SystemOauthClient from '../../api/systemOauthClient'
 import { prisonApiFactory } from '../../api/prisonApi'
 import { bookAVideoLinkApiFactory } from '../../api/bookAVideoLinkApi'
 import { nomisMappingClientFactory } from '../../api/nomisMappingClient'
-import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../../api/locationsInsidePrisonApi'
+import { locationsInsidePrisonApiFactory, ServiceType } from '../../api/locationsInsidePrisonApi'
 import { whereaboutsApiFactory } from '../../api/whereaboutsApi'
 import { mapLocationApiResponse } from '../../services/appointmentsService'
 
@@ -71,11 +71,7 @@ export default ({
 
     const [appointmentTypes, appointmentLocationsUnmapped, appointments, residentialLocations] = await Promise.all([
       prisonApi.getAppointmentTypes(res.locals),
-      locationsInsidePrisonApi.getLocationsByNonResidentialUsageType(
-        systemContext,
-        agencyId,
-        NonResidentialUsageType.APPOINTMENT
-      ),
+      locationsInsidePrisonApi.getLocationsByServiceType(systemContext, agencyId, ServiceType.APPOINTMENT),
       whereaboutsApi.getAppointments(systemContext, agencyId, {
         date: searchDate,
         timeSlot: timeSlot !== 'All' ? timeSlot : undefined,

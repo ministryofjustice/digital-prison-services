@@ -3,7 +3,7 @@ import { endRecurringEndingDate, repeatTypes } from '../shared/appointmentConsta
 import { DATE_TIME_FORMAT_SPEC, Time } from '../../common/dateHelpers'
 import { properCaseName } from '../utils'
 import { prisonApiFactory } from '../api/prisonApi'
-import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../api/locationsInsidePrisonApi'
+import { locationsInsidePrisonApiFactory, ServiceType } from '../api/locationsInsidePrisonApi'
 import { nomisMappingClientFactory } from '../api/nomisMappingClient'
 
 export const isVideoLinkBooking = (appointmentType) => appointmentType === 'VLB'
@@ -88,11 +88,7 @@ export const appointmentsServiceFactory = (
 ) => {
   const getAppointmentOptions = async (locals, context, agency) => {
     const [locationTypes, appointmentTypes] = await Promise.all([
-      locationsInsidePrisonApi.getLocationsByNonResidentialUsageType(
-        context,
-        agency,
-        NonResidentialUsageType.APPOINTMENT
-      ),
+      locationsInsidePrisonApi.getLocationsByServiceType(context, agency, ServiceType.APPOINTMENT),
       prisonApi.getAppointmentTypes(locals),
     ])
 

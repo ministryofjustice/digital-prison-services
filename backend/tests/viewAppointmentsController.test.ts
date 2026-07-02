@@ -2,7 +2,7 @@ import viewAppointments from '../controllers/appointments/viewAppointments'
 import { prisonApiFactory } from '../api/prisonApi'
 import { offenderSearchApiFactory } from '../api/offenderSearchApi'
 import { whereaboutsApiFactory } from '../api/whereaboutsApi'
-import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../api/locationsInsidePrisonApi'
+import { locationsInsidePrisonApiFactory, ServiceType } from '../api/locationsInsidePrisonApi'
 import { bookAVideoLinkApiFactory } from '../api/bookAVideoLinkApi'
 import { nomisMappingClientFactory } from '../api/nomisMappingClient'
 import { getSystemOauthApiClient } from '../api/systemOauthClient'
@@ -26,11 +26,11 @@ describe('View appointments', () => {
 
   const locationsInsidePrisonApi: Partial<ReturnType<typeof locationsInsidePrisonApiFactory>> & {
     getAgencyGroupLocationPrefix: jest.Mock
-    getLocationsByNonResidentialUsageType: jest.Mock
+    getLocationsByServiceType: jest.Mock
     getSearchGroups: jest.Mock
   } = {
     getAgencyGroupLocationPrefix: jest.fn(),
-    getLocationsByNonResidentialUsageType: jest.fn(),
+    getLocationsByServiceType: jest.fn(),
     getSearchGroups: jest.fn(),
   }
   const bookAVideoLinkApi: Partial<ReturnType<typeof bookAVideoLinkApiFactory>> & {
@@ -67,14 +67,12 @@ describe('View appointments', () => {
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
     systemOauthClient.getClientCredentialsTokens.mockResolvedValue(context)
 
-    locationsInsidePrisonApi.getLocationsByNonResidentialUsageType = jest.fn()
+    locationsInsidePrisonApi.getLocationsByServiceType = jest.fn()
     prisonApi.getAppointmentTypes = jest.fn()
     prisonApi.getStaffDetails = jest.fn()
     offenderSearchApi.getPrisonersDetails = jest.fn()
 
-    locationsInsidePrisonApi.getLocationsByNonResidentialUsageType.mockReturnValue([
-      { localName: 'VCC Room 1', id: 'abc-123' },
-    ])
+    locationsInsidePrisonApi.getLocationsByServiceType.mockReturnValue([{ localName: 'VCC Room 1', id: 'abc-123' }])
     prisonApi.getAppointmentTypes.mockReturnValue([{ description: 'Video link booking', code: 'VLB' }])
     prisonApi.getStaffDetails.mockResolvedValue([])
     offenderSearchApi.getPrisonersDetails.mockResolvedValue([])
@@ -130,10 +128,10 @@ describe('View appointments', () => {
       await controller(req, res)
 
       expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
-      expect(locationsInsidePrisonApi.getLocationsByNonResidentialUsageType).toHaveBeenCalledWith(
+      expect(locationsInsidePrisonApi.getLocationsByServiceType).toHaveBeenCalledWith(
         context,
         activeCaseLoadId,
-        NonResidentialUsageType.APPOINTMENT
+        ServiceType.APPOINTMENT
       )
       expect(whereaboutsApi.getAppointments).toHaveBeenCalledWith(res.locals, 'MDI', {
         date: '2020-01-01',
