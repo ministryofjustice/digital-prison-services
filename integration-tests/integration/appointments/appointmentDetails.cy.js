@@ -46,8 +46,8 @@ context('Appointment details page', () => {
       appointment: testAppointment,
     })
     cy.task('stubGetStaffDetails', {
-      staffId: 'TEST_USER',
-      response: { firstName: 'Test', lastName: 'User' },
+      username: 'TEST_USER',
+      response: { name: 'Test User' },
     })
   })
 
@@ -199,8 +199,8 @@ context('when the user does not have the roles', () => {
       { description: 'Video link booking', code: 'VLB' },
     ])
     cy.task('stubGetStaffDetails', {
-      staffId: 'TEST_USER',
-      response: { firstName: 'Test', lastName: 'User' },
+      username: 'TEST_USER',
+      response: { name: 'Test User' },
     })
 
     cy.task('stubGetAppointment', {

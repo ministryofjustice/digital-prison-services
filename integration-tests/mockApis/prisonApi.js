@@ -1524,20 +1524,6 @@ module.exports = {
         jsonBody: response || [],
       },
     }),
-  stubGetStaffDetails: (staffId, response) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/api/users/${staffId}`,
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: response || {},
-      },
-    }),
   stubGetPrisoners: (body) =>
     stubFor({
       request: {
