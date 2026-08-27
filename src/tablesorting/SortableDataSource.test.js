@@ -17,7 +17,7 @@ const ExampleComponent = ({ rows, sortOrder, setColumnSort }) => (
       setColumnSort={setColumnSort}
       sortColumn={LAST_NAME}
     />
-    {rows.map((row) => (
+    {rows.map(row => (
       <div className="row" key={row.offenderNo}>
         <span> {row.firstName}</span>
         <span>{row.lastName}</span>
@@ -46,7 +46,7 @@ describe('Sortable Data Source', () => {
     const wrapper = mount(
       <SortableDataSource sortOrder={ASC} rows={rows} comparator={lastNameComparator} agencyId="LEI">
         <ExampleComponent />
-      </SortableDataSource>
+      </SortableDataSource>,
     )
 
     const props = wrapper.children().props()
@@ -61,7 +61,7 @@ describe('Sortable Data Source', () => {
     const wrapper = mount(
       <SortableDataSource sortOrder={ASC} rows={rows} comparator={lastNameComparator}>
         <ExampleComponent />
-      </SortableDataSource>
+      </SortableDataSource>,
     )
     expect(wrapper.children().props().rows[0].firstName).toBe('Andrew')
   })
@@ -70,7 +70,7 @@ describe('Sortable Data Source', () => {
     const wrapper = mount(
       <SortableDataSource sortOrder={DESC} rows={rows} comparator={lastNameComparator}>
         <ExampleComponent />
-      </SortableDataSource>
+      </SortableDataSource>,
     )
     expect(wrapper.children().props().rows[0].firstName).toBe('Lu')
   })
@@ -78,7 +78,7 @@ describe('Sortable Data Source', () => {
     const wrapper = mount(
       <SortableDataSource sortOrder={ASC} rows={rows} comparator={lastNameComparator}>
         <ExampleComponent />
-      </SortableDataSource>
+      </SortableDataSource>,
     )
 
     expect(wrapper.children().props().rows[0].firstName).toBe('Andrew')

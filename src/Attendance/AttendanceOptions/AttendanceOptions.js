@@ -24,7 +24,7 @@ export const updateOffenderAttendance = async (
   setErrorDispatch,
   setSelectedOption,
   raiseAnalyticsEvent,
-  reloadPage
+  reloadPage,
 ) => {
   let updateSuccess = false
   const eventDetails = { prisonId: agencyId, period, eventDate: date }
@@ -118,7 +118,7 @@ function AttendanceOptions({
       setErrorDispatch,
       setSelectedOption,
       raiseAnalyticsEvent,
-      reloadPage
+      reloadPage,
     )
     setIsPaying(false)
   }
@@ -146,7 +146,7 @@ function AttendanceOptions({
         setOffenderAttendance={setOffenderAttendance}
         setSelectedOption={setSelectedOption}
         date={date?.format ? date.format('DD/MM/YYYY') : date}
-      />
+      />,
     )
 
   const notRecorded = !paid && !other && !isWithinLastWeek(date)

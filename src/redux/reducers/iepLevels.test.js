@@ -14,7 +14,7 @@ describe('Incentive levels reducer', () => {
       initialState,
       Actions.setPossibleIepLevels({
         levels,
-      })
+      }),
     )
 
     expect(state).toEqual({

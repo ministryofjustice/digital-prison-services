@@ -21,7 +21,7 @@ describe('Bulk appointments reducer', () => {
         startTime: '2019-10-10T21:00:00Z',
         endTime: '2019-10-10T22:00:00Z',
         comments: 'hello, world',
-      })
+      }),
     )
 
     expect(state).toEqual({

@@ -28,7 +28,7 @@ describe('Adjudications reducer', () => {
       initialState,
       Actions.setAdjudicationHistoryResults({
         results,
-      })
+      }),
     )
 
     expect(state).toEqual({

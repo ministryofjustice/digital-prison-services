@@ -80,7 +80,7 @@ describe('<AttendanceOptions />', () => {
       props.resetErrorDispatch,
       props.setErrorDispatch,
       props.raiseAnalyticsEvent,
-      props.reloadPage
+      props.reloadPage,
     )
     expect(paid).toBeTruthy()
   })

@@ -107,7 +107,7 @@ class ResultsHouseblock extends Component {
       totalAttended,
     } = this.props
 
-    const renderLocationOptions = (locationOptions) => {
+    const renderLocationOptions = locationOptions => {
       if (!locationOptions) {
         return (
           <option key="housinglocation_option_All" value="--">
@@ -120,7 +120,7 @@ class ResultsHouseblock extends Component {
         <option key="housinglocation_option_All" value="--">
           All
         </option>,
-        ...locationOptions.map((loc) => (
+        ...locationOptions.map(loc => (
           <option key={`housinglocation_option_${loc.key}`} value={loc.key}>
             {loc.name}
           </option>
@@ -275,7 +275,7 @@ class ResultsHouseblock extends Component {
       houseblockData &&
       houseblockData.map((offender, index) => {
         const { offenderNo, bookingId, firstName, lastName, cellLocation } = offender
-        const mainActivity = offender.activities.find((activity) => activity.mainActivity)
+        const mainActivity = offender.activities.find(activity => activity.mainActivity)
         const { eventId, attendanceInfo, eventLocationId } = mainActivity || {}
         const offenderDetails = {
           offenderNo,
@@ -457,9 +457,9 @@ ResultsHouseblock.propTypes = {
           eventDescription: PropTypes.string.isRequired,
           eventStatus: PropTypes.string,
           comment: PropTypes.string,
-        })
+        }),
       ),
-    }).isRequired
+    }).isRequired,
   ).isRequired,
   totalAttended: PropTypes.number.isRequired,
   subLocations: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,

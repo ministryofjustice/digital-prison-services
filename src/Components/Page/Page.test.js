@@ -27,7 +27,7 @@ describe('<Page />', () => {
       wrapper = mount(
         <MemoryRouter initialEntries={['/random']}>
           <Page {...props} loaded />
-        </MemoryRouter>
+        </MemoryRouter>,
       )
     })
 
@@ -51,7 +51,7 @@ describe('<Page />', () => {
       wrapper = mount(
         <MemoryRouter initialEntries={['/random']}>
           <Page {...props} loaded showBreadcrumb={false} />
-        </MemoryRouter>
+        </MemoryRouter>,
       )
 
       expect(wrapper.find('Breadcrumb').exists()).toEqual(false)
@@ -61,7 +61,7 @@ describe('<Page />', () => {
       wrapper = mount(
         <MemoryRouter initialEntries={['/random']}>
           <Page {...props} loaded backLink="" />
-        </MemoryRouter>
+        </MemoryRouter>,
       )
 
       expect(wrapper.find('BackLink').exists()).toEqual(false)

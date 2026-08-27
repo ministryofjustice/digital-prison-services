@@ -155,7 +155,7 @@ describe('actions', () => {
         date: '15/02/2021',
         location: 'Houseblock 1',
         period: 'PM',
-      })
+      }),
     ).toEqual(expectedAction)
   })
 
@@ -237,7 +237,7 @@ describe('actions', () => {
       dateOfBirthFilter: { isoDate: '2018-11-12', valid: true, blank: false },
     }
     expect(actions.setGlobalSearchDateOfBirthFilter({ isoDate: '2018-11-12', valid: true, blank: false })).toEqual(
-      expectedAction
+      expectedAction,
     )
   })
 
@@ -345,7 +345,7 @@ describe('actions', () => {
         other: true,
         absentReason: 'AcceptableAbsence',
         comments: 'Comment or case note text',
-      })
+      }),
     ).toEqual(expectedAction)
   })
 
@@ -365,7 +365,7 @@ describe('actions', () => {
         other: true,
         absentReason: 'AcceptableAbsence',
         comments: 'Comment or case note text',
-      })
+      }),
     ).toEqual(expectedAction)
   })
 

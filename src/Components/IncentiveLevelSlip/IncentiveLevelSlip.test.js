@@ -43,7 +43,7 @@ describe('<IncentiveLevelSlip />', () => {
             },
             { authorName: 'Amendment, Author', creationDateTime: '2019-01-01T15:17:30', additionalNoteText: 'Updated' },
           ]}
-        />
+        />,
       )
       .toJSON()
     expect(tree).toMatchSnapshot()
