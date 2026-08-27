@@ -19,7 +19,7 @@ describe('<ResultsFilter />', () => {
       .create(
         <ResultsFilter {...props}>
           <ResultsFilter.PerPageDropdown {...props} handleChange={jest.fn()} />
-        </ResultsFilter>
+        </ResultsFilter>,
       )
       .toJSON()
 

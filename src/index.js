@@ -22,7 +22,7 @@ ReactDOM.render(
       <AppContainer />
     </ConnectedFlagsProvider>
   </Provider>,
-  document.getElementById('root')
+  document.getElementById('root'),
 )
 
 if (module.hot) {

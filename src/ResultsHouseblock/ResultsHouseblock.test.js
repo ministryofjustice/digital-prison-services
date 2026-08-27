@@ -220,7 +220,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-      />
+      />,
     )
     expect(component.find('.whereabouts-date').text()).toEqual(`${longDateFormat} - ED`)
 
@@ -249,16 +249,16 @@ describe('Offender results component Jira NN-843', () => {
     expect(row1Flags.at(1).shallow().text()).toEqual('CAT A ')
     expect(row1Tds.at(MAIN_COLUMN).text()).toEqual('18:00 - Chapel')
     expect(row1Tds.at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual(
-      'Release scheduled'
+      'Release scheduled',
     )
     expect(row1Tds.at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(1).text()).toEqual(
-      '11:00 - Visits - Official Visit'
+      '11:00 - Visits - Official Visit',
     )
     expect(row1Tds.at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(2).text()).toEqual(
-      '17:00 - 17:30 - The gym, appointment'
+      '17:00 - 17:30 - The gym, appointment',
     )
     expect(row1Tds.at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(3).text()).toEqual(
-      '11:40 - Medical - Dentist - Appt details'
+      '11:40 - Medical - Dentist - Appt details',
     )
     // Check not disabled. This odd looking attribute value is handled correctly in the real DOM
     expect(row1Tds.at(ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true)
@@ -282,7 +282,7 @@ describe('Offender results component Jira NN-843', () => {
     expect(row3Flags.at(0).shallow().text()).toEqual('CAT A High ')
     expect(row3Tds.at(MAIN_COLUMN).text()).toEqual('18:00 - Chapel Activity')
     expect(row3Tds.at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual(
-      '11:11 - Visits - Family Visit (cancelled)'
+      '11:11 - Visits - Family Visit (cancelled)',
     )
 
     const row4Flags = tr.at(4).find('td').at(FLAGS_COLUMN).find('AlertFlags').dive().find('AlertFlag')
@@ -303,7 +303,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-      />
+      />,
     )
     const tr = component.find('tr')
     expect(tr.length).toEqual(1) // table header tr only
@@ -323,7 +323,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-      />
+      />,
     )
 
     expect(component.find(PrintLink).length).toEqual(2)
@@ -345,7 +345,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-      />
+      />,
     )
     expect(component.find(PrintLink).length).toEqual(0)
   })
@@ -363,7 +363,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-      />
+      />,
     )
     expect(component.find(PrintLink).length).toEqual(4)
   })
@@ -381,7 +381,7 @@ describe('Offender results component Jira NN-843', () => {
         currentLocation="BWing"
         user={user}
         offenderNo="1"
-      />
+      />,
     )
 
     const printRedactedButton = component.find('#redactedPrintButton')
@@ -401,7 +401,7 @@ describe('Offender results component Jira NN-843', () => {
         currentLocation="BWing"
         user={user}
         offenderNo="1"
-      />
+      />,
     )
     const printRedactedButton = component.find('.redactedPrintButton')
     expect(printRedactedButton.length).toEqual(2)
@@ -420,7 +420,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-      />
+      />,
     )
 
     const tr = component.find('tr')
@@ -441,7 +441,7 @@ describe('Offender results component Jira NN-843', () => {
         currentLocation="BWing"
         user={user}
         offenderNo="1"
-      />
+      />,
     )
 
     expect(component.find('SortableColumn').at(1).shallow().find('#Location-sort-asc').length).toEqual(1)
@@ -466,7 +466,7 @@ describe('Offender results component Jira NN-843', () => {
         currentLocation="BWing"
         user={user}
         offenderNo="1"
-      />
+      />,
     )
 
     expect(component.find('SortableColumn').at(1).shallow().find('#Location-sort-asc').length).toEqual(0)
@@ -492,7 +492,7 @@ describe('Offender results component Jira NN-843', () => {
         currentLocation="BWing"
         user={user}
         offenderNo="1"
-      />
+      />,
     )
 
     component.find('SortableColumn').at(1).shallow().find('#Location-sort-asc').simulate('click')
@@ -543,12 +543,12 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-      />
+      />,
     )
 
     const tr = component.find('tr')
     expect(tr.at(1).find('td').at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual(
-      'Release scheduled'
+      'Release scheduled',
     )
   })
 
@@ -564,7 +564,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-      />
+      />,
     )
 
     const options = component.find('#housing-location-select option')
@@ -615,12 +615,12 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-      />
+      />,
     )
 
     const tr = component.find('tr')
     expect(tr.at(1).find('td').at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual(
-      'Transfer scheduled'
+      'Transfer scheduled',
     )
   })
 
@@ -670,7 +670,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-      />
+      />,
     )
 
     const transfers = component.find(OtherActivitiesView).dive().find('.transfer')
@@ -701,7 +701,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-      />
+      />,
     )
 
     expect(component.find('TotalResults').first().props()).toEqual({ label: 'Prisoners listed:', totalResults: 4 })
@@ -723,7 +723,7 @@ describe('Offender results component Jira NN-843', () => {
         sortOrder="ASC"
         offenderNo="1"
         totalAttended={1}
-      />
+      />,
     )
 
     expect(component.find('TotalResults').at(1).props()).toEqual({ label: 'Sessions attended:', totalResults: 1 })

@@ -108,7 +108,7 @@ describe('extractSubLocations', () => {
 
   it('should handle matching location with children', () => {
     expect(
-      extractSubLocations([{ key: 'a' }, { key: 'x', children: [{ key: 'xx' }, { key: 'yy' }] }, { key: 'b' }], 'x')
+      extractSubLocations([{ key: 'a' }, { key: 'x', children: [{ key: 'xx' }, { key: 'yy' }] }, { key: 'b' }], 'x'),
     ).toEqual([{ key: 'xx' }, { key: 'yy' }])
   })
 })

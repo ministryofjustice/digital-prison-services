@@ -6,7 +6,6 @@ class Error extends Component {
     const { error } = this.props
     const reloadLink =
       error && error.showReload && error.reloadPage ? (
-        // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <a href="#" onClick={error.reloadPage}>
           Please refresh the page.
         </a>

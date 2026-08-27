@@ -21,11 +21,11 @@ function IncentiveLevelSlipContainer() {
         setIepData(JSON.parse(data))
       } else if (!printed && !iepData) {
         const { offenderNo, offenderName, location, casenoteId, issuedBy } = qs.parse(
-          window.location.href.split('?')[1]
+          window.location.href.split('?')[1],
         )
         const caseNoteData = await axios
           .get(`/api/get-case-note/${offenderNo}/${casenoteId}`)
-          .then((promise) => promise.data)
+          .then(promise => promise.data)
 
         setIepData({
           type: caseNoteData.subTypeDescription,

@@ -4,7 +4,7 @@ import { AttendanceOtherForm } from './AttendanceOtherForm'
 import IncentiveLevelCreated from '../../IncentiveLevelCreated'
 
 describe('<AttendanceOtherForm />', () => {
-  const submitForm = async (formWrapper) => {
+  const submitForm = async formWrapper => {
     await formWrapper.find('form').simulate('submit')
     formWrapper.update()
   }
@@ -79,7 +79,7 @@ describe('<AttendanceOtherForm />', () => {
   let subReasonSelector = () => ({})
   let commentInput = {}
 
-  const buildWrapper = (wrappedComponent) => {
+  const buildWrapper = wrappedComponent => {
     wrapper = wrappedComponent
     payYesRadio = wrappedComponent.find('input[name="pay"][value="yes"]')
     payNoRadio = wrappedComponent.find('input[name="pay"][value="no"]')
@@ -90,7 +90,7 @@ describe('<AttendanceOtherForm />', () => {
     iepNoRadio = () => wrappedComponent.find('input[name="iep"][value="no"]')
   }
 
-  const simulatePay = (pay) => {
+  const simulatePay = pay => {
     if (pay) {
       payYesRadio.instance().checked = true
       payYesRadio.simulate('change', payYesRadio)
@@ -101,7 +101,7 @@ describe('<AttendanceOtherForm />', () => {
     wrapper.update()
   }
 
-  const simulateIep = (iep) => {
+  const simulateIep = iep => {
     if (iep) {
       iepYesRadio().instance().checked = true
       iepYesRadio().simulate('change', iepYesRadio())
@@ -112,13 +112,13 @@ describe('<AttendanceOtherForm />', () => {
     wrapper.update()
   }
 
-  const simulateReason = (reason) => {
+  const simulateReason = reason => {
     reasonSelector().instance().value = reason
     reasonSelector().simulate('change', reasonSelector())
     wrapper.update()
   }
 
-  const simulateSubReason = (subReason) => {
+  const simulateSubReason = subReason => {
     subReasonSelector().instance().value = subReason
     subReasonSelector().simulate('change', subReasonSelector())
     wrapper.update()
@@ -148,7 +148,7 @@ describe('<AttendanceOtherForm />', () => {
       const skipDefaultEntry = 1
       const reasons = reasonSelector()
         .getElement()
-        .props.children[skipDefaultEntry].map((reason) => reason.props)
+        .props.children[skipDefaultEntry].map(reason => reason.props)
 
       expect(reasons).toEqual([
         { value: 'UnacceptableAbsence', children: 'Unacceptable' },
@@ -171,7 +171,7 @@ describe('<AttendanceOtherForm />', () => {
       const skipDefaultEntry = 1
       const reasons = reasonSelector()
         .getElement()
-        .props.children[skipDefaultEntry].map((reason) => reason.props)
+        .props.children[skipDefaultEntry].map(reason => reason.props)
 
       expect(reasons).toEqual([
         { value: 'AcceptableAbsence', children: 'Acceptable' },
@@ -186,7 +186,7 @@ describe('<AttendanceOtherForm />', () => {
       const skipDefaultEntry = 1
       const subReasons = subReasonSelector()
         .getElement()
-        .props.children[skipDefaultEntry].map((subReason) => subReason.props)
+        .props.children[skipDefaultEntry].map(subReason => subReason.props)
 
       expect(subReasons).toEqual([
         { value: 'Activities', children: 'Activities and education' },
@@ -223,7 +223,7 @@ describe('<AttendanceOtherForm />', () => {
           },
           absentSubReason: undefined,
           paid: true,
-        })
+        }),
       )
     })
 
@@ -290,7 +290,7 @@ describe('<AttendanceOtherForm />', () => {
         props.setErrorDispatch,
         props.setSelectedOption,
         props.raiseAnalyticsEvent,
-        props.reloadPage
+        props.reloadPage,
       )
     })
 
@@ -432,7 +432,7 @@ describe('<AttendanceOtherForm />', () => {
           props.setErrorDispatch,
           props.setSelectedOption,
           props.raiseAnalyticsEvent,
-          props.reloadPage
+          props.reloadPage,
         )
       })
 
@@ -470,7 +470,7 @@ describe('<AttendanceOtherForm />', () => {
           props.setErrorDispatch,
           props.setSelectedOption,
           props.raiseAnalyticsEvent,
-          props.reloadPage
+          props.reloadPage,
         )
         expect(props.showModal).toHaveBeenCalledWith(
           true,
@@ -483,7 +483,7 @@ describe('<AttendanceOtherForm />', () => {
             offender={props.offender}
             showModal={props.showModal}
             user={props.user}
-          />
+          />,
         )
       })
     })

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -40,10 +39,10 @@ export function AttendanceOtherForm({
 }) {
   const { offenderNo, bookingId, eventId, eventLocationId, attendanceInfo } = offender
   const { id, absentReason, absentSubReason, comments } = attendanceInfo || {}
-  const shouldTriggerIEP = (r) => triggersIEP && triggersIEP.includes(r)
-  const shouldTriggerSubReason = (r) => triggersAbsentSubReason && triggersAbsentSubReason.includes(r)
+  const shouldTriggerIEP = r => triggersIEP && triggersIEP.includes(r)
+  const shouldTriggerSubReason = r => triggersAbsentSubReason && triggersAbsentSubReason.includes(r)
 
-  const validateThenSubmit = (submitHandler) => async (values) => {
+  const validateThenSubmit = submitHandler => async values => {
     const formErrors = []
     const commentText = values.comments && values.comments.trim()
 
@@ -94,8 +93,8 @@ export function AttendanceOtherForm({
 
     if (attendanceUpdated && values.iep === 'yes') {
       // need to find selected options so can put into the case note
-      const absentReasonOption = absentReasons.unpaidReasons.find((ar) => ar.value === values.absentReason)
-      const absentSubReasonOption = absentReasons.unpaidSubReasons.find((ar) => ar.value === values.absentSubReason)
+      const absentReasonOption = absentReasons.unpaidReasons.find(ar => ar.value === values.absentReason)
+      const absentSubReasonOption = absentReasons.unpaidSubReasons.find(ar => ar.value === values.absentSubReason)
 
       const caseNoteSuffix = absentSubReasonOption
         ? `${absentSubReasonOption.name}. ${values.comments}`
@@ -112,14 +111,14 @@ export function AttendanceOtherForm({
           iepValues={iepValues}
           activityName={activityName}
           user={user}
-        />
+        />,
       )
     }
 
     return attendanceUpdated
   }
 
-  const payOffender = (values) => {
+  const payOffender = values => {
     const paid = values.pay === 'yes'
     const reasons = [...absentReasons.paidReasons, ...absentReasons.unpaidReasons]
 
@@ -133,7 +132,7 @@ export function AttendanceOtherForm({
       paid,
       eventId,
       eventLocationId,
-      absentReason: reasons.find((ar) => ar.value === absentReasonValueWithIep),
+      absentReason: reasons.find(ar => ar.value === absentReasonValueWithIep),
       absentSubReason: values.absentSubReason,
       comments: values.comments,
       attended: false,
@@ -152,11 +151,11 @@ export function AttendanceOtherForm({
       setErrorDispatch,
       setSelectedOption,
       raiseAnalyticsEvent,
-      reloadPage
+      reloadPage,
     )
   }
 
-  const getAbsentReasons = (pay) => {
+  const getAbsentReasons = pay => {
     if (!pay) return []
     return pay === 'yes' ? absentReasons.paidReasons : absentReasons.unpaidReasonsWithoutIep
   }
@@ -183,7 +182,7 @@ export function AttendanceOtherForm({
   return (
     <Form
       initialValues={initialValues}
-      onSubmit={(values) => validateThenSubmit(payOffender, showModal)(values)}
+      onSubmit={values => validateThenSubmit(payOffender, showModal)(values)}
       render={({ handleSubmit, submitting, pristine, submitError: errors, values }) => (
         <form onSubmit={handleSubmit}>
           {errors && (
@@ -216,7 +215,7 @@ export function AttendanceOtherForm({
                 <option value="" disabled>
                   Select
                 </option>
-                {getAbsentReasons(values.pay).map((r) => (
+                {getAbsentReasons(values.pay).map(r => (
                   <option key={r.value} value={r.value}>
                     {r.name}
                   </option>
@@ -234,7 +233,7 @@ export function AttendanceOtherForm({
                   <option value="" disabled>
                     Select
                   </option>
-                  {getAbsentSubReasons(values.pay, values.absentReason).map((reason) => (
+                  {getAbsentSubReasons(values.pay, values.absentReason).map(reason => (
                     <option key={reason.value} value={reason.value}>
                       {reason.name}
                     </option>
@@ -320,7 +319,7 @@ AttendanceOtherForm.propTypes = {
   setSelectedOption: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   user: state.app.user,
   absentReasons: state.events.absentReasons,
 })

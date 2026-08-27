@@ -15,7 +15,7 @@ const IncentiveLevelSlipDetails = styled.div`
 const Row = styled.div`
   display: flex;
   align-items: center;
-  border-bottom: ${(props) => (props.noBorder ? 'none' : `1px solid ${BORDER_COLOUR}`)};
+  border-bottom: ${props => (props.noBorder ? 'none' : `1px solid ${BORDER_COLOUR}`)};
   margin-bottom: ${spacing.simple(3)}px;
   padding-bottom: ${spacing.simple(3)}px;
 `
@@ -27,7 +27,7 @@ const Column = styled.div`
 
 const Value = styled.span`
   font-weight: bold;
-  display: ${(props) => (props.inline ? 'inline' : 'block')};
+  display: ${props => (props.inline ? 'inline' : 'block')};
 `
 
 const Amendment = styled.div`
@@ -79,7 +79,7 @@ function IncentiveLevelSlip({
           Reason:
           <Value>{caseNote}</Value>
           {amendments.length > 0 &&
-            amendments.map((amendment) => (
+            amendments.map(amendment => (
               <Amendment key={amendment.creationDateTime}>
                 Amendment: <Value>{amendment.additionalNoteText}</Value>
                 {amendment.creationDateTime && (
@@ -125,7 +125,7 @@ IncentiveLevelSlip.propTypes = {
       authorName: PropTypes.string,
       creationDateTime: PropTypes.string,
       additionalNoteText: PropTypes.string,
-    })
+    }),
   ),
 }
 

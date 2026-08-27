@@ -16,7 +16,7 @@ describe('Form date picker', () => {
           placeholder="Select"
           input={{ name: 'date', onChange: () => {}, value: '2017-01-01T:21:00:00Z' }}
           meta={{ touched: true, error: 'there was an error' }}
-        />
+        />,
       )
       .toJSON()
     expect(wrapper).toMatchSnapshot()

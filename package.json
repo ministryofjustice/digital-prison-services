@@ -9,7 +9,6 @@
     "node": "^24"
   },
   "overrides": {
-    "brace-expansion": "^5.0.9",
     "diff": "^8.0.3",
     "eslint-plugin-import": {
       "minimatch": "^8.0.0"

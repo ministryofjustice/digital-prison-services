@@ -88,7 +88,7 @@ describe('App component', () => {
       <Provider store={store}>
         <App {...props} />
       </Provider>,
-      div
+      div,
     )
     ReactDOM.unmountComponentAtNode(div)
   })
@@ -109,7 +109,7 @@ describe('App component', () => {
           response: { status: 401, data: { message: 'Session expired', reason: 'session-expired' } },
         })
         expect(appInstance.displayAlertAndSignOut).toBeCalledWith(
-          'Your session has expired, please click OK to be redirected back to the sign in page'
+          'Your session has expired, please click OK to be redirected back to the sign in page',
         )
       })
 

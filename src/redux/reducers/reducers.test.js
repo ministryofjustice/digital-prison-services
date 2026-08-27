@@ -79,7 +79,7 @@ describe('app (global) reducer', () => {
       app(appInitialState, {
         type: types.SET_CONFIG,
         config: { mailTo: 'a@b.com' },
-      })
+      }),
     ).toEqual({
       ...appInitialState,
       config: { mailTo: 'a@b.com' },
@@ -91,7 +91,7 @@ describe('app (global) reducer', () => {
       app(appInitialState, {
         type: types.SET_USER_DETAILS,
         user: { field: 'value' },
-      })
+      }),
     ).toEqual({
       ...appInitialState,
       user: { field: 'value' },
@@ -103,7 +103,7 @@ describe('app (global) reducer', () => {
       app(appInitialState, {
         type: types.SWITCH_AGENCY,
         activeCaseLoadId: 'BXI',
-      })
+      }),
     ).toEqual({
       ...appInitialState,
       user: { activeCaseLoadId: 'BXI' },
@@ -115,7 +115,7 @@ describe('app (global) reducer', () => {
       app(appInitialState, {
         type: types.SET_TERMS_VISIBILITY,
         shouldShowTerms: true,
-      })
+      }),
     ).toEqual({
       ...appInitialState,
       shouldShowTerms: true,
@@ -127,7 +127,7 @@ describe('app (global) reducer', () => {
       app(appInitialState, {
         type: types.SET_ERROR,
         error: 'HELP!',
-      })
+      }),
     ).toEqual({
       ...appInitialState,
       error: 'HELP!',
@@ -138,7 +138,7 @@ describe('app (global) reducer', () => {
     expect(
       app(appWithErrorState, {
         type: types.RESET_ERROR,
-      })
+      }),
     ).toEqual({
       ...appWithErrorState,
       error: '',
@@ -150,7 +150,7 @@ describe('app (global) reducer', () => {
       app(appInitialState, {
         type: types.SET_MESSAGE,
         message: 'An important message!',
-      })
+      }),
     ).toEqual({
       ...appInitialState,
       message: 'An important message!',
@@ -162,7 +162,7 @@ describe('app (global) reducer', () => {
       app(appInitialState, {
         type: types.SET_LOADED,
         loaded: true,
-      })
+      }),
     ).toEqual({
       ...appInitialState,
       loaded: true,
@@ -175,7 +175,7 @@ describe('app (global) reducer', () => {
         type: types.SET_VALIDATION_ERROR,
         fieldName: 'myField',
         message: 'An error!',
-      })
+      }),
     ).toEqual({
       ...appInitialState,
       validationErrors: { myField: 'An error!' },
@@ -188,7 +188,7 @@ describe('app (global) reducer', () => {
         type: types.SET_VALIDATION_ERROR,
         fieldName: 'myField2',
         message: 'Another error!',
-      })
+      }),
     ).toEqual({
       validationErrors: {
         myField: 'An error!',
@@ -201,7 +201,7 @@ describe('app (global) reducer', () => {
     expect(
       app(appWithValidationErrorState, {
         type: types.RESET_VALIDATION_ERRORS,
-      })
+      }),
     ).toEqual({
       validationErrors: null,
     })
@@ -212,7 +212,7 @@ describe('app (global) reducer', () => {
       app(appInitialState, {
         type: types.SET_APPLICATION_TITLE,
         title: 'New Title',
-      })
+      }),
     ).toEqual({
       caseChangeRedirect: true,
       error: '',
@@ -227,7 +227,7 @@ describe('app (global) reducer', () => {
       search(searchInitialState, {
         type: types.SET_SEARCH_LOCATIONS,
         locations: ['a', 'b'],
-      })
+      }),
     ).toEqual({
       ...searchInitialState,
       locations: ['a', 'b'],
@@ -240,7 +240,7 @@ describe('app (global) reducer', () => {
       search(searchInitialState, {
         type: types.SET_SEARCH_LOCATION,
         location: 'lol',
-      })
+      }),
     ).toEqual({
       ...searchInitialState,
       location: 'lol',
@@ -253,7 +253,7 @@ describe('app (global) reducer', () => {
       search(searchInitialState, {
         type: types.SET_SEARCH_SUB_LOCATION,
         subLocation: 'lollol',
-      })
+      }),
     ).toEqual({
       ...searchInitialState,
       subLocation: 'lollol',
@@ -269,7 +269,7 @@ describe('app (global) reducer', () => {
           location: 'Houseblock 1',
           period: 'PM',
         },
-      })
+      }),
     ).toEqual({
       ...searchInitialState,
       date: '15/02/2021',
@@ -283,7 +283,7 @@ describe('app (global) reducer', () => {
       search(searchInitialState, {
         type: types.SET_SEARCH_ACTIVITIES,
         activities: ['a', 'b'],
-      })
+      }),
     ).toEqual({
       ...searchInitialState,
       activities: ['a', 'b'],
@@ -295,7 +295,7 @@ describe('app (global) reducer', () => {
       search(searchInitialState, {
         type: types.SET_SEARCH_ACTIVITY,
         activity: 'lol',
-      })
+      }),
     ).toEqual({
       ...searchInitialState,
       activity: 'lol',
@@ -307,7 +307,7 @@ describe('app (global) reducer', () => {
       search(searchInitialState, {
         type: types.SET_SEARCH_DATE,
         date: '12/12/1999',
-      })
+      }),
     ).toEqual({
       ...searchInitialState,
       date: '12/12/1999',
@@ -319,7 +319,7 @@ describe('app (global) reducer', () => {
       search(searchInitialState, {
         type: types.SET_SEARCH_PERIOD,
         period: 'teatime',
-      })
+      }),
     ).toEqual({
       ...searchInitialState,
       period: 'teatime',
@@ -331,7 +331,7 @@ describe('app (global) reducer', () => {
       search(searchInitialState, {
         type: types.SET_SEARCH_WING_STATUS,
         wingStatus: 'leaving',
-      })
+      }),
     ).toEqual({
       ...searchInitialState,
       wingStatus: 'leaving',
@@ -343,7 +343,7 @@ describe('app (global) reducer', () => {
       events(undefined, {
         type: types.SET_HOUSEBLOCK_DATA,
         data: ['data0', 'data1'],
-      })
+      }),
     ).toEqual({
       activityData: [],
       houseblockData: ['data0', 'data1'],
@@ -359,7 +359,7 @@ describe('app (global) reducer', () => {
       events(undefined, {
         type: types.SET_ORDER_FIELD,
         orderField: 'field1',
-      })
+      }),
     ).toEqual({
       activityData: [],
       houseblockData: [],
@@ -374,7 +374,7 @@ describe('app (global) reducer', () => {
       events(undefined, {
         type: types.SET_ORDER,
         sortOrder: 'DESC',
-      })
+      }),
     ).toEqual({
       houseblockData: [],
       activityData: [],
@@ -394,7 +394,7 @@ describe('app (global) reducer', () => {
       events(eventsInitialState, {
         type: types.SET_ABSENT_REASONS,
         payload: absentReasons,
-      })
+      }),
     ).toEqual({
       ...eventsInitialState,
       absentReasons,
@@ -416,7 +416,7 @@ describe('app (global) reducer', () => {
           absentReason: 'AcceptableAbsence',
           comments: 'Comment or case note text',
         },
-      })
+      }),
     ).toEqual({
       ...eventsInitialState,
       totalAttended: 0,
@@ -455,7 +455,7 @@ describe('app (global) reducer', () => {
           absentReason: 'AcceptableAbsence',
           comments: 'Comment or case note text',
         },
-      })
+      }),
     ).toEqual({
       ...eventsInitialState,
       totalAttended: 0,
@@ -492,7 +492,7 @@ describe('app (global) reducer', () => {
         attendanceInfo: {
           paid: true,
         },
-      })
+      }),
     ).toEqual({
       ...eventsInitialState,
       totalAttended: 1,
@@ -537,7 +537,7 @@ describe('app (global) reducer', () => {
       globalSearch(undefined, {
         type: types.SET_GLOBAL_SEARCH_RESULTS_DATA,
         data: ['data0', 'data1'],
-      })
+      }),
     ).toEqual({
       ...globalSearchInitialState,
       data: ['data0', 'data1'],
@@ -550,7 +550,7 @@ describe('app (global) reducer', () => {
       globalSearch(undefined, {
         type: types.SET_GLOBAL_SEARCH_TEXT,
         searchText: 'hello',
-      })
+      }),
     ).toEqual({
       ...globalSearchInitialState,
       searchText: 'hello',
@@ -562,7 +562,7 @@ describe('app (global) reducer', () => {
       globalSearch(undefined, {
         type: types.SET_GLOBAL_SEARCH_LOCATION_FILTER,
         locationFilter: 'MDI',
-      })
+      }),
     ).toEqual({
       ...globalSearchInitialState,
       locationFilter: 'MDI',
@@ -574,7 +574,7 @@ describe('app (global) reducer', () => {
       globalSearch(undefined, {
         type: types.SET_GLOBAL_SEARCH_GENDER_FILTER,
         genderFilter: 'F',
-      })
+      }),
     ).toEqual({
       ...globalSearchInitialState,
       genderFilter: 'F',
@@ -586,7 +586,7 @@ describe('app (global) reducer', () => {
       globalSearch(undefined, {
         type: types.SET_GLOBAL_SEARCH_DATE_OF_BIRTH_FILTER,
         dateOfBirthFilter: { isoDate: '29-11-2018', valid: true, blank: false },
-      })
+      }),
     ).toEqual({
       ...globalSearchInitialState,
       dateOfBirthFilter: { isoDate: '29-11-2018', valid: true, blank: false },
@@ -600,7 +600,7 @@ describe('app (global) reducer', () => {
       globalSearch(pagingInitialState, {
         type: types.SET_GLOBAL_SEARCH_PAGINATION_PAGE_SIZE,
         pageSize: 5,
-      })
+      }),
     ).toEqual(expectedState)
   })
 
@@ -611,7 +611,7 @@ describe('app (global) reducer', () => {
       globalSearch(pagingInitialState, {
         type: types.SET_GLOBAL_SEARCH_PAGINATION_PAGE_NUMBER,
         pageNumber: 5,
-      })
+      }),
     ).toEqual(expectedState)
   })
 
@@ -622,7 +622,7 @@ describe('app (global) reducer', () => {
       globalSearch(pagingInitialState, {
         type: types.SET_GLOBAL_SEARCH_PAGINATION_TOTAL_RECORDS,
         totalRecords: 5,
-      })
+      }),
     ).toEqual(expectedState)
   })
 })
