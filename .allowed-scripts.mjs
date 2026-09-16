@@ -9,5 +9,6 @@ export default configureAllowedScripts({
   "node_modules/fsevents@2.3.3": "ALLOW",
   "node_modules/react-final-form@4.1.0": "ALLOW",
   "node_modules/unrs-resolver@1.12.2": "ALLOW",
+  "node_modules/protobufjs@7.6.6": "ALLOW",
 },
 })
