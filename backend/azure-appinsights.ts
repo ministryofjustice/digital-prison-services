@@ -1,18 +1,18 @@
-import * as appInsights from 'applicationinsights'
-import { EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
-import { Contracts } from 'applicationinsights'
+import type { TelemetryItem } from 'applicationinsights/out/src/declarations/generated'
 import applicationVersion from './application-version'
 import ignoreNotFoundErrors from './telemetryProcessors/ignoreNotFound'
 
 const { packageData, buildNumber } = applicationVersion
 
 export type ContextObject = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [name: string]: any
 }
 
 export default (() => {
   if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
+    // Load only when telemetry is enabled; Application Insights v3 includes ESM dependencies that Jest cannot parse.
+    // eslint-disable-next-line global-require
+    const appInsights = require('applicationinsights') as typeof import('applicationinsights')
     // eslint-disable-next-line no-console
     console.log('Enabling azure application insights')
     appInsights.setup().setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C).start()
@@ -25,14 +25,14 @@ export default (() => {
   return null
 })()
 
-export function addUserDataToRequests(envelope: EnvelopeTelemetry, contextObjects: ContextObject): boolean {
-  const isRequest = envelope.data.baseType === Contracts.TelemetryTypeString.Request
+export function addUserDataToRequests(envelope: TelemetryItem, contextObjects: ContextObject): boolean {
+  const isRequest = envelope.data?.baseType === 'RequestData'
   if (isRequest) {
     const { username, activeCaseLoad } = contextObjects?.['http.ServerRequest']?.res?.locals?.user || {}
     const referer = contextObjects?.['http.ServerRequest']?.req?.headers?.referer
 
     if (username) {
-      const { properties } = envelope.data.baseData
+      const { properties } = envelope.data.baseData || {}
       // eslint-disable-next-line no-param-reassign
       envelope.data.baseData.properties = {
         username,
