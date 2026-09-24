@@ -1,5 +1,7 @@
-import { DataTelemetry, EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
+import type { TelemetryItem } from 'applicationinsights/out/src/declarations/generated'
 import { addUserDataToRequests, ContextObject } from '../azure-appinsights'
+
+jest.mock('applicationinsights', () => ({}))
 
 const user = {
   activeCaseLoadId: 'LII',
@@ -9,11 +11,13 @@ const user = {
 
 const createEnvelope = (properties: Record<string, string | boolean>, baseType = 'RequestData') =>
   ({
+    name: 'Microsoft.ApplicationInsights.Request',
+    time: new Date(),
     data: {
       baseType,
       baseData: { properties },
-    } as DataTelemetry,
-  } as EnvelopeTelemetry)
+    },
+  }) as TelemetryItem
 
 const createContext = (username: string, activeCaseLoadId: string, referer: string) =>
   ({
@@ -32,7 +36,7 @@ const createContext = (username: string, activeCaseLoadId: string, referer: stri
         },
       },
     },
-  } as ContextObject)
+  }) as ContextObject
 
 const context = createContext(user.username, user.activeCaseLoadId, user.referer)
 
