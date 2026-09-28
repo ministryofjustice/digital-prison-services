@@ -54,7 +54,7 @@
     "@ministryofjustice/hmpps-connect-dps-shared-items": "^3.7.0",
     "@types/superagent": "^4.1.24",
     "agentkeepalive": "^4.2.1",
-    "applicationinsights": "3.8.0",
+    "applicationinsights": "3.16.0",
     "axios": "1.18.1",
     "body-parser": "^1.20.6",
     "bunyan": "^1.8.15",
