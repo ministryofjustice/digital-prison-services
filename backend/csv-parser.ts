@@ -1,4 +1,4 @@
-import parse from 'csv-parse'
+import { parse } from 'csv-parse'
 import config from './config'
 import logger from './log'
 
@@ -11,9 +11,9 @@ export const validationMessages = {
 }
 
 export const csvParserService = ({ fs, isBinaryFileSync }) => {
-  const parseCsvData = async (data) => {
+  const parseCsvData = async data => {
     const output = []
-    // eslint-disable-next-line prefer-arrow-callback
+
     const parser = parse(data, { trim: true, skip_empty_lines: true }).on('readable', function onRead() {
       let record
       // eslint-disable-next-line no-cond-assign
@@ -23,13 +23,13 @@ export const csvParserService = ({ fs, isBinaryFileSync }) => {
     })
 
     return new Promise((resolve, reject) => {
-      parser.on('error', (error) => reject(error))
+      parser.on('error', error => reject(error))
       parser.on('end', () => resolve(output))
       parser.on('finish', () => resolve(output))
     })
   }
 
-  const readFile = (path) =>
+  const readFile = path =>
     new Promise((resolve, reject) => {
       fs.readFile(path, (error, result) => {
         if (error) {
@@ -68,7 +68,7 @@ export const csvParserService = ({ fs, isBinaryFileSync }) => {
     }
   }
 
-  const loadAndParseCsvFile = async (args) => {
+  const loadAndParseCsvFile = async args => {
     await validateCsvFile({ path: args.path, originalFilename: args.originalFilename })
     try {
       const data = await readFile(args.path)

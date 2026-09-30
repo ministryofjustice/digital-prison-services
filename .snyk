@@ -2,23 +2,47 @@
 version: v1.25.1
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
-  SNYK-JS-PACOTE-8225084:
-    - '*':
-        reason: Dev dependency
-        expires: 2026-09-01T00:00:00.000Z
-        created: 2026-06-02T12:48:25.992Z
-  SNYK-JS-BRACEEXPANSION-16755174:
-    - '*':
-        reason: Dev dependency
-        expires: 2026-09-01T00:00:00.000Z
-        created: 2026-06-02T12:48:57.498Z
-  SNYK-JS-BRACEEXPANSION-17706650:
-    - '*':
-        reason: Dev dependency
-        expires: 2026-08-01T00:00:00.000Z
-        created: 2026-07-01T15:14:21.930Z
-  SNYK-JS-UNDICI-17372758:
-    - '*':
-        expires: 2026-08-01T00:00:00.000Z
-        created: 2026-07-01T15:19:16.366Z
+  "SNYK-JS-BRACEEXPANSION-18313044":
+    - "*":
+        reason:
+          "Temp ignore as bundled with npm. Resolved when npm releases version
+          with brace-expansion@5.0.7."
+        expires: "2026-10-28T00:00:00.000Z"
+        created: "2026-09-28T13:27:00.000Z"
+
+  "SNYK-JS-BRACEEXPANSION-18512280":
+    - "*":
+        reason:
+          "Temp ignore as bundled with npm. Resolved when npm releases version
+          with brace-expansion@5.0.9."
+        expires: "2026-10-28T00:00:00.000Z"
+        created: "2026-09-28T13:27:00.000Z"
+
+  "SNYK-JS-UNDICI-19635210":
+    - "*":
+        reason:
+          "Temp ignore as bundled with npm with no direct upgrade. Resolved when
+          new docker image is released with npm version using undici@6.28.1."
+          expires: "2026-10-28T00:00:00.000Z"
+          created: "2026-09-28T13:27:00.000Z"
+
+  "SNYK-JS-UNDICI-19635226":
+    - "*":
+        reason:
+          "Temp ignore as bundled with npm with no direct upgrade. Resolved when
+          new docker image is released with npm version using undici@6.28.1."
+          expires: "2026-10-28T00:00:00.000Z"
+          created: "2026-09-28T13:27:00.000Z"
+
+  "SNYK-JS-HTTPCACHESEMANTICS-19964064":
+    - "*":
+        reason: "Temporarily accepted: found in npm bundled with the runtime base image; no fixed version currently available. Review base-image removal of npm."
+        expires: "2026-10-28T00:00:00.000Z"
+        created: "2026-09-28T13:27:00.000Z"
+
+  "SNYK-JS-HTTPCACHESEMANTICS-19964068":
+    - "*":
+        reason: "Temporarily accepted: found in npm bundled with the runtime base image; no fixed version currently available. Review base-image removal of npm."
+        expires: "2026-10-28T00:00:00.000Z"
+        created: "2026-09-28T13:27:00.000Z"
 patch: {}
