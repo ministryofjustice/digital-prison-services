@@ -87,6 +87,3 @@ generic-service:
       - internal
       - prisons
       - private_prisons
-
-generic-prometheus-alerts:
-  alertSeverity: hmpps-activities-management-preprod
