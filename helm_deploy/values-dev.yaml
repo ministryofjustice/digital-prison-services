@@ -83,5 +83,3 @@ generic-service:
    SUNSET_BANNER_ENABLED: true
    ALERTS_API_URL: "https://alerts-api-dev.hmpps.service.justice.gov.uk"
    CHANGE_CASELOAD_REDIRECT_ENABLED_PRISONS: "***"
-generic-prometheus-alerts:
- alertSeverity: hmpps-activities-management-dev
