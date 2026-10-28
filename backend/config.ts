@@ -124,10 +124,6 @@ export const apis = {
     url: process.env.API_DATA_COMPLIANCE_ENDPOINT_URL || 'http://localhost:8083/',
     timeoutSeconds: toNumber(process.env.API_DATA_COMPLIANCE_ENDPOINT_TIMEOUT_SECONDS) || 30,
   },
-  restrictedPatient: {
-    url: process.env.RESTRICTED_PATIENT_API_URL || 'http://localhost:8089/',
-    timeoutSeconds: toNumber(process.env.RESTRICTED_PATIENT_API_TIMEOUT_SECONDS) || 30,
-  },
   tokenverification: {
     url: process.env.TOKENVERIFICATION_API_URL || 'http://localhost:8100',
     timeoutSeconds: toNumber(process.env.TOKENVERIFICATION_API_TIMEOUT_SECONDS) || 10,

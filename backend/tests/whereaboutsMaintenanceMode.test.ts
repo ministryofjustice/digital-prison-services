@@ -44,9 +44,8 @@ describe('Whereabouts maintenance mode flag is true', () => {
       caseNotesApi: '',
       offenderSearchApi: '',
       curiousApi: '',
-      restrictedPatientApi: '',
       whereaboutsMaintenanceMode: true,
-    })
+    }),
   )
 
   it('should display maintenance page when user navigates to /manage-prisoner-whereabouts', () => {
@@ -58,7 +57,7 @@ describe('Whereabouts maintenance mode flag is true', () => {
           'maintenancePage.njk',
           expect.objectContaining({
             title: 'Prisoner whereabouts',
-          })
+          }),
         )
       })
   })
@@ -72,7 +71,7 @@ describe('Whereabouts maintenance mode flag is true', () => {
           'maintenancePage.njk',
           expect.objectContaining({
             title: 'Prisoner whereabouts',
-          })
+          }),
         )
       })
   })
@@ -86,7 +85,7 @@ describe('Whereabouts maintenance mode flag is true', () => {
           'maintenancePage.njk',
           expect.objectContaining({
             title: 'Appointment details',
-          })
+          }),
         )
       })
   })
@@ -100,7 +99,7 @@ describe('Whereabouts maintenance mode flag is true', () => {
           'maintenancePage.njk',
           expect.objectContaining({
             title: 'Appointment details',
-          })
+          }),
         )
       })
   })

@@ -21,7 +21,6 @@ const {
 } = require('./integration-tests/mockApis/responses/houseBlockResponse')
 const alertsResponse = require('./integration-tests/mockApis/responses/alertsResponse.json')
 const delius = require('./integration-tests/mockApis/delius')
-const restrictedPatientApi = require('./integration-tests/mockApis/restrictedPatient')
 const offenderSearch = require('./integration-tests/mockApis/offenderSearch')
 const curiousApi = require('./integration-tests/mockApis/curiousApi')
 
@@ -359,7 +358,6 @@ module.exports = defineConfig({
         stubSentenceTerms: (sentenceTerms) => prisonApi.stubSentenceTerms(sentenceTerms),
         stubClientCredentialsRequest: () => auth.stubClientCredentialsRequest(),
         stubUserMe: ({ username, staffId, name }) => users.stubUserMe(username, staffId, name),
-        stubIsCaseLoadRestrictedPatient: (details) => restrictedPatientApi.stubIsCaseLoadRestrictedPatient(details),
         stubVisitsWithVisitors: ({ visitsWithVisitors, offenderBasicDetails }) =>
           Promise.all([
             prisonApi.stubVisitsWithVisitors(visitsWithVisitors),

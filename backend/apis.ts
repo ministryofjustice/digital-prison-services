@@ -8,7 +8,6 @@ import { whereaboutsApiFactory } from './api/whereaboutsApi'
 import { locationsInsidePrisonApiFactory } from './api/locationsInsidePrisonApi'
 import { deliusIntegrationApiFactory } from './api/deliusIntegrationApi'
 import { dataComplianceApiFactory } from './api/dataComplianceApi'
-import { restrictedPatientApiFactory } from './api/restrictedPatientApi'
 import { caseNotesApiFactory } from './api/caseNotesApi'
 import { tokenVerificationApiFactory } from './api/tokenVerificationApi'
 import { offenderSearchApiFactory } from './api/offenderSearchApi'
@@ -22,42 +21,42 @@ export const prisonApi = prisonApiFactory(
   clientFactory({
     baseUrl: config.apis.prisonApi.url,
     timeout: config.apis.prisonApi.timeoutSeconds * 1000,
-  })
+  }),
 )
 
 export const whereaboutsApi = whereaboutsApiFactory(
   clientFactory({
     baseUrl: config.apis.whereabouts.url,
     timeout: config.apis.whereabouts.timeoutSeconds * 1000,
-  })
+  }),
 )
 
 export const bookAVideoLinkApi = bookAVideoLinkApiFactory(
   clientFactory({
     baseUrl: config.apis.bookAVideoLinkApi.url,
     timeout: config.apis.bookAVideoLinkApi.timeoutSeconds * 1000,
-  })
+  }),
 )
 
 export const locationsInsidePrisonApi = locationsInsidePrisonApiFactory(
   clientFactory({
     baseUrl: config.apis.locationsInsidePrisonApi.url,
     timeout: config.apis.locationsInsidePrisonApi.timeoutSeconds * 1000,
-  })
+  }),
 )
 
 export const nomisMapping = nomisMappingClientFactory(
   clientFactory({
     baseUrl: config.apis.nomisMapping.url,
     timeout: config.apis.nomisMapping.timeoutSeconds * 1000,
-  })
+  }),
 )
 
 export const deliusIntegrationApi = deliusIntegrationApiFactory(
   clientFactory({
     baseUrl: config.apis.deliusIntegration.url,
     timeout: config.apis.deliusIntegration.timeoutSeconds * 1000,
-  })
+  }),
 )
 
 export const oauthApi = oauthApiFactory(
@@ -65,56 +64,49 @@ export const oauthApi = oauthApiFactory(
     baseUrl: config.apis.oauth2.url,
     timeout: config.apis.oauth2.timeoutSeconds * 1000,
   }),
-  { ...config.apis.oauth2 }
+  { ...config.apis.oauth2 },
 )
 
 export const hmppsManageUsersApi = hmppsManageUsersApiFactory(
   clientFactory({
     baseUrl: config.apis.hmppsManageUsers.url,
     timeout: config.apis.hmppsManageUsers.timeoutSeconds * 1000,
-  })
+  }),
 )
 
 export const dataComplianceApi = dataComplianceApiFactory(
   clientFactory({
     baseUrl: config.apis.datacompliance.url,
     timeout: config.apis.datacompliance.timeoutSeconds * 1000,
-  })
-)
-
-export const restrictedPatientApi = restrictedPatientApiFactory(
-  clientFactory({
-    baseUrl: config.apis.restrictedPatient.url,
-    timeout: config.apis.restrictedPatient.timeoutSeconds * 1000,
-  })
+  }),
 )
 
 export const caseNotesApi = caseNotesApiFactory(
   clientFactory({
     baseUrl: config.apis.caseNotes.url,
     timeout: config.apis.caseNotes.timeoutSeconds * 1000,
-  })
+  }),
 )
 
 export const prisonerAlertsApi = prisonerAlertsApiFactory(
   clientFactory({
     baseUrl: config.apis.prisonerAlerts.url,
     timeout: config.apis.prisonerAlerts.timeoutSeconds * 1000,
-  })
+  }),
 )
 
 export const tokenVerificationApi = tokenVerificationApiFactory(
   clientFactory({
     baseUrl: config.apis.tokenverification.url,
     timeout: config.apis.tokenverification.timeoutSeconds * 1000,
-  })
+  }),
 )
 
 export const offenderSearchApi = offenderSearchApiFactory(
   clientFactory({
     baseUrl: config.apis.offenderSearch.url,
     timeout: config.apis.offenderSearch.timeoutSeconds * 1000,
-  })
+  }),
 )
 
 export const curiousApi = CuriousApi.create(clientFactory({ baseUrl: config.apis.curious.url }))
@@ -123,7 +115,7 @@ export const feComponentsApi = feComponentsApiFactory(
   clientFactory({
     baseUrl: config.apis.frontendComponents.url,
     timeout: config.apis.frontendComponents.timeoutSeconds * 1000,
-  })
+  }),
 )
 
 export default {
@@ -140,7 +132,6 @@ export default {
   tokenVerificationApi,
   offenderSearchApi,
   curiousApi,
-  restrictedPatientApi,
   feComponentsApi,
   nomisMapping,
 }
