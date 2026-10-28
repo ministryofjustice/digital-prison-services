@@ -115,7 +115,6 @@ const setup = ({
   caseNotesApi,
   offenderSearchApi,
   curiousApi,
-  restrictedPatientApi,
   whereaboutsMaintenanceMode,
   getClientCredentialsTokens,
   nomisMapping,
@@ -142,60 +141,57 @@ const setup = ({
     notificationBar({
       contentfulService: contentfulServiceFactory({ notificationCookie, contentfulClient }, contentfulCache),
       logError,
-    })
+    }),
   )
 
-  router.use(
-    '/prisoner/:offenderNo/add-case-note',
-    createCaseNoteRouter({ prisonApi, oauthApi, systemOauthClient, restrictedPatientApi })
-  )
+  router.use('/prisoner/:offenderNo/add-case-note', createCaseNoteRouter({ prisonApi, oauthApi }))
 
   if (whereaboutsMaintenanceMode) {
     router.use('/manage-prisoner-whereabouts*', maintenancePage('Prisoner whereabouts'))
   } else {
     router.use(
       '/manage-prisoner-whereabouts',
-      whereaboutsRouter({ oauthApi, prisonApi, prisonerAlertsApi, offenderSearchApi, systemOauthClient })
+      whereaboutsRouter({ oauthApi, prisonApi, prisonerAlertsApi, offenderSearchApi, systemOauthClient }),
     )
     router.get(
       '/manage-prisoner-whereabouts/attendance-reason-statistics',
       isActivitiesRolledOut,
-      attendanceStatisticsFactory(oauthApi, hmppsManageUsersApi, prisonApi, whereaboutsApi).attendanceStatistics
+      attendanceStatisticsFactory(oauthApi, hmppsManageUsersApi, prisonApi, whereaboutsApi).attendanceStatistics,
     )
     router.get(
       '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/:reason',
       isActivitiesRolledOut,
       attendanceStatisticsFactory(oauthApi, hmppsManageUsersApi, prisonApi, whereaboutsApi)
-        .attendanceStatisticsOffendersList
+        .attendanceStatisticsOffendersList,
     )
 
     router.get(
       '/manage-prisoner-whereabouts/attendance-reason-statistics/suspended',
       isActivitiesRolledOut,
       attendanceStatisticsFactory(oauthApi, hmppsManageUsersApi, prisonApi, whereaboutsApi)
-        .attendanceStatisticsSuspendedList
+        .attendanceStatisticsSuspendedList,
     )
 
     router.get(
       '/manage-prisoner-whereabouts/select-residential-location',
       isActivitiesRolledOut,
-      selectResidentialLocationController(locationsInsidePrisonApi, systemOauthClient).index
+      selectResidentialLocationController(locationsInsidePrisonApi, systemOauthClient).index,
     )
     router.post(
       '/manage-prisoner-whereabouts/select-residential-location',
       isActivitiesRolledOut,
-      selectResidentialLocationController(locationsInsidePrisonApi, systemOauthClient).post
+      selectResidentialLocationController(locationsInsidePrisonApi, systemOauthClient).post,
     )
 
     router.get(
       '/manage-prisoner-whereabouts/select-location',
       isActivitiesRolledOut,
-      selectActivityLocation({ prisonApi }).index
+      selectActivityLocation({ prisonApi }).index,
     )
     router.post(
       '/manage-prisoner-whereabouts/select-location',
       isActivitiesRolledOut,
-      selectActivityLocation({ prisonApi }).post
+      selectActivityLocation({ prisonApi }).post,
     )
   }
 
@@ -203,13 +199,13 @@ const setup = ({
     '/offenders/:offenderNo/probation-documents',
     asyncMiddleware(
       probationDocumentsFactory(oauthApi, hmppsManageUsersApi, prisonApi, deliusIntegrationApi, systemOauthClient)
-        .displayProbationDocumentsPage
-    )
+        .displayProbationDocumentsPage,
+    ),
   )
   router.get(
     '/offenders/:offenderNo/probation-documents/:documentId/download',
     downloadProbationDocumentFactory(oauthApi, hmppsManageUsersApi, deliusIntegrationApi, systemOauthClient, prisonApi)
-      .downloadDocument
+      .downloadDocument,
   )
 
   router.get('/bulk-appointments/need-to-upload-file', isAppointmentsRolledOut, async (req, res) => {
@@ -225,7 +221,7 @@ const setup = ({
   router.use(
     '/bulk-appointments/upload-file',
     isAppointmentsRolledOut,
-    bulkAppointmentsUploadRouter({ prisonApi, logError })
+    bulkAppointmentsUploadRouter({ prisonApi, logError }),
   )
   router.use(
     '/bulk-appointments/add-appointment-details',
@@ -237,32 +233,32 @@ const setup = ({
       systemOauthClient,
       oauthApi,
       logError,
-    })
+    }),
   )
   router.use(
     '/bulk-appointments/appointments-added',
     isAppointmentsRolledOut,
-    bulkAppointmentsAddedRouter({ logError })
+    bulkAppointmentsAddedRouter({ logError }),
   )
   router.get(
     '/bulk-appointments/appointments-movement-slips',
     isAppointmentsRolledOut,
-    bulkAppointmentsSlipsRouter({ prisonApi, logError })
+    bulkAppointmentsSlipsRouter({ prisonApi, logError }),
   )
   router.use(
     '/bulk-appointments/confirm-appointments',
     isAppointmentsRolledOut,
-    bulkAppointmentsConfirmRouter({ systemOauthClient, prisonApi })
+    bulkAppointmentsConfirmRouter({ systemOauthClient, prisonApi }),
   )
   router.use(
     '/bulk-appointments/appointment-clashes',
     isAppointmentsRolledOut,
-    bulkAppointmentsClashesRouter({ systemOauthClient, prisonApi })
+    bulkAppointmentsClashesRouter({ systemOauthClient, prisonApi }),
   )
   router.use(
     '/bulk-appointments/invalid-numbers',
     isAppointmentsRolledOut,
-    bulkAppointmentsInvalidNumbersRouter({ prisonApi, logError })
+    bulkAppointmentsInvalidNumbersRouter({ prisonApi, logError }),
   )
 
   router.use('/change-caseload', changeCaseloadRouter({ prisonApi, logError, systemOauthClient }))
@@ -271,14 +267,14 @@ const setup = ({
     router.use(
       '/offenders/:offenderNo/add-appointment',
       isAppointmentsRolledOut,
-      maintenancePage('Appointment details')
+      maintenancePage('Appointment details'),
     )
   } else {
     router.use(
       '/offenders/:offenderNo/add-appointment',
       isCreateIndividualAppointmentRolledOut,
       redirectToPrisonerProfileForAppointments,
-      addAppointmentRouter({ systemOauthClient, prisonApi, locationsInsidePrisonApi, whereaboutsApi, logError })
+      addAppointmentRouter({ systemOauthClient, prisonApi, locationsInsidePrisonApi, whereaboutsApi, logError }),
     )
   }
 
@@ -293,18 +289,18 @@ const setup = ({
       locationsInsidePrisonApi,
       bookAVideoLinkApi,
       nomisMapping,
-    })
+    }),
   )
 
   router.use(
     '/offenders/:offenderNo/confirm-appointment',
     isAppointmentsRolledOut,
-    confirmAppointmentRouter({ prisonApi, locationsInsidePrisonApi, systemOauthClient, logError })
+    confirmAppointmentRouter({ prisonApi, locationsInsidePrisonApi, systemOauthClient, logError }),
   )
 
   router.use(
     '/offenders/:offenderNo/retention-reasons',
-    retentionReasonsRouter({ prisonApi, dataComplianceApi, logError })
+    retentionReasonsRouter({ prisonApi, dataComplianceApi, logError }),
   )
 
   router.use('/manage-prisoner-whereabouts/activity-results*', (req, res, next) => {
@@ -335,7 +331,7 @@ const setup = ({
 
   router.use(
     '/prisoner/:offenderNo',
-    prisonerProfileRouter({ prisonApi, systemOauthClient, whereaboutsApi, curiousApi })
+    prisonerProfileRouter({ prisonApi, systemOauthClient, whereaboutsApi, curiousApi }),
   )
 
   router.use('/change-someones-cell*', permit(oauthApi, ['CELL_MOVE']), changeSomeonesCellHasMovedRouter())
@@ -348,14 +344,14 @@ const setup = ({
 
   router.use(
     '/prisoner/:offenderNo/case-notes/delete-case-note/:caseNoteId/:caseNoteAmendmentId?',
-    deleteCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, logError, systemOauthClient })
+    deleteCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, logError, systemOauthClient }),
   )
 
   router.get(
     ['/content', '/content/:path'],
     contentController({
       contentfulService: contentfulServiceFactory({ contentfulClient, notificationCookie }, contentfulCache),
-    })
+    }),
   )
 
   router.use('/global-search', globalSearchRouter({ offenderSearchApi, oauthApi, logError }))
@@ -381,7 +377,7 @@ const setup = ({
         videoLinkBookingService,
         getClientCredentialsTokens,
         systemOauthClient,
-      }).index
+      }).index,
     )
     router.post(
       '/appointment-details/:id/confirm-deletion',
@@ -399,21 +395,21 @@ const setup = ({
         videoLinkBookingService,
         getClientCredentialsTokens,
         systemOauthClient,
-      }).post
+      }).post,
     )
     router.get(
       '/appointment-details/:id/delete-recurring-bookings',
       isAppointmentsRolledOut,
       appointmentDeleteRecurringBookings({
         whereaboutsApi,
-      }).index
+      }).index,
     )
     router.post(
       '/appointment-details/:id/delete-recurring-bookings',
       isAppointmentsRolledOut,
       appointmentDeleteRecurringBookings({
         whereaboutsApi,
-      }).post
+      }).post,
     )
     router.get('/appointment-details/deleted', isAppointmentsRolledOut, appointmentDeleted().index)
     router.use(
@@ -432,7 +428,7 @@ const setup = ({
           hmppsManageUsersApi,
         }),
         systemOauthClient,
-      })
+      }),
     )
   }
 
@@ -441,4 +437,4 @@ const setup = ({
   return router
 }
 
-export default (dependencies) => setup(dependencies)
+export default dependencies => setup(dependencies)

@@ -66,14 +66,14 @@ app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
 
 app.use(
-  currentUser({ prisonApi: apis.prisonApi, hmppsManageUsersApi: apis.hmppsManageUsersApi, getClientCredentialsTokens })
+  currentUser({ prisonApi: apis.prisonApi, hmppsManageUsersApi: apis.hmppsManageUsersApi, getClientCredentialsTokens }),
 )
 app.get(
   feComponentsRoutes,
   getFrontendComponents({
     feComponentsApi: apis.feComponentsApi,
     latestFeatures: config.apis.frontendComponents.latestFeatures,
-  })
+  }),
 )
 app.use(returnUrl())
 
@@ -94,7 +94,7 @@ app.use(
     hmppsManageUsersApi: apis.hmppsManageUsersApi,
     caseNotesApi: apis.caseNotesApi,
     prisonerAlertsApi: apis.prisonerAlertsApi,
-  })
+  }),
 )
 
 // Routes that use multer for multipart upload must be registered before csrf executes
@@ -115,11 +115,10 @@ app.use(
     caseNotesApi: apis.caseNotesApi,
     offenderSearchApi: apis.offenderSearchApi,
     curiousApi: apis.curiousApi,
-    restrictedPatientApi: apis.restrictedPatientApi,
     nomisMapping: apis.nomisMapping,
     whereaboutsMaintenanceMode: config.app.whereaboutsMaintenanceMode,
     getClientCredentialsTokens,
-  })
+  }),
 )
 app.use(setupReactRoutes())
 app.use('/$', homepageRedirect())

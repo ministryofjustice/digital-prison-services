@@ -1,6 +1,6 @@
 import asyncMiddleware from '../middleware/asyncHandler'
 import { serviceUnavailableMessage } from '../common-messages'
-import { getContextWithClientTokenAndRoles } from './prisonerProfile/prisonerProfileContext'
+import getContextWithClientTokenAndRoles from './prisonerProfile/prisonerProfileContext'
 import contextProperties from '../contextProperties'
 
 export const factory = ({
@@ -48,7 +48,7 @@ export const factory = ({
         groupName,
         date,
         timeSlot,
-        wingStatus
+        wingStatus,
       )
       return res.json(viewModel)
     } catch (error) {
@@ -82,11 +82,11 @@ export const factory = ({
 
     csvParserService
       .loadAndParseCsvFile(file)
-      .then(async (fileContent) => {
+      .then(async fileContent => {
         const viewModel = await offenderLoader.loadFromCsvContent(res.locals, fileContent, agencyId)
         res.json(viewModel)
       })
-      .catch((error) => {
+      .catch(error => {
         res.status(400)
         res.send(error.message)
         res.end()
@@ -109,12 +109,10 @@ export const factory = ({
   const getCaseNote = asyncMiddleware(async (req, res) => {
     const { offenderNumber, caseNoteId } = req.params
     const { context } = await getContextWithClientTokenAndRoles({
-      offenderNo: offenderNumber,
       res,
       req,
       oauthApi: null,
       systemOauthClient: null,
-      restrictedPatientApi: null,
     })
 
     const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNumber)
@@ -124,7 +122,7 @@ export const factory = ({
 
     const caseNote = await caseNotesApi.getCaseNote(context, offenderNumber, caseNoteId)
 
-    const translateToFirstLast = (lastNameFirstName) => {
+    const translateToFirstLast = lastNameFirstName => {
       if (!lastNameFirstName) return ''
       if (!lastNameFirstName.includes(',')) return lastNameFirstName
       const reversed = lastNameFirstName.split(',').reverse()

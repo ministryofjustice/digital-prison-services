@@ -1,25 +1,15 @@
 import config from '../config'
 import { properCaseName } from '../utils'
-import getContext from './prisonerProfile/prisonerProfileContext'
 
-const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
+const getOffenderUrl = offenderNo => `/prisoner/${offenderNo}`
 
-const getContextWithRoles = async (offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi) => {
+const getContextWithRoles = (res, oauthApi) => {
   const userRoles = oauthApi.userRoles(res.locals)
   res.locals = { ...res.locals, userRoles }
-  const { context } = await getContext({
-    offenderNo,
-    res,
-    req,
-    oauthApi,
-    systemOauthClient,
-    restrictedPatientApi,
-  })
-
-  return context
+  return res.locals
 }
 
-export const caseNoteFactory = ({ prisonApi, oauthApi, systemOauthClient, restrictedPatientApi }) => {
+export const caseNoteFactory = ({ prisonApi, oauthApi }) => {
   const getOffenderDetails = async (context, offenderNo) => {
     const { firstName, lastName } = await prisonApi.getDetails(context, offenderNo)
 
@@ -32,7 +22,7 @@ export const caseNoteFactory = ({ prisonApi, oauthApi, systemOauthClient, restri
 
   const recordIncentiveLevelInterruption = async (req, res) => {
     const { offenderNo } = req.params
-    const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
+    const context = getContextWithRoles(res, oauthApi)
     const offenderDetails = await getOffenderDetails(context, offenderNo)
 
     return res.render('caseNotes/recordIncentiveLevelInterruption.njk', {

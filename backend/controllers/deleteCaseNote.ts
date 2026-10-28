@@ -1,5 +1,5 @@
 import { capitalize, formatName, putLastNameFirst } from '../utils'
-import { getContextWithClientTokenAndRoles } from './prisonerProfile/prisonerProfileContext'
+import getContextWithClientTokenAndRoles from './prisonerProfile/prisonerProfileContext'
 import contextProperties from '../contextProperties'
 
 export default ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient }) => {
@@ -22,12 +22,10 @@ export default ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient }) => {
 
     try {
       const { context } = await getContextWithClientTokenAndRoles({
-        offenderNo,
         res,
         req,
         oauthApi,
         systemOauthClient,
-        restrictedPatientApi: null,
       })
 
       const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo)
@@ -36,7 +34,7 @@ export default ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient }) => {
       }
       const caseNote = await caseNotesApi.getCaseNote(context, offenderNo, caseNoteId)
 
-      const userRoles = oauthApi.userRoles(res.locals).map((role) => role.roleCode)
+      const userRoles = oauthApi.userRoles(res.locals).map(role => role.roleCode)
 
       // @ts-expect-error: This kind of expression is always truthy.
       if (!userRoles.includes('DELETE_SENSITIVE_CASE_NOTES' || !caseNote.caseNoteId)) {
@@ -55,7 +53,7 @@ export default ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient }) => {
       if (caseNoteAmendmentId) {
         const amendmentToDelete =
           caseNote.amendments &&
-          caseNote.amendments.find((amendment) => amendment.caseNoteAmendmentId === Number(caseNoteAmendmentId))
+          caseNote.amendments.find(amendment => amendment.caseNoteAmendmentId === Number(caseNoteAmendmentId))
 
         if (!amendmentToDelete) {
           return res.render('notFound.njk', { url: req.headers.referer || `/prisoner/${offenderNo}/case-notes` })
@@ -76,7 +74,7 @@ export default ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient }) => {
           authorName: caseNote.authorName,
           amendments:
             caseNote.amendments &&
-            caseNote.amendments.map((amendment) => ({
+            caseNote.amendments.map(amendment => ({
               text: amendment.additionalNoteText,
               date: amendment.creationDateTime,
               authorName: amendment.authorName,
@@ -95,12 +93,10 @@ export default ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient }) => {
     const { offenderNo, caseNoteId, caseNoteAmendmentId } = req.params
 
     const { context } = await getContextWithClientTokenAndRoles({
-      offenderNo,
       res,
       req,
       oauthApi,
       systemOauthClient,
-      restrictedPatientApi: null,
     })
 
     try {

@@ -4,16 +4,9 @@ import caseNoteCtrl from '../controllers/caseNote'
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
 const prisonApi = { getDetails: {} }
-const restrictedPatientApi = {}
-const systemOauthClient = { getClientCredentialsTokens: () => ({ access_token: 'CLIENT_TOKEN' }) }
 const oauthApi = {}
 
-const { recordIncentiveLevelInterruption } = caseNoteCtrl.caseNoteFactory({
-  prisonApi,
-  oauthApi,
-  systemOauthClient,
-  restrictedPatientApi,
-})
+const { recordIncentiveLevelInterruption } = caseNoteCtrl.caseNoteFactory({ prisonApi, oauthApi })
 
 jest.mock('../logError', () => ({
   logError: jest.fn(),
@@ -68,7 +61,21 @@ describe('case note management', () => {
           },
           caseNotesUrl: '/prisoner/ABC123/case-notes',
           recordIncentiveLevelUrl: `${config.apis.incentives.ui_url}/incentive-reviews/prisoner/ABC123/change-incentive-level`,
-        })
+        }),
+      )
+    })
+
+    it('should look up the prisoner with the user context, including for POM users', async () => {
+      const req = { ...mockCreateReq, params: { offenderNo } }
+      res.locals = { user: { allCaseloads: [{ caseLoadId: 'MDI' }] } }
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
+      oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'POM' }])
+
+      await recordIncentiveLevelInterruption(req, res)
+
+      expect(prisonApi.getDetails).toHaveBeenCalledWith(
+        { user: { allCaseloads: [{ caseLoadId: 'MDI' }] }, userRoles: [{ roleCode: 'POM' }] },
+        offenderNo,
       )
     })
   })
