@@ -1,7 +1,6 @@
-import './bootstrap'
-
 import './azure-appinsights'
 
+import { flushTelemetry } from '@ministryofjustice/hmpps-azure-telemetry'
 import express from 'express'
 import 'express-async-errors'
 
@@ -38,6 +37,7 @@ import homepageRedirect from './controllers/homepage/homepageRedirect'
 import getFrontendComponents, { feComponentsRoutes } from './middleware/getFeComponents'
 import setUpCsrf from './middleware/setUpCsrf'
 import multipartRouter from './routes/multipartRouter'
+import addUserDataToTelemetry from './middleware/addUserDataToTelemetry'
 
 // We do not want the server to exit, partly because any log information will be lost.
 // Instead, log the error so we can trace, diagnose and fix the problem.
@@ -68,6 +68,7 @@ app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVer
 app.use(
   currentUser({ prisonApi: apis.prisonApi, hmppsManageUsersApi: apis.hmppsManageUsersApi, getClientCredentialsTokens }),
 )
+app.use(addUserDataToTelemetry)
 app.get(
   feComponentsRoutes,
   getFrontendComponents({
@@ -129,3 +130,15 @@ app.listen(config.app.port, () => {
   // eslint-disable-next-line no-console
   console.log('Backend running on port', config.app.port)
 })
+
+const shutdown = () =>
+  flushTelemetry().then(
+    () => process.exit(0),
+    error => {
+      logError('telemetry shutdown', error, 'Failed to flush telemetry')
+      process.exit(1)
+    },
+  )
+
+process.once('SIGTERM', shutdown)
+process.once('SIGINT', shutdown)

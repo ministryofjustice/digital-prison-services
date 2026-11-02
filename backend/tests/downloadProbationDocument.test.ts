@@ -1,5 +1,7 @@
+/** @jest-environment node */
 import { downloadProbationDocumentFactory } from '../controllers/downloadProbationDocument'
 import { deliusIntegrationApiFactory } from '../api/deliusIntegrationApi'
+import telemetry from '../azure-appinsights'
 
 describe('Download probation documents', () => {
   const oauthApi = {}
@@ -7,6 +9,7 @@ describe('Download probation documents', () => {
   const prisonApi = {}
   const deliusIntegrationApi = {}
   const systemOauthClient = {}
+  const trackEvent = jest.spyOn(telemetry, 'trackEvent').mockImplementation()
 
   describe('Controller', () => {
     const mockReq = {
@@ -14,6 +17,7 @@ describe('Download probation documents', () => {
       originalUrl: '/offenders/G9542VP/probation-documents/123/download',
     }
     beforeEach(() => {
+      trackEvent.mockClear()
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles = jest.fn()
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
@@ -52,7 +56,7 @@ describe('Download probation documents', () => {
           hmppsManageUsersApi,
           deliusIntegrationApi,
           systemOauthClient,
-          prisonApi
+          prisonApi,
         ).downloadDocument
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         res.render = jest.fn()
@@ -75,8 +79,13 @@ describe('Download probation documents', () => {
             documentId: '123',
             offenderNo: 'G9542VP',
             res,
-          }
+          },
         )
+        expect(trackEvent).toHaveBeenCalledWith('DownloadProbationDocumentSuccess', {
+          username: 'USER_ADM',
+          documentId: '123',
+          offenderNo: 'G9542VP',
+        })
       })
 
       describe('access to the download is based on role and caseload', () => {
@@ -102,6 +111,11 @@ describe('Download probation documents', () => {
           const error = new Error('You do not have the correct role or caseload to access this page')
 
           await expect(page(req, res)).rejects.toThrowError(error)
+          expect(trackEvent).toHaveBeenCalledWith('DownloadProbationDocumentFailure', {
+            username: 'USER_ADM',
+            documentId: '123',
+            offenderNo: 'G9542VP',
+          })
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'locals' does not exist on type '{}'.
           expect(res.locals.redirectUrl).toBe('/offenders/G9542VP/probation-documents')
         })

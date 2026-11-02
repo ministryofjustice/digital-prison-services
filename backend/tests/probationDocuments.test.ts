@@ -1,5 +1,7 @@
+/** @jest-environment node */
 import { probationDocumentsFactory } from '../controllers/probationDocuments'
 import { Conviction } from '../api/deliusIntegrationApi'
+import telemetry from '../azure-appinsights'
 
 function aDocument(overrides = {}) {
   return {
@@ -38,7 +40,7 @@ function documentsWithMultipleConvictionMatching(convictions) {
   return expect.objectContaining({
     documents: {
       offenderDocuments: [],
-      convictions: expect.objectContaining(convictions.map((conviction) => expect.objectContaining(conviction))),
+      convictions: expect.objectContaining(convictions.map(conviction => expect.objectContaining(conviction))),
     },
   })
 }
@@ -50,6 +52,7 @@ function error(message, status) {
 }
 
 describe('Probation documents', () => {
+  const trackEvent = jest.spyOn(telemetry, 'trackEvent').mockImplementation()
   const oauthApi = {
     userRoles: jest.fn(),
   }
@@ -71,6 +74,7 @@ describe('Probation documents', () => {
   describe('Controller', () => {
     const mockReq = { flash: jest.fn().mockReturnValue([]), originalUrl: '/offenders/G9542VP/probation-documents' }
     beforeEach(() => {
+      trackEvent.mockClear()
       prisonApi.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
       prisonApi.userCaseLoads = jest.fn()
       hmppsManageUsersApi.currentUser = jest.fn()
@@ -116,7 +120,7 @@ describe('Probation documents', () => {
           hmppsManageUsersApi,
           prisonApi,
           deliusIntegrationApi,
-          systemOauthClient
+          systemOauthClient,
         ).displayProbationDocumentsPage
         res.render = jest.fn()
 
@@ -126,11 +130,15 @@ describe('Probation documents', () => {
       it('should render the probation documents page with title', async () => {
         await page(req, res)
 
+        expect(trackEvent).toHaveBeenCalledWith('ViewProbationDocumentSuccess', {
+          username: 'USER_ADM',
+          offenderNo: 'G9542VP',
+        })
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           expect.objectContaining({
             title: 'Probation documents - Digital Prison Services',
-          })
+          }),
         )
       })
 
@@ -141,7 +149,7 @@ describe('Probation documents', () => {
           'probationDocuments.njk',
           expect.objectContaining({
             errors: [],
-          })
+          }),
         )
       })
 
@@ -164,7 +172,7 @@ describe('Probation documents', () => {
               },
               displayName: 'User Name',
             },
-          })
+          }),
         )
       })
 
@@ -183,7 +191,7 @@ describe('Probation documents', () => {
               offenderDocuments: [expect.objectContaining({ id: '1' }), expect.objectContaining({ id: '2' })],
               convictions: [],
             },
-          })
+          }),
         )
       })
 
@@ -219,7 +227,7 @@ describe('Probation documents', () => {
               ],
               convictions: [],
             },
-          })
+          }),
         )
       })
       it('should allow page to be displayed when no documents at all', async () => {
@@ -237,7 +245,7 @@ describe('Probation documents', () => {
               offenderDocuments: [],
               convictions: [],
             },
-          })
+          }),
         )
       })
 
@@ -257,7 +265,7 @@ describe('Probation documents', () => {
                 }),
               ]),
             },
-          })
+          }),
         )
       })
 
@@ -286,7 +294,7 @@ describe('Probation documents', () => {
                 }),
               ]),
             },
-          })
+          }),
         )
       })
 
@@ -330,7 +338,7 @@ describe('Probation documents', () => {
                 }),
               ]),
             },
-          })
+          }),
         )
       })
 
@@ -343,7 +351,7 @@ describe('Probation documents', () => {
 
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
-          documentsWithMultipleConvictionMatching([{ active: true }, { active: false }])
+          documentsWithMultipleConvictionMatching([{ active: true }, { active: false }]),
         )
       })
 
@@ -356,7 +364,7 @@ describe('Probation documents', () => {
 
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
-          documentsWithSingleConvictionMatching({ offence: 'Treason' })
+          documentsWithSingleConvictionMatching({ offence: 'Treason' }),
         )
       })
 
@@ -369,7 +377,7 @@ describe('Probation documents', () => {
 
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
-          documentsWithSingleConvictionMatching({ institutionName: 'Berwyn (HMP)' })
+          documentsWithSingleConvictionMatching({ institutionName: 'Berwyn (HMP)' }),
         )
       })
 
@@ -391,7 +399,7 @@ describe('Probation documents', () => {
               name: 'John Smith',
               crn: 'X123456',
             },
-          })
+          }),
         )
       })
 
@@ -401,7 +409,7 @@ describe('Probation documents', () => {
 
         expect(deliusIntegrationApi.getProbationDocuments).toHaveBeenCalledWith(
           { token: 'ABC' },
-          { offenderNo: 'G9542VP' }
+          { offenderNo: 'G9542VP' },
         )
       })
       describe('access to the page based on role and caseload', () => {
@@ -417,7 +425,7 @@ describe('Probation documents', () => {
                   text: 'Sorry, the service is unavailable',
                 },
               ],
-            })
+            }),
           )
         })
 
@@ -439,7 +447,7 @@ describe('Probation documents', () => {
                   text: 'Sorry, the service is unavailable',
                 },
               ],
-            })
+            }),
           )
         })
         it('should not allow access to page if prisoner is no longer in prison', async () => {
@@ -460,7 +468,7 @@ describe('Probation documents', () => {
                   text: 'Sorry, the service is unavailable',
                 },
               ],
-            })
+            }),
           )
         })
 
@@ -477,7 +485,7 @@ describe('Probation documents', () => {
             'probationDocuments.njk',
             expect.objectContaining({
               errors: [],
-            })
+            }),
           )
         })
 
@@ -495,7 +503,7 @@ describe('Probation documents', () => {
             'probationDocuments.njk',
             expect.objectContaining({
               errors: [],
-            })
+            }),
           )
         })
       })
@@ -515,7 +523,7 @@ describe('Probation documents', () => {
           hmppsManageUsersApi,
           prisonApi,
           deliusIntegrationApi,
-          systemOauthClient
+          systemOauthClient,
         ).displayProbationDocumentsPage
         res.render = jest.fn()
 
@@ -537,7 +545,7 @@ describe('Probation documents', () => {
                   text: 'We are unable to display documents for this prisoner because we cannot find the offender record in the probation system',
                 },
               ],
-            })
+            }),
           )
         })
       })
@@ -548,6 +556,10 @@ describe('Probation documents', () => {
         it('should render page with system error message', async () => {
           await page(req, res)
 
+          expect(trackEvent).toHaveBeenCalledWith('ViewProbationDocumentFailure', {
+            username: 'unknown',
+            offenderNo: 'G9542VP',
+          })
           expect(res.render).toHaveBeenCalledWith(
             'probationDocuments.njk',
             expect.objectContaining({
@@ -556,7 +568,7 @@ describe('Probation documents', () => {
                   text: 'Sorry, the service is unavailable',
                 },
               ],
-            })
+            }),
           )
         })
       })

@@ -32,6 +32,24 @@ docker run -p 3000:3000 -d \
      quay.io/hmpps/digital-prison-services:latest
 ```
 
+## Backend telemetry
+
+Backend telemetry uses `@ministryofjustice/hmpps-azure-telemetry`, initialised in
+`backend/azure-appinsights.ts` before application modules are loaded. Set
+`APPLICATIONINSIGHTS_CONNECTION_STRING` to send telemetry to Azure Application Insights.
+The service name is taken from `package.json` (`digital-prison-services`), and the
+service version comes from `build-info.json`, falling back to the package version.
+
+Set `DEBUG_TELEMETRY=true` to also print telemetry locally. Without a connection
+string or debug mode, telemetry recording is disabled.
+
+Request spans include the existing `username`, `activeCaseLoadId`, and `referer`
+attributes when available. Outgoing HTTP 404 spans are excluded, but incoming
+404 requests are retained. Custom event names are unchanged; global search's
+`offenderNos` and `filters` properties are JSON strings.
+
+Pending telemetry is flushed on `SIGTERM` and `SIGINT`.
+
 ## Cypress integration tests
 
 The `integration-tests` directory contains a set of Cypress integration tests for the `digital-prison-services` application.

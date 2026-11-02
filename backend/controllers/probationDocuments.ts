@@ -13,15 +13,10 @@ const ensureAllowedPageAccess = (userRoles: [{ roleCode: string }], caseloads: [
 const serviceUnavailableMessage = 'Sorry, the service is unavailable'
 const offenderNotFoundInProbationMessage =
   'We are unable to display documents for this prisoner because we cannot find the offender record in the probation system'
-const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
+const getOffenderUrl = offenderNo => `/prisoner/${offenderNo}`
 
 const trackEvent = (offenderNo, suffix, { username }) => {
-  if (telemetry) {
-    telemetry.trackEvent({
-      name: `ViewProbationDocument${suffix}`,
-      properties: { username, offenderNo },
-    })
-  }
+  telemetry.trackEvent(`ViewProbationDocument${suffix}`, { username, offenderNo })
 }
 
 export const probationDocumentsFactory = (
@@ -29,7 +24,7 @@ export const probationDocumentsFactory = (
   hmppsManageUsersApi,
   prisonApi,
   deliusIntegrationApi,
-  systemOauthClient
+  systemOauthClient,
 ) => {
   const renderTemplate = (req, res, pageData) => {
     const { pageErrors, offenderDetails, ...rest } = pageData
@@ -45,7 +40,7 @@ export const probationDocumentsFactory = (
   const displayProbationDocumentsPage = async (req, res) => {
     const pageErrors = []
 
-    const getCommunityDocuments = async (offenderNo) => {
+    const getCommunityDocuments = async offenderNo => {
       try {
         const systemContext = await systemOauthClient.getClientCredentialsTokens()
         const { name, crn, documents, convictions } = await deliusIntegrationApi.getProbationDocuments(systemContext, {
@@ -80,7 +75,7 @@ export const probationDocumentsFactory = (
 
       ensureAllowedPageAccess(userRoles, caseloads, agencyId)
 
-      const activeCaseLoad = caseloads.find((cl) => cl.currentlyActive)
+      const activeCaseLoad = caseloads.find(cl => cl.currentlyActive)
       const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
 
       const offenderDetails = {

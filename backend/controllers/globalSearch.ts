@@ -6,20 +6,15 @@ import config, { app } from '../config'
 
 const trackEvent = (telemetry, prisonerResults, searchText, filters, username, activeCaseLoad) => {
   if (telemetry) {
-    const offenderNos = prisonerResults?.map((prisonerResult) => prisonerResult.offenderNo)
-    const openFilterValues = Object.fromEntries(
-      Object.entries(filters).filter((entry) => entry[1] && entry[1] !== 'ALL')
-    )
+    const offenderNos = prisonerResults?.map(prisonerResult => prisonerResult.offenderNo)
+    const openFilterValues = Object.fromEntries(Object.entries(filters).filter(entry => entry[1] && entry[1] !== 'ALL'))
 
-    telemetry.trackEvent({
-      name: `GlobalSearch`,
-      properties: {
-        offenderNos,
-        searchText,
-        filters: openFilterValues,
-        username,
-        caseLoadId: activeCaseLoad?.caseLoadId,
-      },
+    telemetry.trackEvent('GlobalSearch', {
+      offenderNos: JSON.stringify(offenderNos),
+      searchText,
+      filters: JSON.stringify(openFilterValues),
+      username,
+      caseLoadId: activeCaseLoad?.caseLoadId,
     })
   }
 }
@@ -37,7 +32,7 @@ export default ({ paginationService, offenderSearchApi, oauthApi, telemetry }) =
         dateOfBirth,
         includeAliases: true,
       },
-      pageLimit
+      pageLimit,
     )
 
   const searchByName = (context, name, gender, location, dateOfBirth, pageLimit) => {
@@ -52,7 +47,7 @@ export default ({ paginationService, offenderSearchApi, oauthApi, telemetry }) =
         dateOfBirth,
         includeAliases: true,
       },
-      pageLimit
+      pageLimit,
     )
   }
 
@@ -62,7 +57,7 @@ export default ({ paginationService, offenderSearchApi, oauthApi, telemetry }) =
     const { referrer } = req.query
     return res.render('globalSearch/globalSearch.njk', { backLink: backWhiteList[referrer], referrer })
   }
-  const prisonerBooked = (prisoner) => prisoner.latestBookingId > 0
+  const prisonerBooked = prisoner => prisoner.latestBookingId > 0
   const resultsPage = async (req, res) => {
     delete req.session.userBackLink
     let prisonerResults = []
@@ -99,7 +94,7 @@ export default ({ paginationService, offenderSearchApi, oauthApi, telemetry }) =
 
       log.info(searchData.length, 'globalSearch data received')
 
-      prisonerResults = searchData.map((offender) => {
+      prisonerResults = searchData.map(offender => {
         const formattedDateOfBirth =
           offender.dateOfBirth && moment(offender.dateOfBirth, 'YYYY-MM-DD').format('DD/MM/YYYY')
 
@@ -112,7 +107,7 @@ export default ({ paginationService, offenderSearchApi, oauthApi, telemetry }) =
       })
     }
 
-    const userRoles = oauthApi.userRoles(res.locals).map((role) => role.roleCode)
+    const userRoles = oauthApi.userRoles(res.locals).map(role => role.roleCode)
     const isLicencesUser = userRoles.includes('LICENCE_RO')
     const isLicencesVaryUser = userRoles.includes('LICENCE_VARY')
     const userCanViewInactive = userRoles.includes('INACTIVE_BOOKINGS')
@@ -129,15 +124,15 @@ export default ({ paginationService, offenderSearchApi, oauthApi, telemetry }) =
         filters,
       },
       isLicencesUser,
-      openFilters: Boolean(Object.values(filters).filter((value) => value && value !== 'ALL').length),
+      openFilters: Boolean(Object.values(filters).filter(value => value && value !== 'ALL').length),
       pagination: paginationService.getPagination(
         context.responseHeaders?.['total-records'] || 0,
         pageOffset,
         pageLimit,
-        new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
+        new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`),
       ),
       referrer,
-      results: prisonerResults.map((prisoner) => ({
+      results: prisonerResults.map(prisoner => ({
         ...prisoner,
         showUpdateLicenceLink:
           isLicencesUser && (prisoner.currentlyInPrison === 'Y' || isLicencesVaryUser) && prisonerBooked(prisoner),

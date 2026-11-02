@@ -139,7 +139,7 @@ describe('Global search', () => {
             lastName: 'Smith',
             location: 'ALL',
           },
-          20
+          20,
         )
       })
 
@@ -163,7 +163,7 @@ describe('Global search', () => {
             lastName: 'Smith',
             location: 'ALL',
           },
-          20
+          20,
         )
       })
     })
@@ -188,7 +188,7 @@ describe('Global search', () => {
             prisonerIdentifier: 'ABC123',
             location: 'ALL',
           },
-          20
+          20,
         )
       })
     })
@@ -216,7 +216,7 @@ describe('Global search', () => {
             prisonerIdentifier: 'ABC123',
             location: 'ALL',
           },
-          20
+          20,
         )
       })
     })
@@ -377,7 +377,7 @@ describe('Global search', () => {
               expect.objectContaining({ showProfileLink: false }),
               expect.objectContaining({ showProfileLink: false }),
             ],
-          })
+          }),
         )
       })
 
@@ -396,7 +396,7 @@ describe('Global search', () => {
           5,
           0,
           20,
-          new URL('http://localhost/global-search')
+          new URL('http://localhost/global-search'),
         )
       })
 
@@ -413,20 +413,17 @@ describe('Global search', () => {
         await controller.resultsPage(req, res)
 
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'trackEvent' does not exist on type '{}'.
-        expect(telemetry.trackEvent).toHaveBeenCalledWith({
-          name: 'GlobalSearch',
-          properties: {
-            offenderNos: ['A1234AC', 'A1234AA', 'A1234AD'],
-            filters: {
-              dobDay: 7,
-              dobMonth: 4,
-              dobYear: 1958,
-              genderFilter: 'M',
-            },
-            searchText: 'Smith Ben',
-            username: 'user1',
-            caseLoadId: 'MDI',
-          },
+        expect(telemetry.trackEvent).toHaveBeenCalledWith('GlobalSearch', {
+          offenderNos: JSON.stringify(['A1234AC', 'A1234AA', 'A1234AD']),
+          filters: JSON.stringify({
+            genderFilter: 'M',
+            dobDay: 7,
+            dobMonth: 4,
+            dobYear: 1958,
+          }),
+          searchText: 'Smith Ben',
+          username: 'user1',
+          caseLoadId: 'MDI',
         })
       })
 
@@ -457,7 +454,7 @@ describe('Global search', () => {
                 searchText: 'ABC123',
               },
               openFilters: true,
-            })
+            }),
           )
         })
       })
@@ -477,7 +474,7 @@ describe('Global search', () => {
             'globalSearch/globalSearchResults.njk',
             expect.objectContaining({
               errors: [{ href: '#dobDay', text: 'Enter a date of birth which is in the past' }, { href: '#dobError' }],
-            })
+            }),
           )
         })
 
@@ -495,7 +492,7 @@ describe('Global search', () => {
             'globalSearch/globalSearchResults.njk',
             expect.objectContaining({
               errors: [{ href: '#dobDay', text: 'Enter a date of birth which is a real date' }, { href: '#dobError' }],
-            })
+            }),
           )
         })
       })
@@ -548,7 +545,7 @@ describe('Global search', () => {
                   updateLicenceLink: undefined,
                 }),
               ],
-            })
+            }),
           )
         })
 
@@ -593,7 +590,7 @@ describe('Global search', () => {
                     updateLicenceLink: undefined,
                   }),
                 ],
-              })
+              }),
             )
           })
         })
@@ -637,7 +634,7 @@ describe('Global search', () => {
                   showProfileLink: false,
                 }),
               ],
-            })
+            }),
           )
         })
       })
