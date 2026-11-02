@@ -1,3 +1,4 @@
+/** @jest-environment node */
 import supertest from 'supertest'
 import express from 'express'
 import nunjucksSetup from '../utils/nunjucksSetup'

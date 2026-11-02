@@ -1,7 +1,9 @@
-export default function ignoreNotFoundErrors(envelope?) {
-  if (envelope && envelope.data && envelope.data.baseData) {
-    if (envelope.data.baseType === 'RemoteDependencyData' && envelope.data.baseData.resultCode === '404') return false
-  }
+import { SpanKind } from '@ministryofjustice/hmpps-azure-telemetry'
+import type { SpanFilterFn } from '@ministryofjustice/hmpps-azure-telemetry'
 
-  return true
+const ignoreNotFoundErrors: SpanFilterFn = span => {
+  const statusCode = span.attributes['http.response.status_code'] ?? span.attributes['http.status_code']
+  return !(span.kind === SpanKind.CLIENT && String(statusCode) === '404')
 }
+
+export default ignoreNotFoundErrors

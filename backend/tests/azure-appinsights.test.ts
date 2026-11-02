@@ -1,101 +1,82 @@
-import type { TelemetryItem } from 'applicationinsights/out/src/declarations/generated'
-import { addUserDataToRequests, ContextObject } from '../azure-appinsights'
+import { initialiseTelemetry, telemetry } from '@ministryofjustice/hmpps-azure-telemetry'
+import applicationVersion from '../application-version'
+import ignoreNotFoundErrors from '../telemetryProcessors/ignoreNotFound'
 
-jest.mock('applicationinsights', () => ({}))
+jest.mock('@ministryofjustice/hmpps-azure-telemetry', () => ({
+  initialiseTelemetry: jest.fn(),
+  telemetry: {
+    trackEvent: jest.fn(),
+    processors: { enrichSpanNameWithHttpRoute: jest.fn() },
+  },
+}))
 
-const user = {
-  activeCaseLoadId: 'LII',
-  username: 'test-user',
-  referer: 'some-site.com',
-}
-
-const createEnvelope = (properties: Record<string, string | boolean>, baseType = 'RequestData') =>
-  ({
-    name: 'Microsoft.ApplicationInsights.Request',
-    time: new Date(),
-    data: {
-      baseType,
-      baseData: { properties },
-    },
-  }) as TelemetryItem
-
-const createContext = (username: string, activeCaseLoadId: string, referer: string) =>
-  ({
-    'http.ServerRequest': {
-      req: {
-        headers: { referer },
-      },
-      res: {
-        locals: {
-          user: {
-            username,
-            activeCaseLoad: {
-              caseLoadId: activeCaseLoadId,
-            },
-          },
-        },
-      },
-    },
-  }) as ContextObject
-
-const context = createContext(user.username, user.activeCaseLoadId, user.referer)
+jest.mock('../telemetryProcessors/ignoreNotFound', () => ({ __esModule: true, default: jest.fn() }))
 
 describe('azure-appinsights', () => {
-  describe('addUserDataToRequests', () => {
-    it('adds user data to properties when present', () => {
-      const envelope = createEnvelope({ other: 'things' })
+  const originalConnectionString = process.env.APPLICATIONINSIGHTS_CONNECTION_STRING
+  const originalDebug = process.env.DEBUG_TELEMETRY
+  const builder = {
+    addFilter: jest.fn().mockReturnThis(),
+    addModifier: jest.fn().mockReturnThis(),
+    startRecording: jest.fn(),
+    setInstrumentations: jest.fn().mockReturnThis(),
+    withProvider: jest.fn().mockReturnThis(),
+  }
 
-      addUserDataToRequests(envelope, context)
+  beforeEach(() => {
+    jest.clearAllMocks()
+    jest.mocked(initialiseTelemetry).mockReturnValue(builder)
+    delete process.env.APPLICATIONINSIGHTS_CONNECTION_STRING
+    delete process.env.DEBUG_TELEMETRY
+  })
 
-      expect(envelope.data.baseData.properties).toStrictEqual({
-        ...user,
-        other: 'things',
-      })
+  afterEach(() => {
+    if (originalConnectionString === undefined) delete process.env.APPLICATIONINSIGHTS_CONNECTION_STRING
+    else process.env.APPLICATIONINSIGHTS_CONNECTION_STRING = originalConnectionString
+    if (originalDebug === undefined) delete process.env.DEBUG_TELEMETRY
+    else process.env.DEBUG_TELEMETRY = originalDebug
+  })
+
+  const loadTelemetry = () => {
+    let client: typeof telemetry
+    jest.isolateModules(() => {
+      // eslint-disable-next-line global-require
+      client = require('../azure-appinsights').default
     })
+    return client
+  }
 
-    it('handles absent user data', () => {
-      const envelope = createEnvelope({ other: 'things' })
+  it('initialises with an explicit service identity and connection string', () => {
+    process.env.APPLICATIONINSIGHTS_CONNECTION_STRING = 'InstrumentationKey=test-key'
 
-      addUserDataToRequests(envelope, createContext(undefined, user.activeCaseLoadId, user.referer))
+    expect(loadTelemetry()).toBe(telemetry)
 
-      expect(envelope.data.baseData.properties).toStrictEqual({ other: 'things' })
+    expect(initialiseTelemetry).toHaveBeenCalledWith({
+      serviceName: 'digital-prison-services',
+      serviceVersion: applicationVersion.buildNumber,
+      connectionString: 'InstrumentationKey=test-key',
+      debug: false,
     })
+    expect(builder.addFilter).toHaveBeenCalledWith(ignoreNotFoundErrors)
+    expect(telemetry.processors.enrichSpanNameWithHttpRoute).toHaveBeenCalled()
+    expect(builder.startRecording).toHaveBeenCalledTimes(1)
+  })
 
-    it('handles absent referer header', () => {
-      const envelope = createEnvelope({ other: 'things' })
+  it('enables local debugging without requiring an instrumentation key', () => {
+    process.env.DEBUG_TELEMETRY = 'true'
 
-      addUserDataToRequests(envelope, createContext(user.username, user.activeCaseLoadId, undefined))
+    loadTelemetry()
 
-      const { referer, ...expectNoRefererData } = user
-      expect(envelope.data.baseData.properties).toStrictEqual({ ...expectNoRefererData, other: 'things' })
-    })
+    expect(initialiseTelemetry).toHaveBeenCalledWith(
+      expect.objectContaining({ connectionString: undefined, debug: true }),
+    )
+  })
 
-    it('returns true when not RequestData type', () => {
-      const envelope = createEnvelope({}, 'NOT_REQUEST_DATA')
+  it('leaves recording disabled by default when there is no connection string', () => {
+    loadTelemetry()
 
-      const response = addUserDataToRequests(envelope, context)
-
-      expect(response).toStrictEqual(true)
-    })
-
-    it('handles when no properties have been set', () => {
-      const envelope = createEnvelope(undefined)
-
-      addUserDataToRequests(envelope, context)
-
-      expect(envelope.data.baseData.properties).toStrictEqual(user)
-    })
-
-    it('handles missing user details', () => {
-      const envelope = createEnvelope({ other: 'things' })
-
-      addUserDataToRequests(envelope, {
-        'http.ServerRequest': {},
-      } as ContextObject)
-
-      expect(envelope.data.baseData.properties).toEqual({
-        other: 'things',
-      })
-    })
+    expect(initialiseTelemetry).toHaveBeenCalledWith(
+      expect.objectContaining({ connectionString: undefined, debug: false }),
+    )
   })
 })

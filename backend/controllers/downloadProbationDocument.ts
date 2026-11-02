@@ -8,12 +8,7 @@ const ensureAllowedPageAccess = (userRoles: [{ roleCode: string }], caseloads: [
 }
 
 export const trackEvent = (offenderNo, documentId, suffix, { username }) => {
-  if (telemetry) {
-    telemetry.trackEvent({
-      name: `DownloadProbationDocument${suffix}`,
-      properties: { username, documentId, offenderNo },
-    })
-  }
+  telemetry.trackEvent(`DownloadProbationDocument${suffix}`, { username, documentId, offenderNo })
 }
 
 export const downloadProbationDocumentFactory = (
@@ -21,7 +16,7 @@ export const downloadProbationDocumentFactory = (
   hmppsManageUsersApi,
   deliusIntegrationApi,
   systemOauthClient,
-  prisonApi
+  prisonApi,
 ) => {
   const downloadDocument = async (req, res) => {
     const { offenderNo, documentId } = req.params
